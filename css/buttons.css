@@ -1,0 +1,85 @@
+.btn-block{
+    width: 100%;
+}
+.btn{
+    padding: 12px;
+    font-family: "Droid Sans";
+}
+.btn-add-svc{
+    padding: 5px;
+    font-family: "Droid Sans";
+}
+.btn-ok{
+    background-color: cornflowerblue;
+    color: white;
+}
+.btn-common{
+    background: none;
+    color: white;
+    border-radius: 9px;
+    border: 2px solid white;
+
+    transition: all;
+    transition-duration: 0.5s;
+}
+.btn-common:hover{
+    background-color: #13284E;
+    color: white;
+    transition: all;
+    transition-duration: 0.5s;
+}
+.btn-common:focus{
+    color: white;
+}
+.btn-blue{
+    background-color: blue;
+    color: white;
+}
+.btn-blue:hover, .btn-blue:focus{
+    animation-name: blue-pulse;
+    animation-iteration-count: infinite;
+    animation-duration: 1s;
+    color: white;
+}
+.btn-md{
+    font-size: 20px;
+}
+.btn-rounded{
+    border-radius: 15px;
+}
+.btn-rounded-bottom{
+    border-radius: 0px 0px 25px 25px;
+}
+#close{
+    cursor: pointer;
+}
+
+.fixed-button > p{
+    position: absolute;
+    top: 0.5%;
+    right: 2%;
+    padding: 6px;
+    font-size: 17px;
+    border-radius: 5px;
+    background-color: rgba(75, 75, 250, 0.5 );
+    font-family: "Times New Roman", Times, serif;
+    color: white;
+    border: 2px solid midnightblue;
+    transition: all .3s linear;
+}
+.fixed-button > p:hover{
+    background-color: crimson;
+    color: white;
+    border: 2px solid black;
+}
+@keyframes blue-pulse{
+    0%{
+        background-color: blue;
+    }
+    50%{
+        background-color: cornflowerblue;
+    }
+    100%{
+        background-color: blue;
+    }
+}

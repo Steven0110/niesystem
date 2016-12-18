@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Tools and plugins -->
+
+    <!-- JQuery -->
+    <script src="plugins/jquery-3.1.1.min.js"></script>
+    <script src="plugins/jquery-cookie/jquery.cookie.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
+    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+
+
+    <!-- Sweet Alert -->
+    <link rel="stylesheet" href="plugins/sweetalert/sweetalert.css">
+    <script src="plugins/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+
+    <!-- Custom files -->
+    <script src="js/login-controller.js"></script>
+    <link rel="stylesheet" href="css/blocks.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="shortcut icon" href="/favicon.ico?v=2" />
+
+    <title>Login</title>
+</head>
+<body class="bg-samsung">
+    <div class="login">
+       <div class="row centered-content">
+           <span class="title white-font">NIESYSTEM</span>
+           <hr/>
+       </div>
+        <div class="input-group margin-bottom-sm">
+          <span class="input-group-addon"><i class="fa fa-user-circle fa-fw"></i></span>
+          <input class="form-control" id="rfc" type="text" placeholder="RFC">
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+          <input class="form-control" id="psw" type="password" placeholder="Contraseña">
+        </div>
+        <div class="row centered">
+            <button class="btn btn-block btn-blue btn-md btn-rounded-bottom" id="login-action">Ingresar</button>
+        </div>
+    </div>
+</body>
+</html>

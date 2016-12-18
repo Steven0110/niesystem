@@ -1,0 +1,153 @@
+html, body{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+.bg-samsung{
+    background-image: url("../imgs/samsung-bg.jpg");
+    background-size: cover;
+}
+.button-block{
+    width: 100%;
+    padding: 10px;
+}
+.button-quarter{
+    width: 25%;
+    padding: 10px;
+}
+.login{
+    position: absolute;
+    top: 30%;
+    left: 33%;
+    width: 33%;
+    padding: 25px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.25);
+}
+.centered{
+    margin: auto;
+}
+.sub-centered{
+    margin: 0 auto;
+    display: inline-block;
+}
+.bordered{
+    border: 1px black solid;
+}
+.panel{
+    float: right;
+    padding: 0;
+    min-height: 100%;
+    height: 100%;
+    width: 80%;
+    overflow: hidden;
+    background-color: #2F5C91;
+}
+.panel-title{
+    padding-left: 25px;
+    color: white;
+    font-size: 32px;
+    text-align: center;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-weight: bold;
+    font-stretch: expanded;
+    background-color: rgba(25, 25, 25, 0.5);
+}
+.panel-title:hover{
+    animation-name: title-pulse;
+    animation-iteration-count: infinite;
+    animation-duration: 1s;
+}
+.nav-side-menu{
+    z-index: 999;
+}
+.mid-image{
+    position: absolute;
+    top: 20%;
+    left: 48%;
+    width: 30%;
+    height: 60%;
+}
+.mid-panel{
+    overflow: auto;
+    height: 100%;
+}
+.row-report{
+    background-color: #4977AF;
+    color: white;
+    padding: 10px;
+}
+.row-report:hover{
+    animation-name: reports-row-pulse;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+.fecha, #tipo-reporte{
+    background-color: rgba(25, 25, 25, 0.5);
+    color: white;
+    border: none;
+    font-size: 20px;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+.report-input{
+    background-color: rgba(25, 25, 25, 0.5);
+    color: white;
+    border: none;
+    font-size: 15px;
+    border-radius: 10px;
+    padding: 5px;
+    text-align: center;
+}
+.block-01{
+    padding: 5px 5px 5px 25px;
+}
+.block-title{
+    font-size: 22px;
+}
+.block-title-reg{
+    font-size: 18px;
+}
+.title{
+    font-size: 30px;
+}
+#num_semana{
+    font-size: 35px;
+}
+.centered-block {
+    display: table;
+    margin: 0 auto;
+}
+.service{
+    border-left: 30px blue solid;
+}
+
+@keyframes title-pulse{
+    0%{
+        background-color: rgba(25, 25, 25, 0.5);
+    }
+    50%{
+        background-color: rgba(75, 75, 75, 0.5);
+    }
+    100%{
+        background-color: rgba(25, 25, 25, 0.5);
+    }
+}
+@keyframes reports-row-pulse{
+    0%{
+        background-color: #4977AF;
+    }
+    50%{
+        background-color: #5390C6;
+    }
+    100%{
+        background-color: #4977AF;
+    }
+}
+
+
+

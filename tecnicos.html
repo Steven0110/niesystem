@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+
+    <!-- Tools and plugins -->
+
+    <!-- JQuery -->
+    <script src="plugins/jquery-3.1.1.min.js"></script>
+    <script src="plugins/jquery-cookie/jquery.cookie.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
+    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Date Dropper -->
+    <link rel="stylesheet" href="plugins/datedropper/datedropper.min.css">
+    <script src="plugins/datedropper/datedropper.min.js"></script>
+
+    <!-- Sweet Alert -->
+    <link rel="stylesheet" href="plugins/sweetalert/sweetalert.css">
+    <script src="plugins/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+
+    <!-- Custom files -->
+    <script src="js/tec-controller.js"></script>
+    <link rel="stylesheet" href="css/snippets.css">
+    <link rel="stylesheet" href="css/blocks.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/my-dropper-style.css">
+    <link rel="shortcut icon" href="/favicon.ico?v=2" />
+
+
+    <title>Tecnicos</title>
+</head>
+<body class="">
+
+
+    <div class="fixed-button">
+        <p id="close">Cerrar sesión</p>
+    </div>
+
+    <div class="nav-side-menu">
+        <div class="brand" id="saludo"></div>
+        <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+
+            <div class="menu-list">
+
+                <ul id="menu-content" class="menu-content collapse out">
+
+                    <li  data-toggle="collapse" data-target="#options" class="collapsed active">
+                      <a href="#"><i class="fa fa-folder fa-lg"></i> Reportes <span class="arrow"></span></a>
+                    </li>
+                    <ul class="sub-menu collapse" id="options">
+                        <li id="gen-report"><a href="#">Agregar servicios</a></li>
+                        <li id="show-reports"><a href="#">Crear reporte</a></li>
+                    </ul>
+
+
+
+
+                     <li>
+                      <a href="#">
+                      <i class="fa fa-flag fa-lg"></i> Ver tarifas
+                      </a>
+                    </li>
+                </ul>
+         </div>
+    </div>
+
+
+    <div class="panel">
+       <div class="row panel-title">
+            PANEL DE TÉCNICO
+        </div>
+        <div class="mid-panel bg-samsung">
+            <!-- <img class="mid-image" src="imgs/gears.gif" alt="Gears" /> -->
+        </div>
+        <div class="mid-panel" hidden="hidden" id="gen-report-panel">
+
+            <div class="row row-report">
+                <div class="centered-block title">Agregar servicios</div>
+            </div>
+            <div class="row row-report">
+                <div class="section-reg col-md-2">
+                    <div class="centered-block">
+                        <input type="text" placeholder="Folio" class="report-input" id="folio-1"/>
+                    </div>
+                </div>
+                <div class="section-reg col-md-2">
+                    <div class="centered-block">
+                        <input type="text" placeholder="Mano de obra" class="report-input" id="mo-1"/>
+                    </div>
+                </div>
+                <div class="section-reg col-md-2">
+                    <div class="centered-block">
+                        <input type="text" placeholder="Mano de obra SEM" class="report-input" id="sem-1"/>
+                    </div>
+                </div>
+                <div class="section-reg col-md-2">
+                    <div class="centered-block">
+                        <input type="text" placeholder="Modelo" class="report-input" id="mod-1"/>
+                    </div>
+                </div>
+                <div class="section-reg col-md-2">
+                    <div class="centered-block">
+                        <input type="text" placeholder="Serie" class="report-input" id="serie-1"/>
+                    </div>
+                </div>
+                <div class="section-reg col-md-2">
+                    <div class="centered-block">
+                        <input type="text" placeholder="Costo casetas" class="report-input" id="cas-1"/>
+                    </div>
+                </div>
+                <div class="section-reg col-md-2">
+                    <div class="centered-block">
+                        <input type="text" placeholder="Costo desplazamiento" class="report-input" id="des-1"/>
+                    </div>
+                </div>
+                <div class="section-reg col-md-2">
+                    <div class="centered-block">
+                        <input type="text" placeholder="Partes con IVA" class="report-input" id="iva-1"/>
+                    </div>
+                </div>
+                <div class="section-reg col-md-2">
+                    <div class="centered-block">
+                        <input type="text" placeholder="Cobro a cliente" class="report-input" id="cobro-1"/>
+                    </div>
+                </div>
+                <div class="section-reg col-md-2">
+                    <div class="centered-block">
+                        <input type="text" placeholder="Observacion" class="report-input" id="obs-1"/>
+                    </div>
+                </div>
+            </div>
+
+                    <div class="centered-block button-quarter">
+                        <button class="btn btn-md btn-block btn-common" id="add-svc">Agregar servicio</button>
+                    </div>
+
+        </div>
+        <div class="mid-panel" hidden="hidden" id="view-reports-panel">
+
+        </div>
+    </div>
+</body>
+</html>
