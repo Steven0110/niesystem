@@ -22,6 +22,23 @@
     transition: all;
     transition-duration: 0.5s;
 }
+.btn-check{
+    background: none;
+    color: white;
+    border: 2px solid white;
+
+    transition: all;
+    transition-duration: 0.5s;
+}
+.btn-check:hover{
+    background-color: #13284E;
+    color: white;
+    transition: all;
+    transition-duration: 0.5s;
+}
+.btn-check:focus{
+    color: white;
+}
 .btn-common:hover{
     background-color: #13284E;
     color: white;
@@ -30,6 +47,11 @@
 }
 .btn-common:focus{
     color: white;
+}
+.btn-common:disabled{
+    border: 2px solid gray;
+    color: gray;
+    cursor: not-allowed;
 }
 .btn-blue{
     background-color: blue;
@@ -44,6 +66,10 @@
 .btn-md{
     font-size: 20px;
 }
+.btn-sm{
+    font-size: 19px;
+    padding: 8px;
+}
 .btn-rounded{
     border-radius: 15px;
 }
@@ -53,6 +79,7 @@
 #close{
     cursor: pointer;
 }
+
 
 .fixed-button > p{
     position: absolute;

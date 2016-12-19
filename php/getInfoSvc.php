@@ -10,11 +10,22 @@ try{
     $pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, "SET names utf8");
 
 
-    $sql = "SELECT * FROM registro_gspn WHERE Reclamacion_del_ASC=:folio";
+    $sql = "SELECT Modelo, Nro_de_Serie, Valor_de_la_Mano_de_Obra FROM registro_gspn WHERE Reclamacion_del_ASC=:folio";
     $stm = $pdo->prepare($sql);
     $stm->bindParam( ":folio", $folio, PDO::PARAM_STR );
-
+    $stm->execute();
+    $rs = $stm->fetchAll();
+    echo "{";
+    echo "\"modelo\" : \"".$rs[ 0 ][ 0 ]."\",";
+    echo "\"serie\" : \"".$rs[ 0 ][ 1 ]."\",";
+    echo "\"mo\" : \"".$rs[ 0 ][ 2 ]."\",";
+    echo "\"status\" : \"1\"";
+    echo "}";
 
 }catch(PDOException $ex){
+    echo "{";
+    echo "\"status\" : \"-1\",";
+    echo "\"error\" : \"".$ex->getMessage()."\"";
+    echo "}";
 }
 ?>

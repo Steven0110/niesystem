@@ -85,12 +85,18 @@
             <div class="row row-report">
                 <div class="centered-block title">Agregar servicios</div>
             </div>
+
             <div class="row row-report">
-                <div class="section-reg col-md-2">
+                <div class="section-reg col-md-12">
                     <div class="centered-block">
-                        <input type="text" placeholder="Folio" class="report-input" id="folio-1"/>
+                        <input type="text" placeholder="Folio" class="main-input" id="folio"/>
+                        <button class="btn btn-sm btn-check" id="checkFolio">Revisar</button>
+                        <img src="imgs/loading.gif" class="loading-icon" alt="Cargando..." hidden="hidden" id="loading-icon"/>
+                        <img src="imgs/ok.png" class="loading-icon" alt="OK" hidden="hidden" id="check-ok"/>
                     </div>
                 </div>
+            </div>
+            <div class="row row-report">
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
                         <input type="text" placeholder="Mano de obra" class="report-input" id="mo-1"/>
@@ -98,27 +104,27 @@
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
-                        <input type="text" placeholder="Mano de obra SEM" class="report-input" id="sem-1"/>
+                        <input type="text" placeholder="Mano de obra SEM" class="report-input" id="sem"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
-                        <input type="text" placeholder="Modelo" class="report-input" id="mod-1"/>
+                        <input type="text" placeholder="Modelo" class="report-input" id="mod"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
-                        <input type="text" placeholder="Serie" class="report-input" id="serie-1"/>
+                        <input type="text" placeholder="Serie" class="report-input" id="serie"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
-                        <input type="text" placeholder="Costo casetas" class="report-input" id="cas-1"/>
+                        <input type="text" placeholder="Casetas" class="report-input" id="cas-1"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
-                        <input type="text" placeholder="Costo desplazamiento" class="report-input" id="des-1"/>
+                        <input type="text" placeholder="Desplazamiento" class="report-input" id="des-1"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
@@ -139,7 +145,7 @@
             </div>
 
                     <div class="centered-block button-quarter">
-                        <button class="btn btn-md btn-block btn-common" id="add-svc">Agregar servicio</button>
+                        <button class="btn btn-md btn-block btn-common" id="add-svc" disabled="disabled">Agregar servicio</button>
                     </div>
 
         </div>

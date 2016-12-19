@@ -28,11 +28,15 @@ $(document).ready(function(){
     var salute = "Bienvenido " + JSON.parse( $.cookie("usuario")).name;
     $("#saludo").text( salute );
 
+    $("#checkFolio").click( checkSvcExistence );
+
     $("#add-svc").click(function(){
         //Agregar nueva fila de servicio. MOVER BOTON DE AGREGAR
 
         no_services++;
     });
+
+
 
 });
 
@@ -51,11 +55,80 @@ function getWeekNumber( d ) {
     return weekNo;
 }
 
-function createNewService(){
+function checkSvcExistence(){
 
-    //Return HTMLElement
+        //Revisa que el folio no haya sido cobrado
+
+        $("#loading-icon").slideDown("slow");
+        $("#check-ok").slideUp("fast");
+
+        var folio = $("#folio").val();
+        $.post({
+            url : "php/checkSvcExistence.php",
+            data : { "folio" : folio },
+            success : function( response ){
+                var data = JSON.parse( response );
+                if( data.status == "1" ){
+                    if( data.cantidad == "0" ){
+                        //OK
+                        $("#add-svc").removeAttr("disabled");
+                        $("#loading-icon").slideUp("slow", function(){
+                            $("#check-ok").slideDown("slow", function(){
+                                getInfoSvc( folio );
+                            });
+                            //Carga la informacion a los campos de texto correspondientes
+
+                        });
+                    }else{
+                        //Ya hay un folio registrado
+                        swal({
+                            title : "Advertencia",
+                            type : "warning",
+                            text : "El folio ya ha sido registrado"
+                        },function(){
+                            $("#loading-icon").slideUp("slow");
+                        });
+                    }
+                }else if( data.status == "0"){
+                    swal({
+                        title : "Advertencia",
+                        type : "warning",
+                        text : "El folio que intentas agregar no existe en la base de datos"
+                    },function(){
+                        $("#loading-icon").slideUp("slow");
+                    });
+                }else{
+                    //Error desconocido
+                    swal({
+                        title : "Error",
+                        text : data.error,
+                        type : "error"
+                    });
+                }
+            }
+        });
 }
 
+function getInfoSvc( folio ){
+    $.post({
+        data : { "folio" : folio },
+        url : "php/getInfoSvc.php",
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status ==  "1" ){
+                $("#sem").val( data.mo );
+                $("#mod").val( data.modelo );
+                $("#serie").val( data.serie );
+            }else{
+                swal({
+                    title : "Error",
+                    text : data.error,
+                    type : "error"
+                });
+            }
+        }
+    });
+}
 
 
 
