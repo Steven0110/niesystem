@@ -27,11 +27,11 @@
 
     <!-- Custom files -->
     <script src="js/tec-controller.js"></script>
-    <link rel="stylesheet" href="css/snippets.css">
-    <link rel="stylesheet" href="css/blocks.css">
-    <link rel="stylesheet" href="css/buttons.css">
-    <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/my-dropper-style.css">
+    <link rel="stylesheet" href="css/snippets.css" />
+    <link rel="stylesheet" href="css/blocks.css" />
+    <link rel="stylesheet" href="css/buttons.css" />
+    <link rel="stylesheet" href="css/fonts.css" />
+    <link rel="stylesheet" href="css/my-dropper-style.css" />
     <link rel="shortcut icon" href="/favicon.ico?v=2" />
 
 
@@ -77,9 +77,12 @@
        <div class="row panel-title">
             PANEL DE TÉCNICO
         </div>
+
+
         <div class="mid-panel bg-samsung">
-            <!-- <img class="mid-image" src="imgs/gears.gif" alt="Gears" /> -->
         </div>
+
+
         <div class="mid-panel" hidden="hidden" id="gen-report-panel">
 
             <div class="row row-report">
@@ -89,7 +92,7 @@
             <div class="row row-report">
                 <div class="section-reg col-md-12">
                     <div class="centered-block">
-                        <input type="text" placeholder="Folio" class="main-input" id="folio"/>
+                        <input type="text" placeholder="Folio" class="main-input report-input-2" id="folio"/>
                         <button class="btn btn-sm btn-check" id="checkFolio">Revisar</button>
                         <img src="imgs/loading.gif" class="loading-icon" alt="Cargando..." hidden="hidden" id="loading-icon"/>
                         <img src="imgs/ok.png" class="loading-icon" alt="OK" hidden="hidden" id="check-ok"/>
@@ -99,13 +102,13 @@
             <div class="row row-report">
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
-                        <label for="mo-1">Mano de obra:</label>
+                        <label for="mo-1">M. de obra:</label>
                         <input type="text" placeholder="Mano de obra" class="report-input" id="mo-1"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
-                        <label for="mo-1">Mano de obra SEM:</label>
+                        <label for="mo-1">SEM:</label>
                         <input disabled="disabled" type="text" placeholder="Mano de obra SEM" class="report-input" id="sem"/>
                     </div>
                 </div>
@@ -129,19 +132,19 @@
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
-                        <label for="mo-1">Desplazamiento:</label>
+                        <label for="mo-1">Desp. :</label>
                         <input type="text" placeholder="Desplazamiento" class="report-input" id="des-1"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
-                        <label for="mo-1">Partes con IVA:</label>
+                        <label for="mo-1">Partes:</label>
                         <input type="text" placeholder="Partes con IVA" class="report-input" id="iva-1"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
-                        <label for="mo-1">Cobro a cliente:</label>
+                        <label for="mo-1">Cobro:</label>
                         <input type="text" placeholder="Cobro a cliente" class="report-input" id="cobro-1"/>
                     </div>
                 </div>
@@ -158,8 +161,80 @@
                     </div>
 
         </div>
-        <div class="mid-panel" hidden="hidden" id="view-reports-panel">
 
+        <!-- Ver reportes -->
+        <div class="mid-panel" hidden="hidden" id="view-reports-panel">
+            <div class="row row-report">
+                <div class="centered-block title">Generar reporte</div>
+            </div>
+            <div class="row row-report">
+                <div class="col-md-3">
+                    <div class="row block-title-reg centered-block">
+                        <span >ID Técnico</span>
+                    </div>
+                    <div class="row block-title-reg centered-block">
+                        <span id="id-tecnico">183786</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row block-title-reg centered-block">
+                        <span>Tipo de reporte</span>
+                    </div>
+                    <div class="row centered-block">
+                        <select name="tipo" id="tipo-reporte">
+                            <option value="null" selected="selected" hidden="hidden">Escoge una opción</option>
+                            <option value="elec">Electrónica</option>
+                            <option value="lb">Línea Blanca</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row block-title-reg centered-block">
+                        <span>Fecha</span>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="fecha" class="fecha" data-lang="es" data-large-default="true" data-large-mode="true" data-theme="my-style"/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row block-title-reg centered-block">
+                        <span>Semana</span>
+                    </div>
+                    <div class="row centered-block">
+                        <p id="num_semana"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-report">
+                <table>
+                    <tr>
+                        <th>Folio</th>
+                        <th>Modelo</th>
+                        <th>Serie</th>
+                        <th>M. de obra</th>
+                        <th>SEM</th>
+                        <th>Casetas</th>
+                        <th>Desp.</th>
+                        <th>Partes</th>
+                        <th>Cobro</th>
+                        <th>Obs.</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td id="folio_td-1"><input type="text" placeholder="Folio" id="folio-1"/></td>
+                        <td id="modelo_td-1"><input type="text" placeholder="Modelo" id="mod-1"/></td>
+                        <td id="serie_td-1"><input type="text" placeholder="Serie" id="serie-1"/></td>
+                        <td id="mo_td-1"><input type="text" placeholder="M. de obra" id="mo-1"/></td>
+                        <td id="sem_td-1"><input type="text" placeholder="SEM" id="sem-1"/></td>
+                        <td id="cas_td-1"><input type="text" placeholder="Casetas" id="cas-1"/></td>
+                        <td id="desp_td-1"><input type="text" placeholder="Desplazamiento" id="desp-1"/></td>
+                        <td id="partes_td-1"><input type="text" placeholder="Partes" id="partes-1"/></td>
+                        <td id="cobro_td-1"><input type="text" placeholder="Cobro" id="cobro-1"/></td>
+                        <td id="obs_td-1"><input type="text" placeholder="Observacion" id="obs-1"/></td>
+                        <td><img class="table-icon" id="delete-1" src="imgs/delete.png" alt="Eliminar" /></td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </body>

@@ -103,6 +103,15 @@ html, body{
     padding: 5px;
     text-align: center;
 }
+.report-input-2{
+    background-color: rgba(25, 25, 25, 0.5);
+    color: white;
+    border: none;
+    font-size: 15px;
+    border-radius: 10px;
+    padding: 5px;
+    text-align: center;
+}
 .main-input{
     background-color: rgba(25, 25, 25, 0.8);
     color: white;
@@ -116,6 +125,7 @@ html, body{
 }
 .block-title{
     font-size: 22px;
+    padding-left: 20%;
 }
 .block-title-reg{
     font-size: 18px;
@@ -123,7 +133,7 @@ html, body{
 .title{
     font-size: 30px;
 }
-#num_semana{
+#num_semana, #id-tecnico{
     font-size: 35px;
 }
 .centered-block {
@@ -144,6 +154,53 @@ label{
 }
 input[disabled]{
     cursor: not-allowed;
+}
+table{
+    margin: 2%;
+    text-align: center;
+    table-layout: auto;
+    border-collapse: collapse;
+}
+td, th{
+    border:1px solid #000;
+    text-align: center;
+    padding: 0;
+}
+th{
+    font-size: 17px;
+    background-color: #2F5C91;
+    width: 20px;
+}
+td{
+    background-color: #5390C6;
+    background-color: #5187BF;
+    width: 20px;
+}
+.table-icon{
+    height: 30px;
+    cursor: pointer;
+}
+
+tr td:last-child{
+    width:1%;
+    white-space:nowrap;
+    padding: 0;
+}
+.report-input{
+    width: 100%;
+}
+td input{
+    background-color: rgba(25, 25, 25, 0.5);
+    color: white;
+    border: none;
+    font-size: 15px;
+    padding: 5px;
+    margin: 0;
+    text-align: center;
+    width 20%;
+}
+.section-reg{
+    padding: 5px;
 }
 @keyframes title-pulse{
     0%{

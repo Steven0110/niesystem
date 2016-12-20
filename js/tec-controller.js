@@ -7,13 +7,7 @@ $(document).ready(function(){
     });
 
     //Add listener to datedropper
-    $("#fecha-fin").change(function(){
-        var date = new Date( $(this).val() );
-        var day = getWeekNumber( date );
-        $("#num_semana").text( day );
-        $("#num_semana").slideDown("slow");
-    });
-
+    $("#fecha").change( setSemana );
     $("#gen-report").click( function(){
         //Generar reporte
         $(".mid-panel").slideUp("slow");
@@ -22,6 +16,8 @@ $(document).ready(function(){
     });
     $("#show-reports").click( function(){
         //Visualizar reporte
+        $(".mid-panel").slideUp("slow");
+        $("#view-reports-panel").slideDown("slow");
     });
 
     var salute = "Bienvenido " + JSON.parse( $.cookie("usuario")).name;
@@ -30,6 +26,8 @@ $(document).ready(function(){
     $("#checkFolio").click( checkSvcExistence );
 
     $("#add-svc").click( addService );
+
+    //Generacion de reporte
 
 
 
@@ -82,6 +80,8 @@ function checkSvcExistence(){
                             text : "El folio ya ha sido registrado"
                         },function(){
                             $("#loading-icon").slideUp("slow");
+                            $("#add-svc").attr("disabled", "disabled");
+                            cleanFields();
                         });
                     }
                 }else if( data.status == "0"){
@@ -91,6 +91,8 @@ function checkSvcExistence(){
                         text : "El folio que intentas agregar no existe en la base de datos"
                     },function(){
                         $("#loading-icon").slideUp("slow");
+                        cleanFields();
+                        $("#add-svc").attr("disabled", "disabled");
                     });
                 }else{
                     //Error desconocido
@@ -98,7 +100,7 @@ function checkSvcExistence(){
                         title : "Error",
                         text : data.error,
                         type : "error"
-                    });
+                    }, function(){ cleanFields(); $("#add-svc").attr("disabled", "disabled"); } );
                 }
             }
         });
@@ -128,11 +130,50 @@ function addService(){
     var folio = $("#folio").val();
     var idt = ( JSON.parse( $.cookie("usuario") ) ).idt;
     var status = 1;
-    var mo = ( $("#mo-1").val() === undefined ) ? 0 : $("#mo-1").val();
-    var casetas = ( $("#cas-1").val() === undefined ) ? 0 : $("#cas-1").val();
-    var desp = ( $("#des-1").val() === undefined ) ? 0 : $("#des-1").val();
-    var iva = ( $("#iva-1").val() === undefined ) ? 0 : $("#iva-1").val();
-    var cobro = ( $("#cobro-1").val() === undefined ) ? 0 : $("#cobro-1").val();
-    var obs = ( $("#obs-1").val() === undefined ) ? 0 : $("#obs-1").val();
+    var mo = ( $("#mo-1").val() === "" ) ? 0 : $("#mo-1").val();
+    var casetas = ( $("#cas-1").val() === "" ) ? 0 : $("#cas-1").val();
+    var desp = ( $("#des-1").val() === "" ) ? 0 : $("#des-1").val();
+    var iva = ( $("#iva-1").val() === "" ) ? 0 : $("#iva-1").val();
+    var cobro = ( $("#cobro-1").val() === "" ) ? 0 : $("#cobro-1").val();
+    var obs = ( $("#obs-1").val() === "" ) ? 0 : $("#obs-1").val();
+    $.post({
+        data : {
+            "folio" : folio,
+            "idtec" : idt,
+            "status" : status,
+            "mo" : mo,
+            "casetas" : casetas,
+            "desp" : desp,
+            "iva" : iva,
+            "cobro" : cobro,
+            "obs" : obs
+        },
+        url : "php/addService.php",
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "1" ){
+                swal({
+                    title : "OK",
+                    text : "Servicio agregado correctamente",
+                    type : "success"
+                }, function(){ cleanFields(); $("#add-svc").attr("disabled", "disabled"); $("#check-ok").slideUp("slow"); } );
+            }else{
+                swal({
+                    title : "Error",
+                    text : data.error,
+                    type : "error"
+                }, function(){ cleanFields(); $("#add-svc").attr("disabled", "disabled"); $("#check-ok").slideUp("slow"); } );
+            }
+        }
+    });
+}
+function cleanFields(){
+    $(".report-input").val("");
+}
+function setSemana(){
+    var date = new Date( $(this).val() );
+    var day = getWeekNumber( date );
+    $("#num_semana").text( day );
+    $("#num_semana").slideDown("slow");
 }
 
