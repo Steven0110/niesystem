@@ -1,9 +1,8 @@
-var no_services = 1;
 $(document).ready(function(){
     $(".fecha").dateDropper();
     //Close session
     $("#close").click(function(){
-        $.removeCookie("person");
+        $.removeCookie("usuario");
         location.href = "./";
     });
 
@@ -30,11 +29,7 @@ $(document).ready(function(){
 
     $("#checkFolio").click( checkSvcExistence );
 
-    $("#add-svc").click(function(){
-        //Agregar nueva fila de servicio. MOVER BOTON DE AGREGAR
-
-        no_services++;
-    });
+    $("#add-svc").click( addService );
 
 
 
@@ -71,9 +66,9 @@ function checkSvcExistence(){
                 if( data.status == "1" ){
                     if( data.cantidad == "0" ){
                         //OK
-                        $("#add-svc").removeAttr("disabled");
                         $("#loading-icon").slideUp("slow", function(){
                             $("#check-ok").slideDown("slow", function(){
+                                $("#add-svc").removeAttr("disabled");
                                 getInfoSvc( folio );
                             });
                             //Carga la informacion a los campos de texto correspondientes
@@ -129,6 +124,15 @@ function getInfoSvc( folio ){
         }
     });
 }
-
-
+function addService(){
+    var folio = $("#folio").val();
+    var idt = ( JSON.parse( $.cookie("usuario") ) ).idt;
+    var status = 1;
+    var mo = ( $("#mo-1").val() === undefined ) ? 0 : $("#mo-1").val();
+    var casetas = ( $("#cas-1").val() === undefined ) ? 0 : $("#cas-1").val();
+    var desp = ( $("#des-1").val() === undefined ) ? 0 : $("#des-1").val();
+    var iva = ( $("#iva-1").val() === undefined ) ? 0 : $("#iva-1").val();
+    var cobro = ( $("#cobro-1").val() === undefined ) ? 0 : $("#cobro-1").val();
+    var obs = ( $("#obs-1").val() === undefined ) ? 0 : $("#obs-1").val();
+}
 

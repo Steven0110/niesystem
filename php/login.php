@@ -12,7 +12,7 @@ try{
     $pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, "SET names utf8");
 
 
-    $sql = "SELECT u.*, p.nombre FROM user u, persona p WHERE u.rfc=:username AND u.password=:password AND u.rfc=p.rfc";
+    $sql = "SELECT u.*, p.nombre, p.idTecnico FROM user u, persona p WHERE u.rfc=:username AND u.password=:password AND u.rfc=p.rfc";
     $stm = $pdo->prepare( $sql );
     $stm->bindParam(":username", $user, PDO::PARAM_STR);
     $stm->bindParam(":password", $psw, PDO::PARAM_STR);
@@ -21,6 +21,7 @@ try{
         echo "{\"rfc\" : \"none\",";
         echo "\"tipo\" : \"none\",";
         echo "\"nombre\" : \"none\",";
+        echo "\"idt\" : \"none\",";
         echo "\"error\" : \"none\",";
         echo "\"status\" : \"0\"}";
     }
@@ -29,6 +30,7 @@ try{
         echo "{\"rfc\" : \"".$rs[ 0 ][ 0 ]."\",";
         echo "\"tipo\" : \"".$rs[ 0 ][ 2 ]."\",";
         echo "\"nombre\" : \"".$rs[ 0 ][ 3 ]."\",";
+        echo "\"idt\" : \"".$rs[ 0 ][ 4 ]."\",";
         echo "\"error\" : \"none\",";
         echo "\"status\" : \"1\"}";
     }

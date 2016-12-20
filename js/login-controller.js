@@ -1,4 +1,7 @@
 $(document).ready(function(){
+
+    if($.cookie("usuario"))
+        location.href = "tecnicos.html";
     $("#login-action").click(function(){
         if( validateFields() == true ){
             var rfc = $("#rfc").val();
@@ -15,7 +18,7 @@ $(document).ready(function(){
                             type : "success",
                             text : "Bienvenido " + data.nombre
                         }, function(){
-                            var person = {"name" : data.nombre, "rfc" : data.rfc };
+                            var person = {"name" : data.nombre, "rfc" : data.rfc, "idt" : data.idt };
                             $.cookie( "usuario", JSON.stringify( person ) );
                             if( data.tipo == "TEC" )
                                 location.href = "tecnicos.html";
