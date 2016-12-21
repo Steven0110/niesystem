@@ -155,53 +155,49 @@ label{
 input[disabled]{
     cursor: not-allowed;
 }
-table{
-    margin: 2%;
-    text-align: center;
-    table-layout: auto;
-    border-collapse: collapse;
-}
-td, th{
-    border:1px solid #000;
-    text-align: center;
-    padding: 0;
-}
-th{
-    font-size: 17px;
-    background-color: #2F5C91;
-    width: 20px;
-}
-td{
-    background-color: #5390C6;
-    background-color: #5187BF;
-    width: 20px;
-}
 .table-icon{
     height: 30px;
     cursor: pointer;
 }
 
-tr td:last-child{
-    width:1%;
-    white-space:nowrap;
-    padding: 0;
-}
+
 .report-input{
     width: 100%;
-}
-td input{
-    background-color: rgba(25, 25, 25, 0.5);
-    color: white;
-    border: none;
-    font-size: 15px;
-    padding: 5px;
-    margin: 0;
-    text-align: center;
-    width 20%;
 }
 .section-reg{
     padding: 5px;
 }
+.report-select{
+    background-color: rgba(25, 25, 25, 0.5);
+    font-size: 22px;
+    padding: 3px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+}
+
+td, th{
+    border: 1px solid black;
+    padding: 3px;
+    text-align: center;
+}
+input{
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+table{
+    text-align: center;
+    margin-left: 2%;
+}
+
+table td input{
+    border: none;
+    background-color: rgba(25, 25, 25, 0.5);
+    border-radius: 5px;
+    color: white;
+}
+
 @keyframes title-pulse{
     0%{
         background-color: rgba(25, 25, 25, 0.5);
