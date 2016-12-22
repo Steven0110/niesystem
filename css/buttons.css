@@ -18,7 +18,6 @@
     color: white;
     border-radius: 9px;
     border: 2px solid white;
-
     transition: all;
     transition-duration: 0.5s;
 }
@@ -75,6 +74,15 @@
 }
 .btn-rounded-bottom{
     border-radius: 0px 0px 25px 25px;
+}
+.btn-gen-report{
+    margin-top: 0;
+    margin-right: 20%;
+    margin-bottom: 3%;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 22px;
+    float: right;
 }
 #close{
     cursor: pointer;

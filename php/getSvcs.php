@@ -31,7 +31,7 @@ try{
     }
     $response = trim( $response, "," );
     //COntinuamos creando los de IN HOME
-    $sql = "SELECT s.folio, s.mano_obra, s.casetas, s.desplazamiento, s.partes_iva, s.cobro, s.observacion, r.Modelo, r.Nro_de_Serie, r.Valor_de_la_Mano_de_Obra FROM servicios_tecnico_trabajados s, registro_gspn r WHERE s.idTecnico=:idt AND s.tipo='IH' AND r.Reclamacion_del_ASC=s.folio";
+    $sql = "SELECT s.folio, s.mano_obra, s.casetas, s.desplazamiento, s.partes_iva, s.cobro, s.observacion, r.Modelo, r.Nro_de_Serie, r.Valor_de_la_Mano_de_Obra FROM servicios_tecnico_trabajados s, registro_gspn r WHERE s.idTecnico=:idt AND s.tipo='IH' AND r.Reclamacion_del_ASC=s.folio AND s.status <> 10";
     $stm = $pdo->prepare( $sql );
     $stm->bindParam( ":idt", $idt, PDO::PARAM_INT );
     $stm->execute();
