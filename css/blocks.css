@@ -179,6 +179,9 @@ input[disabled]{
     border: none;
     border-radius: 10px;
 }
+select{
+    text-align: center;
+}
 .data-block{
     padding: 20px;
 }

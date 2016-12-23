@@ -1,4 +1,4 @@
-var num_svcs;
+var num_svcs, num_svcs_c, num_svcs_ih;
 $(document).ready(function(){
     $(".fecha").dateDropper();
     //Close session
@@ -31,22 +31,9 @@ $(document).ready(function(){
 
     $("#generate-report").click( genReport );
 
+    $("#tipo-reporte").change( setDesp );
 });
 
-function getWeekNumber( d ) {
-    // Copy date so don't modify original
-    d = new Date(+d);
-    d.setHours(0,0,0,0);
-    // Set to nearest Thursday: current date + 4 - current day number
-    // Make Sunday's day number 7
-    d.setDate(d.getDate() + 4 - (d.getDay()||7));
-    // Get first day of year
-    var yearStart = new Date(d.getFullYear(),0,1);
-    // Calculate full weeks to nearest Thursday
-    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
-    // Return array of year and week number
-    return weekNo;
-}
 
 function checkSvcExistence(){
 
@@ -250,6 +237,7 @@ function getServices(){
                 input_mo.attr("size", "5");
                 input_mo.attr("id", "mo_td-" + i );
                 input_mo.attr("value", data.svcCargo[ i - 1 ].mo );
+                input_mo.attr("onkeyup", "calcularTotales()");
                 td_mo.append( input_mo );
                 if( input_mo.val().length > 5 )
                     input_mo.attr("size", input_mo.val().length + 2  );
@@ -276,6 +264,7 @@ function getServices(){
                 input_cas.attr("id", "cas_td-" + i );
                 input_cas.attr("value", data.svcCargo[ i - 1 ].cas );
                 td_cas.append( input_cas );
+                input_cas.attr("onkeyup", "calcularTotales()");
                 if( input_cas.val().length > 5 )
                     input_cas.attr("size", input_cas.val().length+ 2  );
                 else
@@ -288,6 +277,7 @@ function getServices(){
                 input_desp.attr("size", "5");
                 input_desp.attr("id", "desp_td-" + i );
                 input_desp.attr("value", data.svcCargo[ i - 1 ].desp );
+                input_desp.attr("onkeyup", "calcularTotales()");
                 td_desp.append( input_desp );
                 if( input_desp.val().length > 5 )
                     input_desp.attr("size", input_desp.val().length+ 2  );
@@ -360,7 +350,7 @@ function getServices(){
             table.empty();
             var header = $("<tr><th>Folio</th><th>Modelo</th><th>Serie</th><th>M. de obra</th><th>SEM</th><th>Casetas</th><th>Desplazamiento</th><th>Partes</th><th>Cobro</th><th>Observación</th></tr>");
             table.append( header );
-            //Servicios de cargo
+            //Servicios in home
             for( i = 1 ; i <= data.svcIH.length ; i++ ){
 
                 var svc_tr = $("<tr></tr>");
@@ -412,6 +402,7 @@ function getServices(){
                 input_mo.attr("size", "5");
                 input_mo.attr("id", "mo_td-" + j );
                 input_mo.attr("value", data.svcIH[ i - 1 ].mo );
+                input_mo.attr("onkeyup", "calcularTotales()");
                 td_mo.append( input_mo );
                 if( input_mo.val().length > 5 )
                     input_mo.attr("size", input_mo.val().length + 2  );
@@ -437,6 +428,7 @@ function getServices(){
                 input_cas.attr("size", "5");
                 input_cas.attr("id", "cas_td-" + j );
                 input_cas.attr("value", data.svcIH[ i - 1 ].cas );
+                input_cas.attr("onkeyup", "calcularTotales()");
                 td_cas.append( input_cas );
                 if( input_cas.val().length > 5 )
                     input_cas.attr("size", input_cas.val().length+ 2  );
@@ -450,6 +442,7 @@ function getServices(){
                 input_desp.attr("size", "5");
                 input_desp.attr("id", "desp_td-" + j );
                 input_desp.attr("value", data.svcIH[ i - 1 ].desp );
+                input_desp.attr("onkeyup", "calcularTotales()");
                 td_desp.append( input_desp );
                 if( input_desp.val().length > 5 )
                     input_desp.attr("size", input_desp.val().length+ 2  );
@@ -461,7 +454,7 @@ function getServices(){
                 input_partes.addClass("input");
                 input_partes.attr("size", "5");
                 input_partes.attr("id", "partes_td-" + j );
-                input_partes.attr("value", data.svcCargo[ i - 1 ].iva );
+                input_partes.attr("value", data.svcIH[ i - 1 ].iva );
                 td_partes.append( input_partes );
                 if( input_partes.val().length > 5 )
                     input_partes.attr("size", input_partes.val().length+ 2  );
@@ -520,10 +513,10 @@ function getServices(){
         }
     });
 }
-
 function deleteSvc( num ){
     console.log("Eliminar: " + num );
     $("#svc-" + num ).remove();
+    calcularTotales();
 }
 function genReport(){;
     console.log( num_svcs );
@@ -541,7 +534,8 @@ function genReport(){;
     if( validacion_general ){
         var idt = JSON.parse( $.cookie("usuario") ).idt;
         var fecha = $("#fecha").val();
-        var semana = getWeekNumber( fecha );
+        var date = new Date( $("#fecha").val() );
+        var semana = getWeekNumber( date );
         var tipo = $('#tipo-reporte').find(":selected").val();
         addReport( id_report, fecha, semana, idt, tipo );
     }else{
@@ -577,7 +571,37 @@ function validarServicio( num ){
 function calcularTotales(){
     var total_mo_c = 0, total_desp_c = 0, total_cas_c = 0, total_labor_c = 0;
     var total_mo_ih = 0, total_desp_ih = 0, total_cas_ih = 0, total_labor_ih = 0;
-    //Obtiene la tabla de cargo, obtiene los hijos (inputs de valores), suma
+    //Calculo para cargo
+    var mo_cargo = $("#report-table-c .input[id^=\"mo_td-\"]");
+    var desp_cargo = $("#report-table-c .input[id^=\"desp_td-\"]");
+    var cas_cargo = $("#report-table-c .input[id^=\"cas_td-\"]");
+    for( var i = 0 ; i < mo_cargo.length ; i++ ){
+        //var index = getIndex( $(mo_cargo[ i ]).attr("id") );
+        total_mo_c += Number( $(mo_cargo[ i ]).val() );
+        total_cas_c += Number( $(cas_cargo[ i ]).val() );
+        total_desp_c += Number( $(desp_cargo[ i ]).val() );
+    }
+    total_labor_c = Math.ceil( (total_mo_c * 0.3914) + (total_mo_c * 0.3914 * 0.16) );
+    $("#total-mo-c").text("$" + total_mo_c );
+    $("#total-cas-c").text("$" + total_cas_c );
+    $("#total-desp-c").text("$" + total_desp_c );
+    $("#total-labor-c").text("$" + total_labor_c );
+
+    //Calculo para in home
+    var mo_ih = $("#report-table-ih .input[id^=\"mo_td-\"]");
+    var desp_ih = $("#report-table-ih .input[id^=\"desp_td-\"]");
+    var cas_ih = $("#report-table-ih .input[id^=\"cas_td-\"]");
+
+    for( var i = 0 ; i < mo_ih.length ; i++ ){
+        total_mo_ih += Number( $(mo_ih[ i ]).val() );
+        total_cas_ih += Number( $(cas_ih[ i ]).val() );
+        total_desp_ih += Number( $(desp_ih[ i ]).val() );
+    }
+    total_labor_ih = Math.ceil( (total_mo_ih * 0.5) + (total_mo_ih * 0.5 * 0.16) );
+    $("#total-mo-ih").text("$" + total_mo_ih );
+    $("#total-cas-ih").text("$" + total_cas_ih );
+    $("#total-desp-ih").text("$" + total_desp_ih );
+    $("#total-labor-ih").text("$" + total_labor_ih );
 }
 
 function addReport( idr, fecha, semana, idt, tipo ){
@@ -597,9 +621,86 @@ function addReport( idr, fecha, semana, idt, tipo ){
             cobros.push( $("#cobro_td-" + i).val() );
         }
     }
+    $.post({
+        url : "php/addReport.php",
+        data : {
+            "folios" : folios,
+            "mos" : mos,
+            "casetas" : casetas,
+            "desps" : desps,
+            "ivas" : ivas,
+            "cobros" : cobros,
+            "idr" : idr,
+            "idt" : idt,
+            "fecha" : fecha,
+            "tipo" : tipo,
+            "semana" : semana
+        },
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "1")
+                swal({
+                    title : "OK",
+                    text : "Reporte generado exitosamente",
+                    type : "success"
+                },function(){
+                    location.reload();
+                });
+            else if( data.status == "-1" )
+                swal({
+                    title : "Error",
+                    text : "error: " + data.error,
+                    type : "error"
+                });
+            else
+                swal({
+                    title : "Error desconocido",
+                    type : "error"
+                });
+        }
+    });
 }
 
 function getIndex( cadena ){
     var aux = cadena.split("-");
     return Number( aux[ 1 ] );
+}
+
+function setDesp(){
+    var tipo = $(this).find(":selected").val();
+    if( tipo == "LB" ){
+        var desp_c = $("#report-table-c .input[id^=\"desp_td-\"]");
+        for( var i = 0 ; i < desp_c.length ; i++ ){
+            desp_c.val(25);
+        }
+        var desp_ih = $("#report-table-ih .input[id^=\"desp_td-\"]");
+        for( var i = 0 ; i < desp_ih.length ; i++ ){
+            desp_ih.val(25);
+        }
+    }else{
+        var desp_c = $("#report-table-c .input[id^=\"desp_td-\"]");
+        for( var i = 0 ; i < desp_c.length ; i++ ){
+            desp_c.val(0);
+        }
+        var desp_ih = $("#report-table-ih .input[id^=\"desp_td-\"]");
+        for( var i = 0 ; i < desp_ih.length ; i++ ){
+            desp_ih.val(0);
+        }
+    }
+    calcularTotales();
+}
+
+function getWeekNumber( d ) {
+    // Copy date so don't modify original
+    d = new Date(+d);
+    d.setHours(0,0,0,0);
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setDate(d.getDate() + 4 - (d.getDay()||7));
+    // Get first day of year
+    var yearStart = new Date(d.getFullYear(),0,1);
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    // Return array of year and week number
+    return weekNo;
 }

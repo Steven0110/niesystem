@@ -58,6 +58,7 @@
                     <ul class="sub-menu collapse" id="options">
                         <li id="gen-report"><a href="#">Agregar servicios</a></li>
                         <li id="show-reports"><a href="#">Crear reporte</a></li>
+                        <li id="checked-reports"><a href="#">Reportes revisados</a></li>
                     </ul>
                      <li>
                       <a href="#">
@@ -170,9 +171,8 @@
         <!-- Ver reportes -->
         <div class="mid-panel" hidden="hidden" id="view-reports-panel">
             <div class="row row-report">
-                <div class="centered-block title">Generar reporte <img src="imgs/delete.png" alt="Actualizar datos" class="table-icon" onclick="getServices()"></div>
-
-
+                <div class="centered-block title">Generar reporte <img src="imgs/refresh.png" alt="Actualizar datos" class="table-icon" onclick="getServices()">
+                </div>
             </div>
             <div class="row row-report">
                 <div class="col-md-3">
@@ -190,8 +190,8 @@
                     <div class="row centered-block">
                         <select name="tipo" id="tipo-reporte">
                             <option value="null" selected="selected" hidden="hidden">Escoge una opción</option>
-                            <option value="elec">Electrónica</option>
-                            <option value="lb">Línea Blanca</option>
+                            <option value="E">Electrónica</option>
+                            <option value="LB">Línea Blanca</option>
                         </select>
                     </div>
                 </div>
@@ -214,7 +214,7 @@
             </div>
             <div class="row row-report">
                 <div class="row subsection-title centered-block">
-                    <span>Servicios de cargo</span>
+                    <span>Servicios de cargo (39.14%)</span>
                 </div>
                 <table id="report-table-c" class="centered-block">
                 </table>
@@ -223,31 +223,31 @@
                     <div class="col-md-3 data-block">
                         <div class="row centered-block">
                             <p class="block-title-reg">Total M.O:</p>
-                            <p class="data" id="total-mo-c">2345</p>
+                            <p class="data" id="total-mo-c"></p>
                         </div>
                     </div>
                     <div class="col-md-3 data-block">
                         <div class="row centered-block">
                             <p class="block-title-reg">Total casetas:</p>
-                            <p class="data" id="total-cas-c">2345</p>
+                            <p class="data" id="total-cas-c"></p>
                         </div>
                     </div>
                     <div class="col-md-3 data-block">
                         <div class="row centered-block">
                             <p class="block-title-reg">Total desplazamiento:</p>
-                            <p class="data" class="total-desp-c">2345</p>
+                            <p class="data" id="total-desp-c"></p>
                         </div>
                     </div>
                     <div class="col-md-3 data-block">
                         <div class="row centered-block">
                             <p class="block-title-reg">Total labor:</p>
-                            <p class="data" class="total-labor-c">2345</p>
+                            <p class="data" id="total-labor-c"></p>
                         </div>
                     </div>
                 </div>
 
                 <div class="row subsection-title centered-block">
-                    <span>Servicios In Home</span>
+                    <span>Servicios In Home (50%)</span>
                 </div>
                 <table id="report-table-ih" class="centered-block">
                 </table>
@@ -255,25 +255,25 @@
                     <div class="col-md-3 data-block">
                         <div class="row centered-block">
                             <p class="block-title-reg">Total M.O:</p>
-                            <p class="data" id="total-mo-ih">2345</p>
+                            <p class="data" id="total-mo-ih"></p>
                         </div>
                     </div>
                     <div class="col-md-3 data-block">
                         <div class="row centered-block">
                             <p class="block-title-reg">Total casetas:</p>
-                            <p class="data" id="total-cas-ih">2345</p>
+                            <p class="data" id="total-cas-ih"></p>
                         </div>
                     </div>
                     <div class="col-md-3 data-block">
                         <div class="row centered-block">
                             <p class="block-title-reg">Total desplazamiento:</p>
-                            <p class="data" class="total-desp-ih">2345</p>
+                            <p class="data" id="total-desp-ih"></p>
                         </div>
                     </div>
                     <div class="col-md-3 data-block">
                         <div class="row centered-block">
                             <p class="block-title-reg">Total labor:</p>
-                            <p class="data" class="total-labor-ih">2345</p>
+                            <p class="data" id="total-labor-ih"></p>
                         </div>
                     </div>
                 </div>
