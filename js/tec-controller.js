@@ -125,6 +125,8 @@ function addService(){
     var cobro = ( $("#cobro-1").val() === "" ) ? 0 : $("#cobro-1").val();
     var obs = ( $("#obs-1").val() === "" ) ? 0 : $("#obs-1").val();
     var tos = $('#tos').find(":selected").val();
+    var gar = ( $("#check-gar").prop("checked") == true ) ? 1 : 0;
+    console.log( $("#check-gar").prop("checked") );
     $.post({
         data : {
             "folio" : folio,
@@ -136,7 +138,8 @@ function addService(){
             "iva" : iva,
             "cobro" : cobro,
             "obs" : obs,
-            "tipo" : tos
+            "tipo" : tos,
+            "gar" : gar
         },
         url : "php/addService.php",
         success : function( response ){
@@ -182,10 +185,10 @@ function getServices(){
             //Generacion de tabla de servicios de cargo
             var table = $("#report-table-c");
             table.empty();
-            var header = $("<tr><th>Folio</th><th>Modelo</th><th>Serie</th><th>M. de obra</th><th>SEM</th><th>Casetas</th><th>Desplazamiento</th><th>Partes</th><th>Cobro</th></tr>");
+            var header = $("<tr><th>Folio</th><th>Modelo</th><th>Serie</th><th>M. de obra</th><th>SEM</th><th>Casetas</th><th>Desplazamiento</th><th>Partes</th><th>Cobro</th><th>Garantía</th></tr>");
             table.append( header );
             //Servicios de cargo
-            var i, j;
+            var i, j=0;
             for( i = 1 ; i <= data.svcCargo.length ; i++ ){
 
                 var svc_tr = $("<tr></tr>");
@@ -320,6 +323,20 @@ function getServices(){
                 else
                     input_cobro.attr("size", "5" );
 
+
+                var td_gar = $("<td></td>");
+                td_gar.addClass("checkbox-block");
+                var input_gar = $("<input/>");
+                input_gar.attr("type", "checkbox");
+                input_gar.addClass("checkbox-md");
+                input_gar.attr("id", "gar_td-" + i );
+                if( data.svcCargo[ i - 1 ].gar == "1" )
+                    input_gar.attr( "checked", "checked" );
+                input_gar.attr( "disabled", "disabled" );
+                td_gar.append( input_gar );
+
+
+
                 var td_img = $("<td></td>");
                 var img = $("<img/>");
                 img.addClass("table-icon");
@@ -339,9 +356,11 @@ function getServices(){
                 svc_tr.append( td_partes );
                 svc_tr.append( td_cobro );
                 //svc_tr.append( td_obs );
+                svc_tr.append( td_gar );
                 svc_tr.append( td_img );
 
                 table.append( svc_tr );
+                num_svcs = i;
                 j = i;
             }
             j++;
@@ -485,6 +504,20 @@ function getServices(){
                 else
                     input_cobro.attr("size", "5" );
 
+                var td_gar = $("<td></td>");
+                td_gar.addClass("checkbox-block");
+                var input_gar = $("<input/>");
+                input_gar.attr("type", "checkbox");
+                input_gar.addClass("checkbox-md");
+                input_gar.attr("id", "gar_td-" + j );
+                if( data.svcIH[ i - 1 ].gar == "1" )
+                    input_gar.attr( "checked", "checked" );
+                input_gar.attr( "disabled", "disabled" );
+                td_gar.append( input_gar );
+
+
+
+
                 var td_img = $("<td></td>");
                 var img = $("<img/>");
                 img.addClass("table-icon");
@@ -503,11 +536,13 @@ function getServices(){
                 svc_tr.append( td_desp );
                 svc_tr.append( td_partes );
                 svc_tr.append( td_cobro );
+                svc_tr.append( td_gar );
                 //svc_tr.append( td_obs );
                 svc_tr.append( td_img );
 
                 table.append( svc_tr );
                 num_svcs = j;
+                console.log("Numero de servicios: " + num_svcs );
                 j++;
             }
         }
@@ -518,12 +553,10 @@ function deleteSvc( num ){
     $("#svc-" + num ).remove();
     calcularTotales();
 }
-function genReport(){;
+function genReport(){
     console.log( num_svcs );
-    var id_report = JSON.parse( $.cookie("usuario") ).idt + $("#fecha").val();
+    var id_report = JSON.parse( $.cookie("usuario") ).idt + $("#fecha").val() + Math.floor(Math.random() * 999);
     id_report = id_report.replace(/\//g, "");
-    console.log( id_report );
-
     var validacion_general = true;
     for( var i = 1 ; i <= num_svcs ; i++ ){
         if( $("#folio_td-" + i ).val() !== undefined ){
@@ -550,22 +583,42 @@ function validarServicio( num ){
     var desp = Number( $( "#desp_td-" + num ).val());
     var partes = Number( $( "#partes_td-" + num ).val());
     var folio = $("#folio_td-" + num).val();
-    var total_tecnico = sem + mo + cas + desp + partes;
-    if( total_tecnico < cobro ){
-        swal({
-            type : "error",
-            title : "Error en el cobro del servicio " + folio,
-            text : "La suma total es menor a lo que se le cobró al cliente "
-        });
-        return false;
-    }else if( total_tecnico > cobro ){
-        swal({
-            type : "error",
-            title : "Error en el cobro del servicio " + folio,
-            text : "La suma total es mayor a lo que se le cobró al cliente "
-        });
-        return false;
-    }else return true;
+    var gar = ( $("#gar_td-" + num ).prop("checked") == true ) ? 1 : 0;
+    if( gar == 0 ){
+        var total_tecnico = sem + mo + cas + desp + partes;
+        if( total_tecnico < cobro ){
+            swal({
+                type : "error",
+                title : "Error en el cobro del servicio " + folio,
+                text : "La suma total es menor a lo que se le cobró al cliente "
+            });
+            return false;
+        }else if( total_tecnico > cobro ){
+            swal({
+                type : "error",
+                title : "Error en el cobro del servicio " + folio,
+                text : "La suma total es mayor a lo que se le cobró al cliente "
+            });
+            return false;
+        }else return true;
+    }else{
+        var total_mo = sem - cas - desp - partes;
+        if( mo > total_mo ){
+            swal({
+                type : "error",
+                title : "Error en el cobro del servicio " + folio,
+                text : "La mano de obra es mayor a la que deberia ser ($" + total_mo + ")"
+            });
+            return false;
+        }else if( mo < total_mo ){
+            swal({
+                type : "error",
+                title : "Error en el cobro del servicio " + folio,
+                text : "La mano de obra es menor a la que deberia ser ($" + total_mo + ")"
+            });
+            return false;
+        }else return true;
+    }
 }
 
 function calcularTotales(){
@@ -701,6 +754,5 @@ function getWeekNumber( d ) {
     var yearStart = new Date(d.getFullYear(),0,1);
     // Calculate full weeks to nearest Thursday
     var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
-    // Return array of year and week number
     return weekNo;
 }

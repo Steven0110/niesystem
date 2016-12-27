@@ -17,7 +17,7 @@ try{
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $usr_admin, $psw_admin );
     $pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, "SET names utf8");
     //Crea el reporte
-    $sql = "INSERT INTO reporte VALUES(:idr, str_to_date(:fecha, '%m/%d/%Y'), :tipo, :idt, :semana, NULL)";
+    $sql = "INSERT INTO reporte VALUES(:idr, str_to_date(:fecha, '%m/%d/%Y'), :tipo, :idt, :semana, NULL, 0)";
     $stm = $pdo->prepare( $sql );
     $stm->bindParam(":idr", $idr, PDO::PARAM_INT);
     $stm->bindParam(":fecha", $fecha, PDO::PARAM_STR);

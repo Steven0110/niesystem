@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+
+    <!-- Tools and plugins -->
+
+    <!-- JQuery -->
+    <script src="plugins/jquery-3.1.1.min.js"></script>
+    <script src="plugins/jquery-cookie/jquery.cookie.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
+    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Date Dropper -->
+    <link rel="stylesheet" href="plugins/datedropper/datedropper.min.css">
+    <script src="plugins/datedropper/datedropper.min.js"></script>
+
+    <!-- Sweet Alert -->
+    <link rel="stylesheet" href="plugins/sweetalert/sweetalert.css">
+    <script src="plugins/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+
+    <!-- Custom files -->
+    <script src="js/admin-controller.js"></script>
+    <link rel="stylesheet" href="css/snippets.css" />
+    <link rel="stylesheet" href="css/blocks.css" />
+    <link rel="stylesheet" href="css/buttons.css" />
+    <link rel="stylesheet" href="css/fonts.css" />
+    <link rel="stylesheet" href="css/my-dropper-style.css" />
+    <link rel="shortcut icon" href="/favicon.ico?v=2" />
+
+
+    <title>Tecnicos</title>
+</head>
+<body class="">
+
+
+    <div class="fixed-button">
+        <p id="close">Cerrar sesión</p>
+    </div>
+
+    <div class="nav-side-menu">
+        <div class="brand" id="saludo"></div>
+        <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+
+            <div class="menu-list">
+
+                <ul id="menu-content" class="menu-content collapse out">
+
+                    <li  data-toggle="collapse" data-target="#options" class="collapsed active">
+                      <a href="#"><i class="fa fa-folder fa-lg"></i> Reportes <span class="arrow"></span></a>
+                    </li>
+                    <ul class="sub-menu collapse" id="options">
+                        <li id="check-reports"><a href="#">Revisar reportes</a></li>
+                        <li id="feed-db"><a href="#">Alimentar base de datos</a></li>
+                    </ul>
+                     <li data-toggle="collapse" data-target="#reports" class="collapsed active">
+                      <a href="#">
+                      <i class="fa fa-flag fa-lg"></i> Descargar reportes<span class="arrow">
+                      </a>
+                    </li>
+                    <ul class="sub-menu collapse" id="reports">
+                        <li id="check-reports-tec"><a href="#">Por técnico</a></li>
+                        <li id="check-reports-week"><a href="#">Por semana</a></li>
+                        <li id="check-reports-all"><a href="#">Todos</a></li>
+                    </ul>
+                     <li>
+                      <a href="#">
+                      <i class="fa fa-flag fa-lg"></i> Gestión de usuarios
+                      </a>
+                    </li>
+                </ul>
+         </div>
+    </div>
+
+
+    <div class="panel">
+       <div class="row panel-title">
+            PANEL DE ADMINISTRADOR
+        </div>
+
+
+        <div class="mid-panel bg-samsung">
+        </div>
+
+
+        <div class="mid-panel" hidden="hidden" id="check-reports-panel">
+            <div class="row row-report">
+                <div class="centered-block title">Revisar reportes pendientes</div>
+            </div>
+            <div class="row row-report">
+                <table id="reports-table" class="centered-block"></table>
+            </div>
+        </div>
+        <div class="mid-panel" hidden="hidden" id="feed-db-panel">
+            <div class="row row-report">
+                <div class="centered-block title">Alimentar base de datos</div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

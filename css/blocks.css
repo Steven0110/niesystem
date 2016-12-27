@@ -211,6 +211,12 @@ table td input{
     border-radius: 5px;
     color: white;
 }
+.checkbox-block{
+    padding-top: 5px;
+}
+.checkbox-md{
+    transform: scale(2.5);
+}
 
 @keyframes title-pulse{
     0%{

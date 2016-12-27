@@ -12,11 +12,12 @@ $iva = $_POST["iva"];
 $cobro = $_POST["cobro"];
 $obs = $_POST["obs"];
 $tipo = $_POST["tipo"];
+$gar = $_POST["gar"];
 try{
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $usr_admin, $psw_admin );
     $pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, "SET names utf8");
 
-    $sql = "INSERT INTO servicios_tecnico_trabajados VALUES(:folio, :idTecnico, :status, :mo, :cas, :desp, :iva, :cobro, :obs, NULL, :tipo)";
+    $sql = "INSERT INTO servicios_tecnico_trabajados VALUES(:folio, :idTecnico, :status, :mo, :cas, :desp, :iva, :cobro, :obs, NULL, :tipo, :gar)";
     $stm = $pdo->prepare( $sql );
     $stm->bindParam(":folio", $folio, PDO::PARAM_STR);
     $stm->bindParam(":idTecnico", $idtec, PDO::PARAM_INT);
@@ -28,6 +29,7 @@ try{
     $stm->bindParam(":cobro", $cobro, PDO::PARAM_INT);
     $stm->bindParam(":obs", $obs, PDO::PARAM_STR);
     $stm->bindParam(":tipo", $tipo, PDO::PARAM_STR);
+    $stm->bindParam(":gar", $gar, PDO::PARAM_INT);
     if( $stm->execute() ){
         echo "{";
         echo "\"status\" : \"1\",";

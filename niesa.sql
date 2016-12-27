@@ -201,8 +201,9 @@ CREATE TABLE `reporte` (
   `idreporte` bigint(20) NOT NULL,
   `fecha` date DEFAULT NULL,
   `tipo` varchar(15) DEFAULT NULL,
-  `total_gas` int(11) DEFAULT NULL,
-  `total_cas` int(11) DEFAULT NULL,
+  `idTecnico` bigint(20) DEFAULT NULL,
+  `semana` int(11) DEFAULT NULL,
+  `comentario` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`idreporte`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -213,6 +214,7 @@ CREATE TABLE `reporte` (
 
 LOCK TABLES `reporte` WRITE;
 /*!40000 ALTER TABLE `reporte` DISABLE KEYS */;
+INSERT INTO `reporte` VALUES (2016547312232016,'2016-12-23','LB',20165473,51,NULL);
 /*!40000 ALTER TABLE `reporte` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -250,7 +252,7 @@ CREATE TABLE `servicios_tecnico_trabajados` (
 
 LOCK TABLES `servicios_tecnico_trabajados` WRITE;
 /*!40000 ALTER TABLE `servicios_tecnico_trabajados` DISABLE KEYS */;
-INSERT INTO `servicios_tecnico_trabajados` VALUES ('4139323256',20165473,1,0,0,0,0,0,'0',NULL,'IH'),('4139328437',20165473,1,0,0,0,0,0,'0',NULL,'C'),('4139329378',20165473,1,0,0,0,0,0,'0',NULL,'C'),('4139330663',20165473,1,0,0,0,0,0,'0',NULL,'C'),('4139334185',20165473,1,0,0,0,0,0,'0',NULL,'C');
+INSERT INTO `servicios_tecnico_trabajados` VALUES ('4139279934',20165473,10,275,0,25,0,600,NULL,2016547312232016,'IH'),('4139287160',20165473,10,110,0,25,0,415,NULL,2016547312232016,'C'),('4139323256',20165473,10,0,0,25,0,325,NULL,2016547312232016,'IH');
 /*!40000 ALTER TABLE `servicios_tecnico_trabajados` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -288,4 +290,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-22  9:22:32
+-- Dump completed on 2016-12-23 13:22:16
