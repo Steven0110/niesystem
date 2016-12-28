@@ -6,6 +6,8 @@ $(document).ready(function(){
         $.removeCookie("usuario");
         location.href = "./";
     });
+    //Calcular mano de obra
+    $("#calc-mo").click( setMO );
 
     //Add listener to datedropper
     $("#fecha").change( setSemana );
@@ -32,6 +34,10 @@ $(document).ready(function(){
     $("#generate-report").click( genReport );
 
     $("#tipo-reporte").change( setDesp );
+
+    $("#check-tarifas").click( openPopUpTarifas );
+
+    $("#close-tarifas").click( closePopUpTarifas );
 });
 
 
@@ -103,7 +109,7 @@ function getInfoSvc( folio ){
                 $("#sem").val( data.mo );
                 $("#mod").val( data.modelo );
                 $("#serie").val( data.serie );
-                $("#cas").val( Math.ceil ( data.cas ) );
+                $("#cas-1").val( Math.ceil ( Number( data.cas ) ) );
             }else{
                 swal({
                     title : "Error",
@@ -241,6 +247,7 @@ function getServices(){
                 input_mo.attr("id", "mo_td-" + i );
                 input_mo.attr("value", data.svcCargo[ i - 1 ].mo );
                 input_mo.attr("onkeyup", "calcularTotales()");
+                input_mo.attr("onchange", "calcularTotales()");
                 td_mo.append( input_mo );
                 if( input_mo.val().length > 5 )
                     input_mo.attr("size", input_mo.val().length + 2  );
@@ -316,6 +323,7 @@ function getServices(){
                 input_cobro.addClass("input");
                 input_cobro.attr("size", "5");
                 input_cobro.attr("id", "cobro_td-" + i );
+                input_cobro.attr("onkeyup", "calcularTotales()");
                 input_cobro.attr("value", data.svcCargo[ i - 1 ].cobro );
                 td_cobro.append( input_cobro );
                 if( input_cobro.val().length > 5 )
@@ -330,13 +338,12 @@ function getServices(){
                 input_gar.attr("type", "checkbox");
                 input_gar.addClass("checkbox-md");
                 input_gar.attr("id", "gar_td-" + i );
-                if( data.svcCargo[ i - 1 ].gar == "1" )
+                if( data.svcCargo[ i - 1 ].gar == "1" ){
                     input_gar.attr( "checked", "checked" );
+                    input_cobro.attr("disabled", "disabled");
+                }
                 input_gar.attr( "disabled", "disabled" );
                 td_gar.append( input_gar );
-
-
-
                 var td_img = $("<td></td>");
                 var img = $("<img/>");
                 img.addClass("table-icon");
@@ -367,7 +374,7 @@ function getServices(){
             //Generacion de tabla de servicios in home
             var table = $("#report-table-ih");
             table.empty();
-            var header = $("<tr><th>Folio</th><th>Modelo</th><th>Serie</th><th>M. de obra</th><th>SEM</th><th>Casetas</th><th>Desplazamiento</th><th>Partes</th><th>Cobro</th><th>Observación</th></tr>");
+            var header = $("<tr><th>Folio</th><th>Modelo</th><th>Serie</th><th>M. de obra</th><th>SEM</th><th>Casetas</th><th>Desplazamiento</th><th>Partes</th><th>Cobro</th><th>Garantía</th></tr>");
             table.append( header );
             //Servicios in home
             for( i = 1 ; i <= data.svcIH.length ; i++ ){
@@ -422,6 +429,7 @@ function getServices(){
                 input_mo.attr("id", "mo_td-" + j );
                 input_mo.attr("value", data.svcIH[ i - 1 ].mo );
                 input_mo.attr("onkeyup", "calcularTotales()");
+                input_mo.attr("onchange", "calcularTotales()");
                 td_mo.append( input_mo );
                 if( input_mo.val().length > 5 )
                     input_mo.attr("size", input_mo.val().length + 2  );
@@ -497,6 +505,7 @@ function getServices(){
                 input_cobro.addClass("input");
                 input_cobro.attr("size", "5");
                 input_cobro.attr("id", "cobro_td-" + j );
+                input_cobro.attr("onkeyup", "calcularTotales()");
                 input_cobro.attr("value", data.svcIH[ i - 1 ].cobro );
                 td_cobro.append( input_cobro );
                 if( input_cobro.val().length > 5 )
@@ -510,13 +519,12 @@ function getServices(){
                 input_gar.attr("type", "checkbox");
                 input_gar.addClass("checkbox-md");
                 input_gar.attr("id", "gar_td-" + j );
-                if( data.svcIH[ i - 1 ].gar == "1" )
+                if( data.svcIH[ i - 1 ].gar == "1" ){
                     input_gar.attr( "checked", "checked" );
+                    input_cobro.attr("disabled", "disabled");
+                }
                 input_gar.attr( "disabled", "disabled" );
                 td_gar.append( input_gar );
-
-
-
 
                 var td_img = $("<td></td>");
                 var img = $("<img/>");
@@ -714,11 +722,6 @@ function addReport( idr, fecha, semana, idt, tipo ){
     });
 }
 
-function getIndex( cadena ){
-    var aux = cadena.split("-");
-    return Number( aux[ 1 ] );
-}
-
 function setDesp(){
     var tipo = $(this).find(":selected").val();
     if( tipo == "LB" ){
@@ -737,8 +740,28 @@ function setDesp(){
         }
         var desp_ih = $("#report-table-ih .input[id^=\"desp_td-\"]");
         for( var i = 0 ; i < desp_ih.length ; i++ ){
-            desp_ih.val(0);
+            desp_ih.val(100);
         }
+    }
+    setMO();
+    calcularTotales();
+}
+function setMO(){
+    var mo_c = $("#report-table-c .input[id^=\"mo_td-\"]");
+    var mo_ih = $("#report-table-ih .input[id^=\"mo_td-\"]");
+    for( var i = 0 ; i < mo_c.length ; i++ ){
+        var index = getIndex( $(mo_c[ i ]).attr("id") );
+        if( $("#gar_td-" + index ).prop("checked") == true )
+            $("#mo_td-" + index ).val( Number( $("#sem_td-" + index ).val() ) - Number( $("#desp_td-" + index).val() ) - Number( $("#cas_td-" + index).val() ) - Number( $("#partes_td-" + index ).val() )  );
+        else
+            $("#mo_td-" + index ).val( - Number( $("#sem_td-" + index ).val() ) - Number( $("#desp_td-" + index).val() ) - Number( $("#cas_td-" + index).val() ) - Number( $("#partes_td-" + index ).val() ) + Number( $("#cobro_td-" + index).val() )  );
+    }
+    for( var i = 0 ; i < mo_ih.length ; i++ ){
+        var index = getIndex( $(mo_ih[ i ]).attr("id") );
+        if( $("#gar_td-" + index ).prop("checked") == true )
+            $("#mo_td-" + index ).val( Number( $("#sem_td-" + index ).val() ) - Number( $("#desp_td-" + index).val() ) - Number( $("#cas_td-" + index).val() ) - Number( $("#partes_td-" + index ).val() )  );
+        else
+            $("#mo_td-" + index ).val( - Number( $("#sem_td-" + index ).val() ) - Number( $("#desp_td-" + index).val() ) - Number( $("#cas_td-" + index).val() ) - Number( $("#partes_td-" + index ).val() ) + Number( $("#cobro_td-" + index).val() )  );
     }
     calcularTotales();
 }
@@ -752,7 +775,57 @@ function getWeekNumber( d ) {
     d.setDate(d.getDate() + 4 - (d.getDay()||7));
     // Get first day of year
     var yearStart = new Date(d.getFullYear(),0,1);
-    // Calculate full weeks to nearest Thursday
+    // Calculate full weeks to ne
     var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
     return weekNo;
+}
+function closePopUpTarifas(){
+    $("#popup-layer").fadeOut("slow");
+    $("#tarifas-block").fadeOut("slow");
+}
+function openPopUpTarifas(){
+    $("#popup-layer").fadeIn("slow");
+    $("#tarifas-block").fadeIn("slow");
+    showTarifas();
+}
+function getIndex( cadena ){
+    var aux = cadena.split("-");
+    return Number( aux[ 1 ] );
+}
+function showTarifas(){
+    var table = $("#tarifas-table");
+    table.empty();
+    $.post({
+        url : "php/getTarifas.php",
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "1" ){
+                var row_header = $("<tr></tr>");
+                var header = $("<th>Descripción</th><th>Mano de obra</th><th>Costo revisión</th><th>Categoría</th>");
+                row_header.append( header );
+                table.append( row_header );
+                for( var i = 0 ; i < data.item.length ; i++ ){
+                    var tr = $("<tr></tr>");
+
+                    var td_desc = $("<td>" + data.item[ i ].desc +  "</td>");
+                    var td_mo = $("<td>" + data.item[ i ].mo +  "</td>");
+                    var td_rev = $("<td>" + data.item[ i ].rev +  "</td>");
+                    var td_cat = $("<td>" + data.item[ i ].cat +  "</td>");
+
+                    tr.append( td_desc );
+                    tr.append( td_mo );
+                    tr.append( td_rev );
+                    tr.append( td_cat );
+
+                    table.append( tr );
+                }
+            }else{
+                swal({
+                    title : "Error",
+                    text : data.error,
+                    type : "error"
+                });
+            }
+        }
+    });
 }

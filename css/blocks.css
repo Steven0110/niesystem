@@ -154,6 +154,7 @@ label{
 }
 input[disabled]{
     cursor: not-allowed;
+    color: rgba(150, 150, 150, 1);
 }
 .table-icon{
     height: 30px;
@@ -193,6 +194,10 @@ td, th{
     padding: 3px;
     text-align: center;
 }
+
+td{
+    background-color: #3F6DA5;
+}
 input{
     background-color: black;
     color: white;
@@ -203,6 +208,11 @@ table{
     margin-top: 2%;
     margin-bottom: 2%;
     margin-left: 2%;
+}
+tr:hover td{
+    animation-name: reports-row-pulse;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
 }
 
 table td input{
@@ -216,6 +226,54 @@ table td input{
 }
 .checkbox-md{
     transform: scale(2.5);
+}
+#tarifas-block{
+    position: absolute;
+    width: 70%;
+    height: 90%;
+    left: 15%;
+    top: 5%;
+    z-index: 1001;
+    background-color: #5390C6;
+    border-radius: 30px 0 0 30px;
+}
+#close-tarifas{
+    background-image: url("../imgs/delete.png");
+    float: right;
+    margin-top: 2%;
+    margin-right: 2%;
+    transition: all;
+    transition-duration: 0.2s;
+}
+#close-tarifas img:hover{
+    transform: scale(1.6);
+    transition: all;
+    transition-duration: 0.2s;
+}
+.layer{
+    z-index: 1000;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0, 0.8);
+}
+.popup-panel{
+    margin-top: 5%;
+    color: white;
+    padding: 20px;
+}
+#tarifas-block{
+    overflow: auto;
+}
+::-webkit-scrollbar {
+    width: 1em;
+}
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+}
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
 }
 
 @keyframes title-pulse{

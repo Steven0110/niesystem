@@ -58,9 +58,10 @@
                     <ul class="sub-menu collapse" id="options">
                         <li id="gen-report"><a href="#">Agregar servicios</a></li>
                         <li id="show-reports"><a href="#">Crear reporte</a></li>
-                        <li id="checked-reports"><a href="#">Reportes revisados</a></li>
+                        <li id="checked-reports"><a href="#">Reportes anteriores</a></li>
+                        <li id="checked-reports"><a href="#" id="rechazados">Servicios rechazados (0)</a></li>
                     </ul>
-                     <li>
+                     <li id="check-tarifas">
                       <a href="#">
                       <i class="fa fa-flag fa-lg"></i> Ver tarifas
                       </a>
@@ -221,6 +222,11 @@
                 </div>
             </div>
             <div class="row row-report">
+                <div class="col-md-4 col-md-offset-8">
+                    <button class="btn btn-md btn-common" id="calc-mo">Calcular mano de obra</button>
+                </div>
+            </div>
+            <div class="row row-report">
                 <div class="row subsection-title centered-block">
                     <span>Servicios de cargo (39.14%)</span>
                 </div>
@@ -290,5 +296,14 @@
             </div>
         </div>
     </div>
+    <div id="tarifas-block" hidden="hidden">
+        <div id="close-tarifas"><img src="imgs/delete.png" class="table-icon" alt="Cerrar popup"></div>
+        <div class="row centered-block popup-panel">
+           <p class="title">Tarifas</p>
+           <table id="tarifas-table" class="centered-block"></table>
+        </div>
+
+    </div>
+    <div class="layer" id="popup-layer" hidden="hidden"></div>
 </body>
 </html>
