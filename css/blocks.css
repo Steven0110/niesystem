@@ -73,6 +73,7 @@ html, body{
 .mid-panel{
     overflow: auto;
     height: 100%;
+    padding-bottom: 30px;
 }
 .row-report{
     background-color: #4977AF;
@@ -250,6 +251,10 @@ table td input{
     transition: all;
     transition-duration: 0.2s;
 }
+.spaced{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 .layer{
     z-index: 1000;
     position: absolute;
@@ -264,6 +269,20 @@ table td input{
 }
 #tarifas-block{
     overflow: auto;
+}
+#no-reporte{
+    border-bottom: 2px solid white;
+}
+.return-icon{
+    position: fixed;
+    float: right;
+    height: 50px;
+    cursor: pointer;
+    top: 10%;
+    right: 6%;
+}
+.all-bordered{
+    border: 4px solid white;
 }
 ::-webkit-scrollbar {
     width: 1em;

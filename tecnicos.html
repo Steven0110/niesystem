@@ -58,8 +58,8 @@
                     <ul class="sub-menu collapse" id="options">
                         <li id="gen-report"><a href="#">Agregar servicios</a></li>
                         <li id="show-reports"><a href="#">Crear reporte</a></li>
-                        <li id="checked-reports"><a href="#">Reportes anteriores</a></li>
-                        <li id="checked-reports"><a href="#" id="rechazados">Servicios rechazados (0)</a></li>
+                        <li id="checked-reports" class="view-checked-reports"><a href="#">Reportes anteriores</a></li>
+                        <li id="rejected-services"><a href="#">Servicios rechazados (<span id="no-rechazados">0</span>)</a></li>
                     </ul>
                      <li id="check-tarifas">
                       <a href="#">
@@ -80,7 +80,7 @@
         <div class="mid-panel bg-samsung">
         </div>
 
-
+        <!-- AGREGAR SERVICIOS -->
         <div class="mid-panel" hidden="hidden" id="gen-report-panel">
 
             <div class="row row-report">
@@ -101,55 +101,49 @@
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
                         <label for="mo-1">M. de obra:</label>
-                        <input type="text" placeholder="Mano de obra" class="report-input" id="mo-1"/>
+                        <input type="text" class="report-input" id="mo-1"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
                         <label for="mo-1">SEM:</label>
-                        <input disabled="disabled" type="text" placeholder="Mano de obra SEM" class="report-input" id="sem"/>
+                        <input disabled="disabled" type="text" class="report-input" id="sem"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
                         <label for="mo-1">Modelo:</label>
-                        <input type="text" disabled="disabled" placeholder="Modelo" class="report-input" id="mod"/>
+                        <input type="text" disabled="disabled" class="report-input" id="mod"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
                         <label for="mo-1">Serie:</label>
-                        <input type="text" disabled="disabled" placeholder="Serie" class="report-input" id="serie"/>
+                        <input type="text" disabled="disabled" class="report-input" id="serie"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
                         <label for="mo-1">Casetas:</label>
-                        <input type="text" placeholder="Casetas" class="report-input" id="cas-1"/>
+                        <input type="text" class="report-input" id="cas-1"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
                         <label for="mo-1">Desp. :</label>
-                        <input type="text" placeholder="Desplazamiento" class="report-input" id="des-1"/>
+                        <input type="text" class="report-input" id="des-1"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
                         <label for="mo-1">Partes:</label>
-                        <input type="text" placeholder="Partes con IVA" class="report-input" id="iva-1"/>
+                        <input type="text" class="report-input" id="iva-1"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
                     <div class="centered-block">
                         <label for="mo-1">Cobro:</label>
-                        <input type="text" placeholder="Cobro a cliente" class="report-input" id="cobro-1"/>
-                    </div>
-                </div>
-                <div class="section-reg col-md-2">
-                    <div class="centered-block">
-                        <label for="mo-1">Observación:</label>
-                        <input type="text" placeholder="Observacion" class="report-input" id="obs-1"/>
+                        <input type="text" class="report-input" id="cobro-1"/>
                     </div>
                 </div>
                 <div class="section-reg col-md-2">
@@ -233,7 +227,7 @@
                 <table id="report-table-c" class="centered-block">
                 </table>
 
-                <div class="row">
+                <div class="row spaced">
                     <div class="col-md-3 data-block">
                         <div class="row centered-block">
                             <p class="block-title-reg">Total M.O:</p>
@@ -252,7 +246,7 @@
                             <p class="data" id="total-desp-c"></p>
                         </div>
                     </div>
-                    <div class="col-md-3 data-block">
+                    <div class="col-md-2 data-block all-bordered">
                         <div class="row centered-block">
                             <p class="block-title-reg">Total labor:</p>
                             <p class="data" id="total-labor-c"></p>
@@ -265,7 +259,7 @@
                 </div>
                 <table id="report-table-ih" class="centered-block">
                 </table>
-                <div class="row">
+                <div class="row spaced">
                     <div class="col-md-3 data-block">
                         <div class="row centered-block">
                             <p class="block-title-reg">Total M.O:</p>
@@ -284,10 +278,18 @@
                             <p class="data" id="total-desp-ih"></p>
                         </div>
                     </div>
-                    <div class="col-md-3 data-block">
+                    <div class="col-md-2 data-block all-bordered">
                         <div class="row centered-block">
                             <p class="block-title-reg">Total labor:</p>
                             <p class="data" id="total-labor-ih"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spaced">
+                    <div class="col-md-3 col-md-offset-8 data-block all-bordered">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">COBRO TOTAL POR REPORTE:</p>
+                            <p class="data" id="total-rep"></p>
                         </div>
                     </div>
                 </div>
@@ -295,11 +297,107 @@
                 <button class="btn-gen-report btn-common" id="generate-report">Generar reporte</button>
             </div>
         </div>
+
+        <div class="mid-panel" hidden="hidden" id="last-reports-panel">
+
+            <div class="row row-report">
+                <div class="centered-block title">Reportes anteriores</div>
+            </div>
+
+            <div class="row row-report">
+                <table id="prev-reports-table" class="centered-block"></table>
+            </div>
+        </div>
+        <!-- DESCRIBE REPORTE -->
+        <div class="mid-panel" hidden="hidden" id="desc-report">
+            <img src="imgs/return.png" alt="Regresar" class="view-checked-reports return-icon">
+            <div class="row row-report">
+                <div class="centered-block title">Reporte <span id="no-reporte"></span></div>
+            </div>
+            <div class="row row-report">
+                <div class="row subsection-title centered-block">
+                    <span>Servicios de cargo (39.14%)</span>
+                </div>
+                <table id="desc-report-table-c" class="centered-block">
+                </table>
+
+                <div class="row spaced">
+                    <div class="col-md-3 data-block">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total M.O:</p>
+                            <p class="data" id="desc-total-mo-c"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 data-block">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total casetas:</p>
+                            <p class="data" id="desc-total-cas-c"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 data-block">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total desplazamiento:</p>
+                            <p class="data" id="desc-total-desp-c"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 data-block all-bordered">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total labor:</p>
+                            <p class="data" id="desc-total-labor-c"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row subsection-title centered-block">
+                    <span>Servicios In Home (50%)</span>
+                </div>
+                <table id="desc-report-table-ih" class="centered-block">
+                </table>
+                <div class="row spaced">
+                    <div class="col-md-3 data-block">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total M.O:</p>
+                            <p class="data" id="desc-total-mo-ih"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 data-block">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total casetas:</p>
+                            <p class="data" id="desc-total-cas-ih"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 data-block">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total desplazamiento:</p>
+                            <p class="data" id="desc-total-desp-ih"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 data-block all-bordered">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total labor:</p>
+                            <p class="data" id="desc-total-labor-ih"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spaced">
+                    <div class="col-md-3 col-md-offset-8 data-block all-bordered">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">COBRO TOTAL POR REPORTE:</p>
+                            <p class="data" id="desc-total-rep"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
+
+
     <div id="tarifas-block" hidden="hidden">
         <div id="close-tarifas"><img src="imgs/delete.png" class="table-icon" alt="Cerrar popup"></div>
         <div class="row centered-block popup-panel">
-           <p class="title">Tarifas</p>
+           <span class="title centered-block">Tarifas</span>
            <table id="tarifas-table" class="centered-block"></table>
         </div>
 

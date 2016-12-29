@@ -200,13 +200,14 @@ DROP TABLE IF EXISTS `registro_gspn`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `registro_gspn` (
-  `Reclamacion_del_ASC` varchar(12) NOT NULL,
+  `Reclamacion_del_ASC` varchar(15) NOT NULL,
   `Modelo` varchar(14) NOT NULL,
   `Nro_de_Serie` varchar(15) NOT NULL,
   `Valor_de_la_Mano_de_Obra` float DEFAULT NULL,
   `FLETES` float DEFAULT NULL,
   `Estado` int(11) NOT NULL,
-  `Ingeniero` bigint(20) DEFAULT NULL
+  `Ingeniero` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`Reclamacion_del_ASC`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -245,7 +246,7 @@ CREATE TABLE `reporte` (
 
 LOCK TABLES `reporte` WRITE;
 /*!40000 ALTER TABLE `reporte` DISABLE KEYS */;
-INSERT INTO `reporte` VALUES (2016547312272016,'2016-12-27','E',20165473,52,NULL,0),(201654731227201668,'2016-12-27','LB',20165473,52,NULL,0),(2016547312272016569,'2016-12-27','E',20165473,52,NULL,0),(2016547312272016577,'2016-12-27','LB',20165473,52,NULL,0),(2016547312272016726,'2016-12-27','E',20165473,52,NULL,0),(2016547312272016934,'2016-12-27','LB',20165473,52,NULL,0),(2016547312282016965,'2016-12-28','null',20165473,52,NULL,0);
+INSERT INTO `reporte` VALUES (2016547312292016189,'2016-12-29','LB',20165473,52,NULL,0);
 /*!40000 ALTER TABLE `reporte` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -272,9 +273,9 @@ CREATE TABLE `servicios_tecnico_trabajados` (
   PRIMARY KEY (`folio`,`idtecnico`),
   KEY `idTecnico` (`idtecnico`),
   KEY `idreporte` (`idreporte`),
-  CONSTRAINT `servicios_tecnico_trabajados_ibfk_1` FOREIGN KEY (`folio`) REFERENCES `asd` (`Reclamacion_del_ASC`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `servicios_tecnico_trabajados_ibfk_2` FOREIGN KEY (`idtecnico`) REFERENCES `persona` (`idTecnico`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `servicios_tecnico_trabajados_ibfk_3` FOREIGN KEY (`idreporte`) REFERENCES `reporte` (`idreporte`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `servicios_tecnico_trabajados_ibfk_3` FOREIGN KEY (`idreporte`) REFERENCES `reporte` (`idreporte`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `servicios_tecnico_trabajados_ibfk_4` FOREIGN KEY (`folio`) REFERENCES `registro_gspn` (`Reclamacion_del_ASC`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -284,6 +285,7 @@ CREATE TABLE `servicios_tecnico_trabajados` (
 
 LOCK TABLES `servicios_tecnico_trabajados` WRITE;
 /*!40000 ALTER TABLE `servicios_tecnico_trabajados` DISABLE KEYS */;
+INSERT INTO `servicios_tecnico_trabajados` VALUES ('4138842613',20165473,10,756,0,25,0,1200,NULL,2016547312292016189,'C',0),('4139591111',20165473,10,175,0,25,0,0,NULL,2016547312292016189,'C',1),('4139597174',20165473,10,1134,61,25,0,1500,NULL,2016547312292016189,'C',0),('4139624176',20165473,10,309,26,25,0,0,NULL,2016547312292016189,'IH',1),('4139657093',20165473,10,529,26,25,0,800,NULL,2016547312292016189,'IH',0);
 /*!40000 ALTER TABLE `servicios_tecnico_trabajados` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -347,4 +349,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-28 13:30:47
+-- Dump completed on 2016-12-29 12:16:07
