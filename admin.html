@@ -35,7 +35,7 @@
     <link rel="shortcut icon" href="/favicon.ico?v=2" />
 
 
-    <title>Tecnicos</title>
+    <title>Administración</title>
 </head>
 <body class="">
 
@@ -100,6 +100,111 @@
         <div class="mid-panel" hidden="hidden" id="feed-db-panel">
             <div class="row row-report">
                 <div class="centered-block title">Alimentar base de datos</div>
+            </div>
+        </div>
+
+
+
+        <!-- DESCRIBE REPORTE -->
+        <div class="mid-panel" hidden="hidden" id="desc-report">
+            <img src="imgs/return.png" alt="Regresar" class="view-checked-reports return-icon">
+            <div class="row row-report">
+                <div class="centered-block title">Reporte <span id="no-reporte"></span></div>
+            </div>
+            <div class="row row-report">
+                <div class="row subsection-title centered-block">
+                    <span>Servicios de cargo (39.14%)</span>
+                </div>
+                <table id="desc-report-table-c" class="centered-block">
+                </table>
+
+                <div class="row spaced">
+                    <div class="col-md-2 data-block">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total M.O:</p>
+                            <p class="data" id="desc-total-mo-c"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 data-block">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total casetas:</p>
+                            <p class="data" id="desc-total-cas-c"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 data-block">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total desplazamiento:</p>
+                            <p class="data" id="desc-total-desp-c"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 data-block">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Subtotal:</p>
+                            <p class="data" id="desc-total-sub-c"></p>
+                        </div>
+                        <div class="row centered-block">
+                            <p class="block-title-reg">IVA (16%):</p>
+                            <p class="data" id="desc-total-iva-c"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 data-block all-bordered">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total labor:</p>
+                            <p class="data" id="desc-total-labor-c"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row subsection-title centered-block">
+                    <span>Servicios In Home (50%)</span>
+                </div>
+                <table id="desc-report-table-ih" class="centered-block">
+                </table>
+                <div class="row spaced">
+                    <div class="col-md-2 data-block">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total M.O:</p>
+                            <p class="data" id="desc-total-mo-ih"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 data-block">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total casetas:</p>
+                            <p class="data" id="desc-total-cas-ih"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 data-block">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total desplazamiento:</p>
+                            <p class="data" id="desc-total-desp-ih"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 data-block">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Subtotal:</p>
+                            <p class="data" id="desc-total-sub-ih"></p>
+                        </div>
+                        <div class="row centered-block">
+                            <p class="block-title-reg">IVA (16%):</p>
+                            <p class="data" id="desc-total-iva-ih"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 data-block all-bordered">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">Total labor:</p>
+                            <p class="data" id="desc-total-labor-ih"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row spaced">
+                    <div class="col-md-3 col-md-offset-8 data-block all-bordered">
+                        <div class="row centered-block">
+                            <p class="block-title-reg">COBRO TOTAL POR REPORTE:</p>
+                            <p class="data" id="desc-total-rep"></p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-gen-report btn-common" id="confirm-report">Confirmar reporte</button>
             </div>
         </div>
 

@@ -29,6 +29,10 @@ $(document).ready(function(){
         $("#last-reports-panel").slideDown("slow");
         getReports();
     });
+    $("#rejected-services").click(function(){
+        $(".mid-panel").slideUp("slow");
+        $("#rej-services-panel").slideDown("slow");
+    });
 
     var salute = "Bienvenido " + JSON.parse( $.cookie("usuario")).name;
     $("#saludo").text( salute );
@@ -44,6 +48,9 @@ $(document).ready(function(){
     $("#check-tarifas").click( openPopUpTarifas );
 
     $("#close-tarifas").click( closePopUpTarifas );
+
+
+    getRejectedServices();
 
 
 });
@@ -647,10 +654,12 @@ function calcularTotales(){
         total_cas_c += Number( $(cas_cargo[ i ]).val() );
         total_desp_c += Number( $(desp_cargo[ i ]).val() );
     }
-    total_labor_c = Math.ceil( (total_mo_c * 0.3914) + (total_mo_c * 0.3914 * 0.16) );
+    total_labor_c = ((total_mo_c * 0.3914) + (total_mo_c * 0.3914 * 0.16)).toFixed(2);
     $("#total-mo-c").text("$" + total_mo_c );
     $("#total-cas-c").text("$" + total_cas_c );
     $("#total-desp-c").text("$" + total_desp_c );
+    $("#total-sub-c").text( "$" + (total_mo_c * 0.3914).toFixed(2) );
+    $("#total-iva-c").text( "$" + (total_mo_c * 0.3914 * 0.16).toFixed(2) );
     $("#total-labor-c").text("$" + total_labor_c );
 
     //Calculo para in home
@@ -663,12 +672,14 @@ function calcularTotales(){
         total_cas_ih += Number( $(cas_ih[ i ]).val() );
         total_desp_ih += Number( $(desp_ih[ i ]).val() );
     }
-    total_labor_ih = Math.ceil( (total_mo_ih * 0.5) + (total_mo_ih * 0.5 * 0.16) );
+    total_labor_ih = ((total_mo_ih * 0.5) + (total_mo_ih * 0.5 * 0.16)).toFixed(2);
     $("#total-mo-ih").text("$" + total_mo_ih );
     $("#total-cas-ih").text("$" + total_cas_ih );
     $("#total-desp-ih").text("$" + total_desp_ih );
+    $("#total-sub-ih").text( "$" + (total_mo_ih * 0.5).toFixed(2));
+    $("#total-iva-ih").text( "$" + (total_mo_ih * 0.5 * 0.16).toFixed(2) );
     $("#total-labor-ih").text("$" + total_labor_ih );
-    var total_reporte = total_labor_c + total_labor_ih;
+    var total_reporte = Number(total_labor_c )+ Number(total_labor_ih);
     $("#total-rep").text( "$" + total_reporte );
 }
 
@@ -866,7 +877,6 @@ function getReports(){
                     var img = $("<img/>");
                     img.addClass("table-icon");
                     img.attr("onclick", "describeReport('" + data.reports[ i ].idr + "')")
-                    console.log( data.reports[ i ].idr );
                     if( data.reports[ i ].rev == "0")
                         img.attr("src", "imgs/wait.png");
                     else
@@ -903,7 +913,6 @@ function describeReport( idr ){
     var total_mo_c = 0, total_desp_c = 0, total_cas_c = 0, total_labor_c = 0;
     var total_mo_ih = 0, total_desp_ih = 0, total_cas_ih = 0, total_labor_ih = 0;
 
-    console.log( idr );
     var idt = ( JSON.parse( $.cookie("usuario") ) ).idt;
     var table_c = $("#desc-report-table-c");
     var table_ih = $("#desc-report-table-ih");
@@ -929,24 +938,20 @@ function describeReport( idr ){
                     total_mo_c += Number( data.svcCargo[ i - 1 ].mo );
                     total_cas_c += Number( data.svcCargo[ i - 1 ].cas );
                     total_desp_c += Number( data.svcCargo[ i - 1 ].desp );
-
                     var svc_tr = $("<tr></tr>");
                     svc_tr.attr("id", "svc-" + i );
 
                     var td_folio = $("<td></td>");
                     var input_folio = $("<input/>");
                     input_folio.addClass("input");
-                    input_folio.attr("size", "5");
                     input_folio.attr("id", "folio_td-" + i );
                     input_folio.attr("value", data.svcCargo[ i - 1 ].folio );
                     input_folio.attr("disabled", "disabled");
-                    td_folio.append( input_folio );
                     if( input_folio.val().length > 5 )
                         input_folio.attr("size", input_folio.val().length + 2 );
                     else
-                    total_desp_c += Number( data.svcCargo[ i - 1 ].desp );
                         input_folio.attr("size", "5" );
-
+                    td_folio.append( input_folio );
 
                     var td_mod = $("<td></td>");
                     var input_mod = $("<input/>");
@@ -1081,10 +1086,12 @@ function describeReport( idr ){
                     table_c.append( svc_tr );
                 }
 
-                total_labor_c = Math.ceil( (total_mo_c * 0.3914) + (total_mo_c * 0.3914 * 0.16) );
+                total_labor_c = ((total_mo_c * 0.3914) + (total_mo_c * 0.3914 * 0.16)).toFixed(2);
                 $("#desc-total-mo-c").text( "$" + total_mo_c );
                 $("#desc-total-cas-c").text( "$" + total_cas_c );
                 $("#desc-total-desp-c").text( "$" + total_desp_c );
+                $("#desc-total-sub-c").text( "$" + (total_mo_c * 0.3914).toFixed(2));
+                $("#desc-total-iva-c").text( "$" + (total_mo_c * 0.3914 * 0.16).toFixed(2));
                 $("#desc-total-labor-c").text( "$" + total_labor_c );
 
                 for( i = 1 ; i <= data.svcIH.length ; i++ ){
@@ -1095,7 +1102,6 @@ function describeReport( idr ){
                     total_mo_ih += Number(  data.svcIH[ i - 1 ].mo );
                     total_cas_ih += Number( data.svcIH[ i - 1 ].cas );
                     total_desp_ih += Number( data.svcIH[ i - 1 ].desp );
-                    total_labor_ih += Number( data.svcIH[ i - 1 ].labor );
 
                     var svc_tr = $("<tr></tr>");
                     svc_tr.attr("id", "svc-" + i );
@@ -1107,11 +1113,11 @@ function describeReport( idr ){
                     input_folio.attr("id", "folio_td-" + i );
                     input_folio.attr("value", data.svcIH[ i - 1 ].folio );
                     input_folio.attr("disabled", "disabled");
-                    td_folio.append( input_folio );
                     if( input_folio.val().length > 5 )
                         input_folio.attr("size", input_folio.val().length + 2 );
                     else
                         input_folio.attr("size", "5" );
+                    td_folio.append( input_folio );
 
 
                     var td_mod = $("<td></td>");
@@ -1246,12 +1252,14 @@ function describeReport( idr ){
 
                     table_ih.append( svc_tr );
                 }
-                total_labor_ih = Math.ceil( (total_mo_ih * 0.5) + (total_mo_ih * 0.5 * 0.16) );
+                total_labor_ih = ((total_mo_ih * 0.5) + (total_mo_ih * 0.5 * 0.16)).toFixed(2);
                 $("#desc-total-mo-ih").text( "$" + total_mo_ih );
                 $("#desc-total-cas-ih").text( "$" + total_cas_ih );
                 $("#desc-total-desp-ih").text( "$" + total_desp_ih );
+                $("#desc-total-sub-ih").text( "$" + (total_mo_ih * 0.5).toFixed(2) );
+                $("#desc-total-iva-ih").text( "$" + (total_mo_ih * 0.5 * 0.16).toFixed(2));
                 $("#desc-total-labor-ih").text( "$" + total_labor_ih );
-                var total_rep = total_labor_ih + total_labor_c;
+                var total_rep = Number( total_labor_ih ) + Number( total_labor_c );
                 $("#desc-total-rep").text("$" + total_rep );
             }else if( data.status == "-2"){
                 swal({
@@ -1269,5 +1277,83 @@ function describeReport( idr ){
     });
 }
 
+function getRejectedServices(){
+    var idt = ( JSON.parse( $.cookie("usuario") ) ).idt;
+    var table = $("#rej-svc-table");
+    table.empty();
+    var header = $("<tr><th>Folio</th><th>Modelo</th><th>Serie</th><th>Observación</th></tr>");
+    table.append( header );
+    $.post({
+        url : "php/getRejectedServices.php",
+        data : {
+            "idt" : idt
+        },
+        success : function( response ){
+            var data = JSON.parse( response );
+            //Despliega el numero de servicios rechazados en la opcion correspondiente
+            $("#no-rechazados").text( data.svc.length );
 
+            if( data.status == "1" ){
+                for( var i = 0 ; i < data.svc.length ; i++ ){
+                    var tr = $("<tr></tr>");
+                    var td_folio = $("<td></td>");
+                    var input_folio = $("<input/>");
+                    input_folio.addClass("input");
+                    input_folio.attr("size", "5");
+                    input_folio.attr("id", "folio_td-" + i );
+                    input_folio.attr("value", data.svc[ i ].folio );
+                    input_folio.attr("disabled", "disabled");
+                    if( input_folio.val().length > 5 )
+                        input_folio.attr("size", input_folio.val().length + 2 );
+                    else
+                        input_folio.attr("size", "5" );
+                    td_folio.append( input_folio );
+                    var td_mod = $("<td></td>");
+                    var input_mod = $("<input/>");
+                    input_mod.addClass("input");
+                    input_mod.attr("size", "5");
+                    input_mod.attr("id", "mod_td-" + i );
+                    input_mod.attr("value", data.svc[ i ].mod );
+                    input_mod.attr("disabled", "disabled");
+                    if( input_mod.val().length > 5 )
+                        input_mod.attr("size", input_mod.val().length + 2 );
+                    else
+                        input_mod.attr("size", "5" );
+                    td_mod.append( input_mod );
+                    var td_serie = $("<td></td>");
+                    var input_serie = $("<input/>");
+                    input_serie.addClass("input");
+                    input_serie.attr("size", "5");
+                    input_serie.attr("id", "serie_td-" + i );
+                    input_serie.attr("value", data.svc[ i ].serie );
+                    input_serie.attr("disabled", "disabled");
+                    if( input_serie.val().length > 5 )
+                        input_serie.attr("size", input_serie.val().length + 2 );
+                    else
+                        input_serie.attr("size", "5" );
+                    td_serie.append( input_serie );
 
+                    var td_obs = $("<td class='wrapped'></td>");
+                    td_obs.text(data.svc[ i ].obs);
+
+                    tr.append( td_folio );
+                    tr.append( td_mod );
+                    tr.append( td_serie );
+                    tr.append( td_obs );
+                    table.append( tr );
+                }
+            }else if( data.status == "-2"){
+                swal({
+                    title : "Error desconocido",
+                    type : "error"
+                });
+            }else{
+                swal({
+                    title : "Error",
+                    type : "error",
+                    text : data.error
+                });
+            }
+        }
+    });
+}

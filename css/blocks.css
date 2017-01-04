@@ -214,6 +214,11 @@ tr:hover td{
     animation-name: reports-row-pulse;
     animation-duration: 1s;
     animation-iteration-count: infinite;
+
+}
+tr td{
+
+
 }
 
 table td input{
@@ -281,6 +286,11 @@ table td input{
     top: 10%;
     right: 6%;
 }
+.wrapped{
+    word-wrap: break-word;
+    max-width: 500px;
+}
+
 .all-bordered{
     border: 4px solid white;
 }
