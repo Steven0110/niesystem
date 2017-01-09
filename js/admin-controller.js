@@ -27,6 +27,21 @@ $(document).ready(function(){
         $("#check-reports-panel").slideDown("slow");
         showUncheckedReports();
     });
+    $("#mng-usr").click(function(){
+        //Ver gestion de usuarios
+        $(".mid-panel").slideUp("slow");
+        $("#mng-usr-panel").slideDown("slow");
+    });
+    $("#tax").click(function(){
+        //Ver gestion de usuarios
+        $(".mid-panel").slideUp("slow");
+        $("#tax-panel").slideDown("slow");
+        showTaxes();
+    });
+
+    $("#add-usr").click( addUser );
+
+    $("#rm-usr").click( removeUser );
 
     $("#confirm-report").click( confirmReport );
 });
@@ -132,9 +147,9 @@ function checkReport( idr, idt ){
                     var input_mod = $("<input/>");
                     input_mod.addClass("input");
                     input_mod.attr("size", "5");
+                    input_mod.attr("disabled", "disabled");
                     input_mod.attr("id", "mod_td-" + i );
                     input_mod.attr("value", data.svcCargo[ i - 1 ].mod );
-                    input_mod.attr("disabled", "disabled");
                     td_mod.append( input_mod );
                     if( input_mod.val().length > 5 )
                         input_mod.attr("size", input_mod.val().length + 2 );
@@ -145,9 +160,9 @@ function checkReport( idr, idt ){
                     var input_serie = $("<input/>");
                     input_serie.addClass("input");
                     input_serie.attr("size", "5");
+                    input_serie.attr("disabled", "disabled");
                     input_serie.attr("id", "serie_td-" + i );
                     input_serie.attr("value", data.svcCargo[ i - 1 ].serie );
-                    input_serie.attr("disabled", "disabled");
                     td_serie.append( input_serie );
                     if( input_serie.val().length > 5 )
                         input_serie.attr("size", input_serie.val().length + 2  );
@@ -160,7 +175,6 @@ function checkReport( idr, idt ){
                     input_mo.attr("size", "5");
                     input_mo.attr("id", "mo_td-" + i );
                     input_mo.attr("value", data.svcCargo[ i - 1 ].mo );
-                    input_mo.attr("disabled", "disabled");
                     td_mo.append( input_mo );
                     if( input_mo.val().length > 5 )
                         input_mo.attr("size", input_mo.val().length + 2  );
@@ -187,7 +201,6 @@ function checkReport( idr, idt ){
                     input_cas.attr("id", "cas_td-" + i );
                     input_cas.attr("value", data.svcCargo[ i - 1 ].cas );
                     td_cas.append( input_cas );
-                    input_cas.attr("disabled", "disabled");
                     if( input_cas.val().length > 5 )
                         input_cas.attr("size", input_cas.val().length+ 2  );
                     else
@@ -200,7 +213,6 @@ function checkReport( idr, idt ){
                     input_desp.attr("size", "5");
                     input_desp.attr("id", "desp_td-" + i );
                     input_desp.attr("value", data.svcCargo[ i - 1 ].desp );
-                    input_desp.attr("disabled", "disabled");
                     td_desp.append( input_desp );
                     if( input_desp.val().length > 5 )
                         input_desp.attr("size", input_desp.val().length+ 2  );
@@ -211,7 +223,6 @@ function checkReport( idr, idt ){
                     var input_partes = $("<input/>");
                     input_partes.addClass("input");
                     input_partes.attr("size", "5");
-                    input_partes.attr("disabled", "disabled");
                     input_partes.attr("id", "partes_td-" + i );
                     input_partes.attr("value", data.svcCargo[ i - 1 ].iva );
                     td_partes.append( input_partes );
@@ -225,7 +236,6 @@ function checkReport( idr, idt ){
                     input_cobro.addClass("input");
                     input_cobro.attr("size", "5");
                     input_cobro.attr("id", "cobro_td-" + i );
-                    input_cobro.attr("disabled", "disabled");
                     input_cobro.attr("value", data.svcCargo[ i - 1 ].cobro );
                     td_cobro.append( input_cobro );
                     if( input_cobro.val().length > 5 )
@@ -242,7 +252,6 @@ function checkReport( idr, idt ){
                     input_gar.attr("id", "gar_td-" + i );
                     if( data.svcCargo[ i - 1 ].gar == "1" ){
                         input_gar.attr( "checked", "checked" );
-                        input_cobro.attr("disabled", "disabled");
                     }
                     input_gar.attr( "disabled", "disabled" );
                     td_gar.append( input_gar );
@@ -255,6 +264,14 @@ function checkReport( idr, idt ){
                     img.attr( "alt", "Eliminar servicio");
                     img.attr("onclick", "deleteSvc(" + i + ")" );
                     td_img.append( img );
+                    var td_img_upt = $("<td></td>");
+                    var img_upt = $("<img/>");
+                    img_upt.addClass("table-icon");
+                    img_upt.attr( "id", "update-" + i );
+                    img_upt.attr( "src", "imgs/update.ico");
+                    img_upt.attr( "alt", "Eliminar servicio");
+                    img_upt.attr("onclick", "updateSvc(" + i + ")" );
+                    td_img_upt.append( img_upt );
 
                     svc_tr.append( td_folio );
                     svc_tr.append( td_mod );
@@ -267,6 +284,7 @@ function checkReport( idr, idt ){
                     svc_tr.append( td_cobro );
                     svc_tr.append( td_gar );
                     svc_tr.append( td_img );
+                    svc_tr.append( td_img_upt );
 
                     table_c.append( svc_tr );
                 }
@@ -337,7 +355,6 @@ function checkReport( idr, idt ){
                     input_mo.attr("size", "5");
                     input_mo.attr("id", "mo_td-" + i );
                     input_mo.attr("value", data.svcIH[ i - 1 ].mo );
-                    input_mo.attr("disabled", "disabled");
                     td_mo.append( input_mo );
                     if( input_mo.val().length > 5 )
                         input_mo.attr("size", input_mo.val().length + 2  );
@@ -348,9 +365,9 @@ function checkReport( idr, idt ){
                     var input_sem = $("<input/>");
                     input_sem.addClass("input");
                     input_sem.attr("size", "5");
+                    input_sem.attr("disabled", "disabled");
                     input_sem.attr("id", "sem_td-" + i );
                     input_sem.attr("value", data.svcIH[ i - 1 ].sem );
-                    input_sem.attr("disabled", "disabled");
                     td_sem.append( input_sem );
                     if( input_sem.val().length > 5 )
                         input_sem.attr("size", input_sem.val().length+ 2  );
@@ -364,7 +381,6 @@ function checkReport( idr, idt ){
                     input_cas.attr("id", "cas_td-" + i );
                     input_cas.attr("value", data.svcIH[ i - 1 ].cas );
                     td_cas.append( input_cas );
-                    input_cas.attr("disabled", "disabled");
                     if( input_cas.val().length > 5 )
                         input_cas.attr("size", input_cas.val().length+ 2  );
                     else
@@ -377,7 +393,6 @@ function checkReport( idr, idt ){
                     input_desp.attr("size", "5");
                     input_desp.attr("id", "desp_td-" + i );
                     input_desp.attr("value", data.svcIH[ i - 1 ].desp );
-                    input_desp.attr("disabled", "disabled");
                     td_desp.append( input_desp );
                     if( input_desp.val().length > 5 )
                         input_desp.attr("size", input_desp.val().length+ 2  );
@@ -389,7 +404,6 @@ function checkReport( idr, idt ){
                     input_partes.addClass("input");
                     input_partes.attr("size", "5");
                     input_partes.attr("id", "partes_td-" + i );
-                    input_partes.attr("disabled", "disabled");
                     input_partes.attr("value", data.svcIH[ i - 1 ].iva );
                     td_partes.append( input_partes );
                     if( input_partes.val().length > 5 )
@@ -402,7 +416,6 @@ function checkReport( idr, idt ){
                     input_cobro.addClass("input");
                     input_cobro.attr("size", "5");
                     input_cobro.attr("id", "cobro_td-" + i );
-                    input_cobro.attr("disabled", "disabled");
                     input_cobro.attr("value", data.svcIH[ i - 1 ].cobro );
                     td_cobro.append( input_cobro );
                     if( input_cobro.val().length > 5 )
@@ -419,7 +432,6 @@ function checkReport( idr, idt ){
                     input_gar.attr("id", "gar_td-" + i );
                     if( data.svcIH[ i - 1 ].gar == "1" ){
                         input_gar.attr( "checked", "checked" );
-                        input_cobro.attr("disabled", "disabled");
                     }
                     input_gar.attr( "disabled", "disabled" );
                     td_gar.append( input_gar );
@@ -432,6 +444,14 @@ function checkReport( idr, idt ){
                     img.attr( "alt", "Eliminar servicio");
                     img.attr("onclick", "deleteSvc(" + i + ")" );
                     td_img.append( img );
+                    var td_img_upt = $("<td></td>");
+                    var img_upt = $("<img/>");
+                    img_upt.addClass("table-icon");
+                    img_upt.attr( "id", "update-" + i );
+                    img_upt.attr( "src", "imgs/update.ico");
+                    img_upt.attr( "alt", "Eliminar servicio");
+                    img_upt.attr("onclick", "updateSvc(" + i + ")" );
+                    td_img_upt.append( img_upt );
 
                     svc_tr.append( td_folio );
                     svc_tr.append( td_mod );
@@ -444,6 +464,7 @@ function checkReport( idr, idt ){
                     svc_tr.append( td_cobro );
                     svc_tr.append( td_gar );
                     svc_tr.append( td_img );
+                    svc_tr.append( td_img_upt );
 
                     table_ih.append( svc_tr );
                 }
@@ -554,5 +575,194 @@ function confirmReport(){
                 }
             }
         });
+    });
+}
+function addUser(){
+    var name = $("#usr-name").val();
+    var ap = $("#usr-ap").val();
+    var rfc = $("#usr-rfc").val();
+    var idt = $("#usr-idt").val();
+    $.post({
+        url : "php/createUser.php",
+        data : {
+            "name" : name,
+            "ap" : ap,
+            "idt" : idt,
+            "rfc" : rfc
+        },
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "-3" ){
+                swal("Error al crear técnico", "", "error");
+            }else if( data.status == "-2" ){
+                swal( "Error al crear usuario", "", "error");
+            }else if( data.status == "-1"  ){
+                swal( "Error", data.error, "error");
+            }else{
+                swal( "OK", "Cuenta creada correctamente", "success");
+                //LImpiar valores
+                $("#usr-idt").val("");
+                $("#usr-name").val("");
+                $("#usr-rfc").val("");
+                $("#usr-ap").val("");
+            }
+        }
+    });
+}
+
+function removeUser(){
+    var idt = $("#rm-usr-idt").val();
+    $.post({
+        url : "php/removeUser.php",
+        data: { "idt" : idt },
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "-2"){
+                swal("Error al borrar tecnico" ,"", "error");
+            }else if( data.status == "-3"){
+                swal("Error al borrar cuenta de usuario", "", "error");
+            }else if( data.status == "1"){
+                swal("OK", "Cuenta eliminada correctamente", "success");
+            }else{
+                swal("Error", data.error, "error");
+            }
+        }
+    });
+}
+function showTaxes(){
+    var table = $("#tarifas-table");
+    table.empty();
+    $.post({
+        url : "php/getTarifas.php",
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "1" ){
+                var row_header = $("<tr></tr>");
+                var header = $("<th>#</th><th>Descripción</th><th>Mano de obra</th><th>Costo revisión</th><th>Categoría</th>");
+                row_header.append( header );
+                table.append( row_header );
+                for( var i = 0 ; i < data.item.length ; i++ ){
+                    var tr = $("<tr></tr>");
+
+                    var td_id = $("<td id='idx_td-" + i + "'>" + data.item[ i ].id + "</td>");
+                    var td_desc = $("<td>" + data.item[ i ].desc + "</td>");
+
+                    var td_mo = $("<td></td>");
+                    var input_mo = $("<input/>");
+                    input_mo.addClass("input");
+                    input_mo.attr("size", "5");
+                    input_mo.attr("id", "mox_td-" + i );
+                    input_mo.attr("value", data.item[ i ].mo );
+                    if( input_mo.val().length > 5 )
+                        input_mo.attr("size", input_mo.val().length + 2  );
+                    else
+                        input_mo.attr("size", "5" );
+                    td_mo.append( input_mo );
+                    var td_rev = $("<td></td>");
+                    var input_rev = $("<input/>");
+                    input_rev.addClass("input");
+                    input_rev.attr("size", "5");
+                    input_rev.attr("id", "revx_td-" + i );
+                    input_rev.attr("value", data.item[ i ].rev );
+                    if( input_rev.val().length > 5 )
+                        input_rev.attr("size", input_rev.val().length + 2  );
+                    else
+                        input_rev.attr("size", "5" );
+                    td_rev.append( input_rev );
+                    var td_cat = $("<td>" + data.item[ i ].cat + "</td>");
+                    var td_img = $("<td></td>");
+                    var img = $("<img src='imgs/update.ico' class='table-icon'/>");
+                    img.attr("onclick", "updateTax(" + i + ")");
+                    td_img.append( img );
+
+                    tr.append( td_id );
+                    tr.append( td_desc );
+                    tr.append( td_mo );
+                    tr.append( td_rev );
+                    tr.append( td_cat );
+                    tr.append( td_img );
+
+                    table.append( tr );
+                }
+            }else{
+                swal({
+                    title : "Error",
+                    text : data.error,
+                    type : "error"
+                });
+            }
+        }
+    });
+}
+
+function updateTax( num ){
+    var id = $("#idx_td-" + num ).text();
+    var mo = $("#mox_td-" + num ).val();
+    var rev = $("#revx_td-" + num ).val();
+    $.post({
+        url : "php/updateTax.php",
+        data : {
+            "id" : id,
+            "mo" : mo,
+            "rev": rev
+        },
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "-1"){
+                swal("Error", data.error, "error");
+            }else if( data.status == "-2"){
+                swal("Error en", "", "error");
+            }else{
+                swal("OK", "Tarifa actualizada correctamente", "success");
+                showTaxes();
+            }
+        }
+    });
+}
+
+function addTax(){
+    var desc = $("#tax-desc").val();
+    var mo = $("#tax-mo").val();
+    var rev = $("#tax-rev").val();
+    var type_letter = $("#tax-type").find(":selected").val();
+    var type;
+    switch( type_letter ){
+        case 'A':
+            type = "Audio";
+            break;
+        case 'V':
+            type = "Video";
+            break;
+        case 'M':
+            type = "Microondas";
+            break;
+        case 'O':
+            type = "Oficina";
+            break;
+        case 'D':
+            type = "Domicilio";
+            break;
+    }
+    $.post({
+        url : "php/createTax.php",
+        data : {
+            "desc" : desc,
+            "mo" : mo,
+            "rev" : rev,
+            "cat" : type
+        },
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "-1"){
+                swal("Error", data.error, "error");
+            }else if( data.status == "-2"){
+                swal("Error al insertar la nueva tarifa", "", "error");
+            }else{
+                swal("OK", "Tarifa ingresada correctamente", "success");
+                $("#tax-desc").val("");
+                $("#tax-mo").val("");
+                $("#tax-rev").val("");
+            }
+        }
     });
 }

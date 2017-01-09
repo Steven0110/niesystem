@@ -18,7 +18,8 @@ try{
         $response .= "\"mo\" : \"".$row[ 1 ]."\",";
 
         $response .= "\"rev\" : \"".$row[ 2 ]."\",";
-        $response .= "\"cat\" : \"".$row[ 3 ]."\"";
+        $response .= "\"cat\" : \"".$row[ 3 ]."\",";
+        $response .= "\"id\" : \"".$row[ 4 ]."\"";
         $response .= "},";
     }
     $response = trim( $response, "," );

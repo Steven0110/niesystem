@@ -61,7 +61,7 @@
                     </ul>
                      <li data-toggle="collapse" data-target="#reports" class="collapsed active">
                       <a href="#">
-                      <i class="fa fa-flag fa-lg"></i> Descargar reportes<span class="arrow">
+                      <i class="fa fa-download fa-lg"></i> Descargar reportes<span class="arrow">
                       </a>
                     </li>
                     <ul class="sub-menu collapse" id="reports">
@@ -69,9 +69,14 @@
                         <li id="check-reports-week"><a href="#">Por semana</a></li>
                         <li id="check-reports-all"><a href="#">Todos</a></li>
                     </ul>
-                     <li>
+                     <li id="mng-usr">
                       <a href="#">
-                      <i class="fa fa-flag fa-lg"></i> Gestión de usuarios
+                      <i class="fa fa-user-o fa-lg"></i> Gestión de usuarios
+                      </a>
+                    </li>
+                     <li id="tax">
+                      <a href="#">
+                      <i class="fa fa-flag fa-lg"></i> Actualizar tarifas
                       </a>
                     </li>
                 </ul>
@@ -97,6 +102,7 @@
                 <table id="reports-table" class="centered-block"></table>
             </div>
         </div>
+        <!-- ALIMENTAR LA BASE DE DATOS -->
         <div class="mid-panel" hidden="hidden" id="feed-db-panel">
             <div class="row row-report">
                 <div class="centered-block title">Alimentar base de datos</div>
@@ -205,6 +211,101 @@
                     </div>
                 </div>
                 <button class="btn-gen-report btn-common" id="confirm-report">Confirmar reporte</button>
+            </div>
+        </div>
+
+
+        <div class="mid-panel" hidden="hidden" id="mng-usr-panel">
+            <div class="row row-report">
+                <div class="centered-block title">Gestionar usuarios</div>
+                <div class="row">
+                    <div class="row subsection-title centered-block">
+                        <span>Crear nuevo usuario</span>
+                    </div>
+                    <div class="row form">
+                        <div class="centered-block form-panel">
+                            <div class="row">
+                                <div class="col-md-6 field label">Nombre:</div>
+                                <div class="col-md-6 field"><input class="report-input" id="usr-name" type="text"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 field label">Apellido:</div>
+                                <div class="col-md-6 field"><input class="report-input" id="usr-ap" type="text"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 field label">ID Técnico:</div>
+                                <div class="col-md-6 field"><input class="report-input" id="usr-idt" type="text"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 field label">RFC:</div>
+                                <div class="col-md-6 field"><input class="report-input" id="usr-rfc" type="text"></div>
+                            </div>
+                            <button class="btn-gen-report btn-common" id="add-usr">Agregar usuario</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row subsection-title centered-block">
+                        <span>Borrar un usuario</span>
+                    </div>
+
+                    <div class="row form">
+                        <div class="centered-block form-panel">
+                            <div class="row">
+                                <div class="col-md-6 field label">RFC de Técnico:</div>
+                                <div class="col-md-6 field"><input class="report-input" id="rm-usr-idt" type="text"></div>
+                            </div>
+                            <button class="btn-gen-report btn-common" id="rm-usr">Eliminar usuario</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GESTION DE TARIFAS -->
+        <div class="mid-panel" hidden="hidden" id="tax-panel">
+            <div class="row row-report">
+                <div class="centered-block title">Cambiar tarifas</div>
+                <table id="tarifas-table" class="centered-block"></table>
+            </div>
+            <div class="row row-report">
+                <div class="centered-block title">Agregar tarifa</div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <span class="centered-block">Nombre:</span>
+                        <div class="row field ">
+                            <input type="text" id="tax-desc" class="input centered-block" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="centered-block">Mano de obra</span>
+                        <div class="row field">
+                            <input type="text" id="tax-mo" class="input centered-block" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="centered-block">Costo revisión</span>
+                        <div class="row field">
+                            <input type="text" id="tax-rev" class="input centered-block" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="centered-block">Tipo</span>
+                        <div class="row field">
+                            <select name="tipo" id="tax-type" class="centered-block">
+                                <option value="HD" hidden="hidden" selected="selected">Escoje una opción</option>
+                                <option value="A">Audio</option>
+                                <option value="V">Video</option>
+                                <option value="D">Domicilio</option>
+                                <option value="M">Microondas</option>
+                                <option value="O">Oficina</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn btn-lg btn-common centered-block" onclick="addTax()">Agregar tarifa</button>
+                </div>
             </div>
         </div>
 
