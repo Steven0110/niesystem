@@ -49,29 +49,39 @@ $(document).ready(function(){
 
     $("#close-tarifas").click( closePopUpTarifas );
 
-
     getRejectedServices();
-
 
 });
 
 
 function checkSvcExistence(){
-
+    //Detecta si el folio es de samsung o de cargo
+    var folio = $("#folio").val();
+    var isSamsung = true;
+    if( folio.length == 10 ){
+        for( var i = 0 ; i < folio.length ; i++ ){
+            if( isNaN(folio.charAt( i ) ) )
+                isSamsung = false;
+        }
+    }else if( !folio.includes("GRMS") ) isSamsung = false;
+    
+        
+    if( isSamsung ){
+        //Para los folios de SAMSUNG
         //Revisa que el folio no haya sido cobrado
-
         $("#loading-icon").slideDown("slow");
         $("#check-ok").slideUp("fast");
 
-        var folio = $("#folio").val();
         $.post({
             url : "php/checkSvcExistence.php",
-            data : { "folio" : folio },
+            // 0 Samsung, 1 Cargo
+            data : { "folio" : folio, "type" : 0 },
             success : function( response ){
                 var data = JSON.parse( response );
                 if( data.status == "1" ){
                     if( data.cantidad == "0" ){
                         //OK
+                        $("#check-cargo").removeAttr("checked");
                         $("#loading-icon").slideUp("slow", function(){
                             $("#check-ok").slideDown("slow", function(){
                                 $("#add-svc").removeAttr("disabled");
@@ -112,6 +122,49 @@ function checkSvcExistence(){
                 }
             }
         });
+    }else{
+        //Para los servicios de cargo
+        $("#loading-icon").slideDown("slow");
+        $("#check-ok").slideUp("fast");
+        $.post({
+            data : { "folio" : folio, "type" : 1 },
+            url : "php/checkSvcExistence.php",
+            success : function( response ){
+                var data = JSON.parse( response );
+                if( data.status == "1" ){
+                    if( data.cantidad == "0" ){
+                        //OK
+                        cleanFields_2();
+                        $("#check-cargo").attr("checked", "checked");
+                        $("#loading-icon").slideUp("slow", function(){
+                            $("#check-ok").slideDown("slow", function(){
+                                $("#add-svc").removeAttr("disabled");
+                            });
+                        });
+                    }else{
+                        //Ya hay un folio registrado
+                        swal({
+                            title : "Advertencia",
+                            type : "warning",
+                            text : "El folio ya ha sido registrado"
+                        },function(){
+                            $("#loading-icon").slideUp("slow");
+                            $("#add-svc").attr("disabled", "disabled");
+                            cleanFields();
+                        });
+                    }
+                }else{
+                    //Error desconocido
+                    swal({
+                        title : "Error",
+                        text : data.error,
+                        type : "error"
+                    }, function(){ cleanFields(); $("#add-svc").attr("disabled", "disabled"); } );
+                }
+            }
+        });
+        
+    }
 }
 
 function getInfoSvc( folio ){
@@ -145,9 +198,8 @@ function addService(){
     var iva = ( $("#iva-1").val() === "" ) ? 0 : $("#iva-1").val();
     var cobro = ( $("#cobro-1").val() === "" ) ? 0 : $("#cobro-1").val();
     var obs = ( $("#obs-1").val() === "" ) ? 0 : $("#obs-1").val();
-    var tos = $('#tos').find(":selected").val();
+    var tos = ( $("#check-cargo").prop("checked") == true ) ? 1 : 0;
     var gar = ( $("#check-gar").prop("checked") == true ) ? 1 : 0;
-    console.log( $("#check-gar").prop("checked") );
     $.post({
         data : {
             "folio" : folio,
@@ -184,6 +236,9 @@ function addService(){
 function cleanFields(){
     $(".report-input").val("");
     $(".report-input-2").val("");
+}
+function cleanFields_2(){
+    $(".report-input").val("");
 }
 function setSemana(){
     var date = new Date( $(this).val() );

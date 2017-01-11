@@ -165,6 +165,32 @@ INSERT INTO `asd` VALUES ('0001729745','0001729745',401002732476,'4138089714','S
 UNLOCK TABLES;
 
 --
+-- Table structure for table `material_cargo`
+--
+
+DROP TABLE IF EXISTS `material_cargo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `material_cargo` (
+  `folio` varchar(15) COLLATE utf8_spanish_ci NOT NULL,
+  `mano_obra` int(11) DEFAULT NULL,
+  `partes_iva` int(11) DEFAULT NULL,
+  `idtecnico` bigint(30) DEFAULT NULL,
+  `observaciones` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
+  PRIMARY KEY (`folio`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `material_cargo`
+--
+
+LOCK TABLES `material_cargo` WRITE;
+/*!40000 ALTER TABLE `material_cargo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `material_cargo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `persona`
 --
 
@@ -251,6 +277,38 @@ INSERT INTO `reporte` VALUES (2016547312292016328,'2016-12-29','LB',20165473,52,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `servicios_cargo_trabajados`
+--
+
+DROP TABLE IF EXISTS `servicios_cargo_trabajados`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `servicios_cargo_trabajados` (
+  `folio` varchar(15) COLLATE utf8_spanish_ci NOT NULL,
+  `idtecnico` bigint(30) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `mano_obra` int(11) DEFAULT NULL,
+  `casetas` int(11) DEFAULT NULL,
+  `desplazamiento` int(11) DEFAULT NULL,
+  `partes_iva` int(11) DEFAULT NULL,
+  `cobro` int(11) DEFAULT NULL,
+  `observacion` int(11) DEFAULT NULL,
+  `idreporte` bigint(30) DEFAULT NULL,
+  `garantia` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`folio`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `servicios_cargo_trabajados`
+--
+
+LOCK TABLES `servicios_cargo_trabajados` WRITE;
+/*!40000 ALTER TABLE `servicios_cargo_trabajados` DISABLE KEYS */;
+/*!40000 ALTER TABLE `servicios_cargo_trabajados` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `servicios_tecnico_trabajados`
 --
 
@@ -274,8 +332,7 @@ CREATE TABLE `servicios_tecnico_trabajados` (
   KEY `idTecnico` (`idtecnico`),
   KEY `idreporte` (`idreporte`),
   CONSTRAINT `servicios_tecnico_trabajados_ibfk_2` FOREIGN KEY (`idtecnico`) REFERENCES `persona` (`idTecnico`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `servicios_tecnico_trabajados_ibfk_3` FOREIGN KEY (`idreporte`) REFERENCES `reporte` (`idreporte`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `servicios_tecnico_trabajados_ibfk_4` FOREIGN KEY (`folio`) REFERENCES `registro_gspn` (`Reclamacion_del_ASC`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `servicios_tecnico_trabajados_ibfk_3` FOREIGN KEY (`idreporte`) REFERENCES `reporte` (`idreporte`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -350,4 +407,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-06 13:00:25
+-- Dump completed on 2017-01-11 17:50:21
