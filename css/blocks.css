@@ -172,6 +172,7 @@ input[disabled]{
 .subsection-title{
     font-size: 22px;
     padding: 5px;
+    color: white;
 }
 .report-select{
     background-color: rgba(25, 25, 25, 0.5);
@@ -312,6 +313,13 @@ table td input{
 .wrapped{
     word-wrap: break-word;
     max-width: 500px;
+}
+.file-input{
+    font-size: 16px !important;
+    color: black !important;
+    background-color: white !important;
+    margin-bottom: 10px;
+    border-radius: 16px;
 }
 
 .all-bordered{

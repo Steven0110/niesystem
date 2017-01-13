@@ -85,6 +85,8 @@ function checkSvcExistence(){
                         $("#loading-icon").slideUp("slow", function(){
                             $("#check-ok").slideDown("slow", function(){
                                 $("#add-svc").removeAttr("disabled");
+                                $("#mod").attr("disabled", "disabled");
+                                $("#serie").attr("disabled", "disabled");
                                 getInfoSvc( folio );
                             });
                             //Carga la informacion a los campos de texto correspondientes
@@ -139,6 +141,9 @@ function checkSvcExistence(){
                         $("#loading-icon").slideUp("slow", function(){
                             $("#check-ok").slideDown("slow", function(){
                                 $("#add-svc").removeAttr("disabled");
+                                $("#mod").removeAttr("disabled");
+                                $("#serie").removeAttr("disabled");
+                                
                             });
                         });
                     }else{
@@ -189,49 +194,101 @@ function getInfoSvc( folio ){
     });
 }
 function addService(){
-    var folio = $("#folio").val();
-    var idt = ( JSON.parse( $.cookie("usuario") ) ).idt;
-    var status = 1;
-    var mo = ( $("#mo-1").val() === "" ) ? 0 : $("#mo-1").val();
-    var casetas = ( $("#cas-1").val() === "" ) ? 0 : $("#cas-1").val();
-    var desp = ( $("#des-1").val() === "" ) ? 0 : $("#des-1").val();
-    var iva = ( $("#iva-1").val() === "" ) ? 0 : $("#iva-1").val();
-    var cobro = ( $("#cobro-1").val() === "" ) ? 0 : $("#cobro-1").val();
-    var obs = ( $("#obs-1").val() === "" ) ? 0 : $("#obs-1").val();
     var tos = ( $("#check-cargo").prop("checked") == true ) ? 1 : 0;
-    var gar = ( $("#check-gar").prop("checked") == true ) ? 1 : 0;
-    $.post({
-        data : {
-            "folio" : folio,
-            "idtec" : idt,
-            "status" : status,
-            "mo" : mo,
-            "casetas" : casetas,
-            "desp" : desp,
-            "iva" : iva,
-            "cobro" : cobro,
-            "obs" : obs,
-            "tipo" : tos,
-            "gar" : gar
-        },
-        url : "php/addService.php",
-        success : function( response ){
-            var data = JSON.parse( response );
-            if( data.status == "1" ){
-                swal({
-                    title : "OK",
-                    text : "Servicio agregado correctamente",
-                    type : "success"
-                }, function(){ cleanFields(); $("#add-svc").attr("disabled", "disabled"); $("#check-ok").slideUp("slow"); } );
-            }else{
-                swal({
-                    title : "Error",
-                    text : data.error,
-                    type : "error"
-                }, function(){ cleanFields(); $("#add-svc").attr("disabled", "disabled"); $("#check-ok").slideUp("slow"); } );
+    if( tos == 0 ){
+        var folio = $("#folio").val();
+        var idt = ( JSON.parse( $.cookie("usuario") ) ).idt;
+        var status = 1;
+        var mo = ( $("#mo-1").val() === "" ) ? 0 : $("#mo-1").val();
+        var casetas = ( $("#cas-1").val() === "" ) ? 0 : $("#cas-1").val();
+        var desp = ( $("#des-1").val() === "" ) ? 0 : $("#des-1").val();
+        var iva = ( $("#iva-1").val() === "" ) ? 0 : $("#iva-1").val();
+        var cobro = ( $("#cobro-1").val() === "" ) ? 0 : $("#cobro-1").val();
+        var obs = ( $("#obs-1").val() === "" ) ? 0 : $("#obs-1").val();
+        var gar = ( $("#check-gar").prop("checked") == true ) ? 1 : 0;
+        $.post({
+            data : {
+                "folio" : folio,
+                "idtec" : idt,
+                "status" : status,
+                "mo" : mo,
+                "casetas" : casetas,
+                "desp" : desp,
+                "iva" : iva,
+                "cobro" : cobro,
+                "obs" : obs,
+                "tipo" : tos,
+                "gar" : gar,
+                "type" : tos
+            },
+            url : "php/addService.php",
+            success : function( response ){
+                var data = JSON.parse( response );
+                if( data.status == "1" ){
+                    swal({
+                        title : "OK",
+                        text : "Servicio agregado correctamente",
+                        type : "success"
+                    }, function(){ cleanFields(); $("#add-svc").attr("disabled", "disabled"); $("#check-ok").slideUp("slow"); } );
+                }else{
+                    swal({
+                        title : "Error",
+                        text : data.error,
+                        type : "error"
+                    }, function(){ cleanFields(); $("#add-svc").attr("disabled", "disabled"); $("#check-ok").slideUp("slow"); } );
+                }
             }
-        }
-    });
+        });
+    }else{
+        var folio = $("#folio").val();
+        var idt = ( JSON.parse( $.cookie("usuario") ) ).idt;
+        var status = 1;
+        var mo = ( $("#mo-1").val() === "" ) ? 0 : $("#mo-1").val();
+        var casetas = ( $("#cas-1").val() === "" ) ? 0 : $("#cas-1").val();
+        var desp = ( $("#des-1").val() === "" ) ? 0 : $("#des-1").val();
+        var iva = ( $("#iva-1").val() === "" ) ? 0 : $("#iva-1").val();
+        var cobro = ( $("#cobro-1").val() === "" ) ? 0 : $("#cobro-1").val();
+        var obs = ( $("#obs-1").val() === "" ) ? 0 : $("#obs-1").val();
+        var gar = ( $("#check-gar").prop("checked") == true ) ? 1 : 0;
+        var mod = ( $("#mod").val() === "" ) ? 0 : $("#mod").val();
+        var serie = ( $("#serie").val() === "" ) ? 0 : $("#serie").val();
+        $.post({
+            data : {
+                "folio" : folio,
+                "idtec" : idt,
+                "status" : status,
+                "mo" : mo,
+                "casetas" : casetas,
+                "desp" : desp,
+                "iva" : iva,
+                "cobro" : cobro,
+                "obs" : obs,
+                "tipo" : tos,
+                "gar" : gar,
+                "type" : tos,
+                "mod" : mod,
+                "serie" : serie
+            },
+            url : "php/addService.php",
+            success : function( response ){
+                var data = JSON.parse( response );
+                if( data.status == "1" ){
+                    swal({
+                        title : "OK",
+                        text : "Servicio agregado correctamente",
+                        type : "success"
+                    }, function(){ cleanFields(); $("#add-svc").attr("disabled", "disabled"); $("#check-ok").slideUp("slow"); } );
+                }else{
+                    swal({
+                        title : "Error",
+                        text : data.error,
+                        type : "error"
+                    }, function(){ cleanFields(); $("#add-svc").attr("disabled", "disabled"); $("#check-ok").slideUp("slow"); } );
+                }
+            }
+        });
+        
+    }
 }
 function cleanFields(){
     $(".report-input").val("");
@@ -250,6 +307,7 @@ function setSemana(){
 function getServices(){
     //Set id tecnico
     $("#id-tecnico").text( JSON.parse( $.cookie("usuario") ).idt);
+    
     $.post({
         url : "php/getSvcs.php",
         data : { "idt" : JSON.parse( $.cookie("usuario") ).idt },
@@ -327,7 +385,6 @@ function getServices(){
                 input_sem.attr("size", "5");
                 input_sem.attr("id", "sem_td-" + i );
                 input_sem.attr("value", data.svcCargo[ i - 1 ].sem );
-                input_sem.attr("disabled", "disabled");
                 td_sem.append( input_sem );
                 if( input_sem.val().length > 5 )
                     input_sem.attr("size", input_sem.val().length+ 2  );
@@ -419,6 +476,13 @@ function getServices(){
                 img.attr( "alt", "Eliminar servicio");
                 img.attr("onclick", "deleteSvc(" + i + ")" );
                 td_img.append( img );
+                
+                //Indicador de cargo
+                var id_cargo = $("<td></td>");
+                id_cargo.attr("id", "cargo_td-" + i);
+                id_cargo.attr("hidden", "hidden");
+                id_cargo.val("1");
+                
 
                 svc_tr.append( td_folio );
                 svc_tr.append( td_mod );
@@ -429,6 +493,7 @@ function getServices(){
                 svc_tr.append( td_desp );
                 svc_tr.append( td_partes );
                 svc_tr.append( td_cobro );
+                svc_tr.append( id_cargo );
                 //svc_tr.append( td_obs );
                 svc_tr.append( td_gar );
                 svc_tr.append( td_img );
@@ -635,8 +700,10 @@ function genReport(){
     var validacion_general = true;
     for( var i = 1 ; i <= num_svcs ; i++ ){
         if( $("#folio_td-" + i ).val() !== undefined ){
-            if( !validarServicio( i ) )
+            if( !validarServicio( i ) ){
                 validacion_general = false;
+                break;
+            }
         }
     }
     if( validacion_general ){
@@ -646,11 +713,10 @@ function genReport(){
         var semana = getWeekNumber( date );
         var tipo = $('#tipo-reporte').find(":selected").val();
         addReport( id_report, fecha, semana, idt, tipo );
-    }else{
-        console.log("El reporte NO procede");
     }
 }
 function validarServicio( num ){
+    console.log( "Revisar folio " + num );
     var cobro = Number( $( "#cobro_td-" + num ).val());
     var sem = Number( $( "#sem_td-" + num ).val());
     var mo = Number( $( "#mo_td-" + num ).val());
@@ -677,21 +743,24 @@ function validarServicio( num ){
             return false;
         }else return true;
     }else{
-        var total_mo = sem - cas - desp - partes;
-        if( mo > total_mo ){
-            swal({
-                type : "error",
-                title : "Error en el cobro del servicio " + folio,
-                text : "La mano de obra es mayor a la que deberia ser ($" + total_mo + ")"
-            });
-            return false;
-        }else if( mo < total_mo ){
-            swal({
-                type : "error",
-                title : "Error en el cobro del servicio " + folio,
-                text : "La mano de obra es menor a la que deberia ser ($" + total_mo + ")"
-            });
-            return false;
+        //El folio es de garantia
+        if( $("#cargo_td-" + num).val() === undefined ){
+            var total_mo = sem - cas - desp - partes;
+            if( mo > total_mo ){
+                swal({
+                    type : "error",
+                    title : "Error en el cobro del servicio " + folio,
+                    text : "La mano de obra es mayor a la que deberia ser ($" + total_mo + ")"
+                });
+                return false;
+            }else if( mo < total_mo ){
+                swal({
+                    type : "error",
+                    title : "Error en el cobro del servicio " + folio,
+                    text : "La mano de obra es menor a la que deberia ser ($" + total_mo + ")"
+                });
+                return false;
+            }else return true;
         }else return true;
     }
 }
@@ -735,7 +804,7 @@ function calcularTotales(){
     $("#total-iva-ih").text( "$" + (total_mo_ih * 0.5 * 0.16).toFixed(2) );
     $("#total-labor-ih").text("$" + total_labor_ih );
     var total_reporte = Number(total_labor_c )+ Number(total_labor_ih);
-    $("#total-rep").text( "$" + total_reporte );
+    $("#total-rep").text( "$" + total_reporte.toFixed(2) );
 }
 
 function addReport( idr, fecha, semana, idt, tipo ){
@@ -824,10 +893,14 @@ function setMO(){
     var mo_ih = $("#report-table-ih .input[id^=\"mo_td-\"]");
     for( var i = 0 ; i < mo_c.length ; i++ ){
         var index = getIndex( $(mo_c[ i ]).attr("id") );
-        if( $("#gar_td-" + index ).prop("checked") == true )
-            $("#mo_td-" + index ).val( Number( $("#sem_td-" + index ).val() ) - Number( $("#desp_td-" + index).val() ) - Number( $("#cas_td-" + index).val() ) - Number( $("#partes_td-" + index ).val() )  );
-        else
+        if( $("#gar_td-" + index ).prop("checked") == true ){
+            if( $("#cargo_td-" + index).val() === undefined ){
+                $("#mo_td-" + index ).val( Number( $("#sem_td-" + index ).val() ) - Number( $("#desp_td-" + index).val() ) - Number( $("#cas_td-" + index).val() ) - Number( $("#partes_td-" + index ).val() )  );
+            }
+        }
+        else{
             $("#mo_td-" + index ).val( - Number( $("#sem_td-" + index ).val() ) - Number( $("#desp_td-" + index).val() ) - Number( $("#cas_td-" + index).val() ) - Number( $("#partes_td-" + index ).val() ) + Number( $("#cobro_td-" + index).val() )  );
+        }
     }
     for( var i = 0 ; i < mo_ih.length ; i++ ){
         var index = getIndex( $(mo_ih[ i ]).attr("id") );
@@ -1336,7 +1409,7 @@ function getRejectedServices(){
     var idt = ( JSON.parse( $.cookie("usuario") ) ).idt;
     var table = $("#rej-svc-table");
     table.empty();
-    var header = $("<tr><th>Folio</th><th>Modelo</th><th>Serie</th><th>Observación</th></tr>");
+    var header = $("<tr><th>Folio</th><th>Observación</th></tr>");
     table.append( header );
     $.post({
         url : "php/getRejectedServices.php",
@@ -1363,37 +1436,11 @@ function getRejectedServices(){
                     else
                         input_folio.attr("size", "5" );
                     td_folio.append( input_folio );
-                    var td_mod = $("<td></td>");
-                    var input_mod = $("<input/>");
-                    input_mod.addClass("input");
-                    input_mod.attr("size", "5");
-                    input_mod.attr("id", "mod_td-" + i );
-                    input_mod.attr("value", data.svc[ i ].mod );
-                    input_mod.attr("disabled", "disabled");
-                    if( input_mod.val().length > 5 )
-                        input_mod.attr("size", input_mod.val().length + 2 );
-                    else
-                        input_mod.attr("size", "5" );
-                    td_mod.append( input_mod );
-                    var td_serie = $("<td></td>");
-                    var input_serie = $("<input/>");
-                    input_serie.addClass("input");
-                    input_serie.attr("size", "5");
-                    input_serie.attr("id", "serie_td-" + i );
-                    input_serie.attr("value", data.svc[ i ].serie );
-                    input_serie.attr("disabled", "disabled");
-                    if( input_serie.val().length > 5 )
-                        input_serie.attr("size", input_serie.val().length + 2 );
-                    else
-                        input_serie.attr("size", "5" );
-                    td_serie.append( input_serie );
 
                     var td_obs = $("<td class='wrapped'></td>");
                     td_obs.text(data.svc[ i ].obs);
 
                     tr.append( td_folio );
-                    tr.append( td_mod );
-                    tr.append( td_serie );
                     tr.append( td_obs );
                     table.append( tr );
                 }

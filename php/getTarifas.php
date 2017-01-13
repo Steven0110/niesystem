@@ -6,7 +6,7 @@ try{
     $pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, "SET names utf8");
 
 
-    $sql = "SELECT * from tarifas ORDER BY 4";
+    $sql = "SELECT * from tarifas ORDER BY 4, 1";
     $stm = $pdo->prepare( $sql );
     $stm->execute();
     $rs = $stm->fetchAll();

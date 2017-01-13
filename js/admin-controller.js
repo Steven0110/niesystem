@@ -44,6 +44,26 @@ $(document).ready(function(){
     $("#rm-usr").click( removeUser );
 
     $("#confirm-report").click( confirmReport );
+    //Upload files
+    $("#upload-material").click( uploadMaterial );
+    $("#upload-gspn").click( uploadGSPN );
+    //Validation for file update
+    $('.file-input').change(function(){
+        var file = this.files[0];
+        var type = file.type;
+        if( type != "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ){
+            swal("Error. El archivo no es formato .xslx", "Si es .xsl favor de guardar el documento como documento .xlsx y volver a subirlo", "error");
+            $("#upload-gspn").attr("disabled", "disabled");
+        }else{
+            $("#upload-gspn").removeAttr("disabled");
+        }
+    });
+    
+    //upload MS EXCEL files
+    //
+    //
+    $("#upload-gspn").click( uploadGSPN );
+    
 });
 function showUncheckedReports(){
     $.post({
@@ -121,8 +141,9 @@ function checkReport( idr, idt ){
         success : function( response ){
             var data = JSON.parse( response );
             if( data.status == "1" ){
+                var j;
                 for( i = 1 ; i <= data.svcCargo.length ; i++ ){
-
+                    j = i;
                     //Sumatoria de valores
 
                     total_mo_c += Number( data.svcCargo[ i - 1 ].mo );
@@ -288,6 +309,7 @@ function checkReport( idr, idt ){
 
                     table_c.append( svc_tr );
                 }
+                j++;
 
                 total_labor_c = ((total_mo_c * 0.3914) + (total_mo_c * 0.3914 * 0.16)).toFixed(2);
                 $("#desc-total-mo-c").text( "$" + total_mo_c );
@@ -307,13 +329,13 @@ function checkReport( idr, idt ){
                     total_desp_ih += Number( data.svcIH[ i - 1 ].desp );
 
                     var svc_tr = $("<tr></tr>");
-                    svc_tr.attr("id", "svc-" + i );
+                    svc_tr.attr("id", "svc-" + (i+j) );
 
                     var td_folio = $("<td></td>");
                     var input_folio = $("<input/>");
                     input_folio.addClass("input");
                     input_folio.attr("size", "5");
-                    input_folio.attr("id", "folio_td-" + i );
+                    input_folio.attr("id", "folio_td-" + (i+j) );
                     input_folio.attr("value", data.svcIH[ i - 1 ].folio );
                     input_folio.attr("disabled", "disabled");
                     if( input_folio.val().length > 5 )
@@ -327,7 +349,7 @@ function checkReport( idr, idt ){
                     var input_mod = $("<input/>");
                     input_mod.addClass("input");
                     input_mod.attr("size", "5");
-                    input_mod.attr("id", "mod_td-" + i );
+                    input_mod.attr("id", "mod_td-" + (i+j) );
                     input_mod.attr("value", data.svcIH[ i - 1 ].mod );
                     input_mod.attr("disabled", "disabled");
                     td_mod.append( input_mod );
@@ -340,7 +362,7 @@ function checkReport( idr, idt ){
                     var input_serie = $("<input/>");
                     input_serie.addClass("input");
                     input_serie.attr("size", "5");
-                    input_serie.attr("id", "serie_td-" + i );
+                    input_serie.attr("id", "serie_td-" + (i+j) );
                     input_serie.attr("value", data.svcIH[ i - 1 ].serie );
                     input_serie.attr("disabled", "disabled");
                     td_serie.append( input_serie );
@@ -353,7 +375,7 @@ function checkReport( idr, idt ){
                     var input_mo = $("<input/>");
                     input_mo.addClass("input");
                     input_mo.attr("size", "5");
-                    input_mo.attr("id", "mo_td-" + i );
+                    input_mo.attr("id", "mo_td-" + (i+j) );
                     input_mo.attr("value", data.svcIH[ i - 1 ].mo );
                     td_mo.append( input_mo );
                     if( input_mo.val().length > 5 )
@@ -366,7 +388,7 @@ function checkReport( idr, idt ){
                     input_sem.addClass("input");
                     input_sem.attr("size", "5");
                     input_sem.attr("disabled", "disabled");
-                    input_sem.attr("id", "sem_td-" + i );
+                    input_sem.attr("id", "sem_td-" + (i+j) );
                     input_sem.attr("value", data.svcIH[ i - 1 ].sem );
                     td_sem.append( input_sem );
                     if( input_sem.val().length > 5 )
@@ -378,7 +400,7 @@ function checkReport( idr, idt ){
                     var input_cas = $("<input/>");
                     input_cas.addClass("input");
                     input_cas.attr("size", "5");
-                    input_cas.attr("id", "cas_td-" + i );
+                    input_cas.attr("id", "cas_td-" + (i+j) );
                     input_cas.attr("value", data.svcIH[ i - 1 ].cas );
                     td_cas.append( input_cas );
                     if( input_cas.val().length > 5 )
@@ -391,7 +413,7 @@ function checkReport( idr, idt ){
                     var input_desp = $("<input/>");
                     input_desp.addClass("input");
                     input_desp.attr("size", "5");
-                    input_desp.attr("id", "desp_td-" + i );
+                    input_desp.attr("id", "desp_td-" + (i+j) );
                     input_desp.attr("value", data.svcIH[ i - 1 ].desp );
                     td_desp.append( input_desp );
                     if( input_desp.val().length > 5 )
@@ -403,7 +425,7 @@ function checkReport( idr, idt ){
                     var input_partes = $("<input/>");
                     input_partes.addClass("input");
                     input_partes.attr("size", "5");
-                    input_partes.attr("id", "partes_td-" + i );
+                    input_partes.attr("id", "partes_td-" + (i+j) );
                     input_partes.attr("value", data.svcIH[ i - 1 ].iva );
                     td_partes.append( input_partes );
                     if( input_partes.val().length > 5 )
@@ -415,7 +437,7 @@ function checkReport( idr, idt ){
                     var input_cobro = $("<input/>");
                     input_cobro.addClass("input");
                     input_cobro.attr("size", "5");
-                    input_cobro.attr("id", "cobro_td-" + i );
+                    input_cobro.attr("id", "cobro_td-" + (i+j) );
                     input_cobro.attr("value", data.svcIH[ i - 1 ].cobro );
                     td_cobro.append( input_cobro );
                     if( input_cobro.val().length > 5 )
@@ -442,15 +464,15 @@ function checkReport( idr, idt ){
                     img.attr( "id", "delete-" + i );
                     img.attr( "src", "imgs/delete.png");
                     img.attr( "alt", "Eliminar servicio");
-                    img.attr("onclick", "deleteSvc(" + i + ")" );
+                    img.attr("onclick", "deleteSvc(" + (i+j) + ")" );
                     td_img.append( img );
                     var td_img_upt = $("<td></td>");
                     var img_upt = $("<img/>");
                     img_upt.addClass("table-icon");
-                    img_upt.attr( "id", "update-" + i );
+                    img_upt.attr( "id", "update-" + (i+j) );
                     img_upt.attr( "src", "imgs/update.ico");
                     img_upt.attr( "alt", "Eliminar servicio");
-                    img_upt.attr("onclick", "updateSvc(" + i + ")" );
+                    img_upt.attr("onclick", "updateSvc(" + (i+j) + ")" );
                     td_img_upt.append( img_upt );
 
                     svc_tr.append( td_folio );
@@ -527,7 +549,7 @@ function deleteSvc( num ){
                             "text" : "El técnico correspondiente podrá ver su folio rechazado en su cuenta",
                             "type" :  "success"
                         },function(){
-
+                            $("#svc-" + num).remove();
                         });
                     }else if( data.status == "-1"){
                         swal("Error" , data.error, "error");
@@ -765,4 +787,59 @@ function addTax(){
             }
         }
     });
+}
+function updateSvc( num ){
+    var folio = $("#folio_td-" + num).val();
+    var mo = $("#mo_td-" + num).val();
+    var cas = $("#cas_td-" + num ).val();
+    var desp = $("#desp_td-" + num ).val();
+    var partes = $("#partes_td-" + num).val();
+    var cobro = $("#cobro_td-" + num).val();
+    console.log( folio + mo + cas + desp + partes + cobro );
+    $.post({
+        url : "php/updateSvc.php",
+        data : {
+            "folio" : folio,
+            "mo" : mo,
+            "cas" : cas,
+            "desp" : desp,
+            "partes" : partes,
+            "cobro" : cobro
+        },
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "-1" ){
+                swal("Error", data.error, "error");
+            }else if( data.status == "-2"){
+                swal("Error", "al actualizar el folio", "error");
+            }else{
+                swal("OK", "Servicio actualizado correctamente", "success");
+            }
+        }
+    });
+}
+function uploadGSPN(){
+    var file_data = $('#gspn-reg').prop('files')[0]; 
+    var formData = new FormData();
+    formData.append( "file", file_data );
+    console.log( formData );
+    $.ajax({
+        url : "php/uploadGSPN.php",  //Server script to process data
+        data: formData,
+        dataType : "text",
+        type: 'POST',
+        //Ajax events
+        success : function( response ){
+            console.log( response );
+        },
+        // Form data
+        //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+    
+}
+function uploadMaterial(){
+    
 }
