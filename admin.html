@@ -115,18 +115,30 @@
                    <form enctype="multipart/form-data" id="form-gspn">
                         <input id="gspn-reg" type="file" class="file-input"/>
                         <button id="upload-gspn" class="btn btn-md btn-common centered-block">Subir <i class="fa fa-upload fa-lg"></i></button>
-                        <progress></progress>
+                        <div class="row">
+                            <div class="centered-block">
+                                <img src="imgs/loading.gif" class="loading-icon" alt="Cargando..." hidden="hidden" id="loading-icon-gspn"/>
+                            </div>
+                        </div>
                    </form>
                 </div>
                 
             </div>
+            <br/><br/>
             <div class="row">
                 <div class="row subsection-title centered-block">
                     <span>Control de material</span>
                 </div>
                 <div class="row centered-block">
-                    <input id="material" type="file" class="file-input"/>
-                    <button id="upload-material" class="btn btn-md btn-common centered-block">Subir <i class="fa fa-upload fa-lg"></i></button>
+                   <form enctype="multipart/form-data" id="form-gspn">
+                        <input id="material" type="file" class="file-input"/>
+                        <button id="upload-mat" class="btn btn-md btn-common centered-block">Subir <i class="fa fa-upload fa-lg"></i></button>
+                        <div class="row">
+                            <div class="centered-block">
+                                <img src="imgs/loading.gif" class="loading-icon" alt="Cargando..." hidden="hidden" id="loading-icon-mat"/>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

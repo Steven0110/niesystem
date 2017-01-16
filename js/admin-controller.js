@@ -45,7 +45,7 @@ $(document).ready(function(){
 
     $("#confirm-report").click( confirmReport );
     //Upload files
-    $("#upload-material").click( uploadMaterial );
+    $("#upload-mat").click( uploadMaterial );
     $("#upload-gspn").click( uploadGSPN );
     //Validation for file update
     $('.file-input').change(function(){
@@ -54,8 +54,10 @@ $(document).ready(function(){
         if( type != "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ){
             swal("Error. El archivo no es formato .xslx", "Si es .xsl favor de guardar el documento como documento .xlsx y volver a subirlo", "error");
             $("#upload-gspn").attr("disabled", "disabled");
+            $("#upload-mat").attr("disabled", "disabled");
         }else{
             $("#upload-gspn").removeAttr("disabled");
+            $("#upload-mat").removeAttr("disabled");
         }
     });
     
@@ -820,9 +822,10 @@ function updateSvc( num ){
 }
 function uploadGSPN(){
     var file_data = $('#gspn-reg').prop('files')[0]; 
+    $("#loading-icon-gspn").slideDown();
+    $("#upload-gspn").hide();
     var formData = new FormData();
     formData.append( "file", file_data );
-    console.log( formData );
     $.ajax({
         url : "php/uploadGSPN.php",  //Server script to process data
         data: formData,
@@ -830,7 +833,21 @@ function uploadGSPN(){
         type: 'POST',
         //Ajax events
         success : function( response ){
-            console.log( response );
+            $("#loading-icon-gspn").slideUp();
+            $("#upload-gspn").show();
+            var data = JSON.parse( response );
+            if( data.status == "-1" ){
+                swal("Error", "al crear la conexión con la base de datos", "error");
+            }else if( data.status == "-2"){
+                swal("Error", "al almacenar la informacion en la base de datos", "error");
+            }else if( data.status == "-3"){
+                swal("Error", "al subir el archivo al servidor", "error");
+            }else if( data.status == "-4"){
+                swal("Error", "al leer la hoja de cálculo", "error");
+            }else{
+                swal("OK", "Base de datos actualizada correctamente", "success");
+            }
+            
         },
         // Form data
         //Options to tell jQuery not to process data or worry about content-type.
@@ -838,8 +855,41 @@ function uploadGSPN(){
         contentType: false,
         processData: false
     });
-    
 }
 function uploadMaterial(){
+    var file_data = $('#material').prop('files')[0]; 
+    $("#loading-icon-mat").slideDown();
+    $("#upload-mat").hide();
+    var formData = new FormData();
+    formData.append( "file", file_data );
+    $.ajax({
+        url : "php/updateMat.php",  //Server script to process data
+        data: formData,
+        dataType : "text",
+        type: 'POST',
+        //Ajax events
+        success : function( response ){
+            $("#loading-icon-mat").slideUp();
+            $("#upload-mat").show();
+            var data = JSON.parse( response );
+            if( data.status == "-1" ){
+                swal("Error", "al crear la conexión con la base de datos", "error");
+            }else if( data.status == "-2"){
+                swal("Error", "al almacenar la informacion en la base de datos", "error");
+            }else if( data.status == "-3"){
+                swal("Error", "al subir el archivo al servidor", "error");
+            }else if( data.status == "-4"){
+                swal("Error", "al leer la hoja de cálculo", "error");
+            }else{
+                swal("OK", "Base de datos actualizada correctamente", "success");
+            }
+            
+        },
+        // Form data
+        //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+    });
     
 }
