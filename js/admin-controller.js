@@ -60,11 +60,8 @@ $(document).ready(function(){
             $("#upload-mat").removeAttr("disabled");
         }
     });
+    $("#val-rep").click( validateReport );
     
-    //upload MS EXCEL files
-    //
-    //
-    $("#upload-gspn").click( uploadGSPN );
     
 });
 function showUncheckedReports(){
@@ -568,7 +565,7 @@ function confirmReport(){
     var idr = $("#no-reporte").text();
     swal({
         title : "¿Estás seguro de confirmar el reporte?",
-        text : "Id de reporte: " + idr,
+        text : "Recuerde que debe actualizar cada servicio individualmente si es que realizó algún cambio en los valores",
         type : "warning",
         showCancelButton : true,
         confirmButtonColor : "#F43",
@@ -820,6 +817,61 @@ function updateSvc( num ){
         }
     });
 }
+function validateReport(){
+    var folios = $("#desc-report-table-c .input[id^=\"folio_td-\"]");
+    var partes = $("#desc-report-table-c .input[id^=\"partes_td-\"]");
+    var svc_adv = new Array();
+    var svc_err = new Array();
+    $("#loading-icon-val").slideDown();
+    for( var i = 0 ; i < folios.length ; i++ ){
+        var valid = true;
+        $.post({
+            async : false, 
+            data : { "folio" : $(folios[ i ]).val() },
+            url : "php/getPartes.php",
+            success : function( response ){
+                var data = JSON.parse( response );
+                if( data.status == "-1")
+                    swal("Error", data.error, "error");
+                else if( data.status == "-2")
+                    swal("Error", "al leer la informacion de la base de datos", "error");
+                else if( data.status == "-3")
+                    swal("Error", "No existe el folio " + $(folios[ i ]).val() + " en la base de datos", "error");
+                else if( data.status == "1" ){
+                    var iva = $(partes[ i ]).val();
+                    var dif = Math.abs( iva - Number( data.partes) ).toFixed(2);
+                    if( dif < 50 & dif > 0 )
+                        svc_adv.push({"folio" : $(folios[ i ]).val(), "partes_db" : data.partes, "partes" : iva, "dif" : dif });
+                    else if( dif > 50 )
+                        svc_err.push({"folio" : $(folios[ i ]).val(), "partes_db" : data.partes, "partes" : iva, "dif" : dif });
+                }
+            }
+        });
+    }
+    if( svc_err.length == 0 && svc_adv.length == 0 )
+        swal("OK", "Todos los servicios de cargo son correctos", "success");
+    else{
+        var html_adv = "";
+        var html_err = "";
+        if(svc_err.length == 0)
+            var html_err = "<p>-- Ninguno --</p>";
+        if( svc_adv.length == 0)
+            var html_adv = "<p>-- Ninguna --</p>";
+        //Errors
+        for( var i = 0 ; i < svc_err.length ; i++ )
+            html_err += ("<p><strong>Folio:</strong> " + svc_err[ i ].folio + ", <strong>partes (RP): </strong>$" + svc_err[ i ].partes + ",<strong> partes (BD):</strong> $" + svc_err[ i ].partes_db + ", <strong>diferencia: </strong>$" + svc_err[ i ].dif + "</p>");
+        //Warnings
+        for( var i = 0 ; i < svc_adv.length ; i++ )
+            html_adv += ("<p><strong>Folio:</strong> " + svc_adv[ i ].folio + ", <strong>partes (RP):</strong> $" + svc_adv[ i ].partes + ", <strong>partes (BD):</strong> $" + svc_adv[ i ].partes_db + ", <strong>diferencia:</strong> $" + svc_adv[ i ].dif + "</p>");
+        swal({
+            title : "Se encontraron detalles en los siguientes servicios de cargo: ",
+            text : "<h4><strong>Advertencias (Partes dentro del rango permitido):</strong></h4>" + html_adv + "<h4><strong>Errores (Partes fuera del rango permitido):</strong></h4>" + html_err,
+            type : "warning",
+            html : true
+        });
+    }
+    $("#loading-icon-val").slideUp();
+}
 function uploadGSPN(){
     var file_data = $('#gspn-reg').prop('files')[0]; 
     $("#loading-icon-gspn").slideDown();
@@ -882,14 +934,12 @@ function uploadMaterial(){
                 swal("Error", "al leer la hoja de cálculo", "error");
             }else{
                 swal("OK", "Base de datos actualizada correctamente", "success");
-            }
-            
+            }     
         },
         // Form data
         //Options to tell jQuery not to process data or worry about content-type.
         cache: false,
         contentType: false,
         processData: false
-    });
-    
+    });   
 }

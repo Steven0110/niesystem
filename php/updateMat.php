@@ -31,11 +31,9 @@ else{
     $highestColumn = $sheet->getHighestColumn();
     for ($row = 2; $row <= $highestRow; $row++ ){
         //  Read a row of data into an array
-        $folio = $sheet->getCell("K".$row)->getOldCalculatedValue();
+        $folio = $sheet->getCell("K".$row)->getValue();
         $partes = $sheet->getCell("O".$row)->getOldCalculatedValue();
-        echo $folio."  ";
-        echo $partes."  \n";
-        $sql = "INSERT IGNORE INTO material_cargo('folio', 'partes_iva') VALUES(:folio, :partes)";
+        $sql = "INSERT IGNORE INTO material_cargo(folio, partes_iva) VALUES(:folio, :partes)";
         $stm = $pdo->prepare( $sql );
         $stm->bindParam(":folio", $folio, PDO::PARAM_STR);
         $stm->bindParam(":partes", $partes, PDO::PARAM_INT);

@@ -1360,7 +1360,7 @@ function describeReport( idr ){
                     input_gar.attr("type", "checkbox");
                     input_gar.addClass("checkbox-md");
                     input_gar.attr("id", "gar_td-" + i );
-                    if( data.svcCargo[ i - 1 ].gar == "1" ){
+                    if( data.svcIH[ i - 1 ].gar == "1" ){
                         input_gar.attr( "checked", "checked" );
                         input_cobro.attr("disabled", "disabled");
                     }
