@@ -65,9 +65,9 @@
                       </a>
                     </li>
                     <ul class="sub-menu collapse" id="reports">
-                        <li id="check-reports-tec"><a href="#">Por técnico</a></li>
-                        <li id="check-reports-week"><a href="#">Por semana</a></li>
-                        <li id="check-reports-all"><a href="#">Todos</a></li>
+                        <li id="dwnld-tec"><a href="#">Por técnico</a></li>
+                        <li id="dwnld-week"><a href="#">Por semana</a></li>
+                        <li id="dwnld-all"><a href="#">Todos</a></li>
                     </ul>
                      <li id="mng-usr">
                       <a href="#">
@@ -297,6 +297,8 @@
             </div>
         </div>
 
+       
+       
         <!-- GESTION DE TARIFAS -->
         <div class="mid-panel" hidden="hidden" id="tax-panel">
             <div class="row row-report">
@@ -343,7 +345,26 @@
                 </div>
             </div>
         </div>
-
+        
+        
+        
+        <div class="mid-panel" hidden="hidden" id="dwnld-tec-panel">
+            <div class="row row-report">
+                <div class="centered-block title">Descargar reporte por técnico</div>
+            </div>
+            <div class="row row-report">
+                    <div class="centered-block">
+                       <div class="row field">
+                            <select class="select" name="tecs" id="tecs">
+                                <option value="NONE" selected="selected" hidden="hidden">
+                                    Selecciona un técnico
+                                </option>
+                            </select>
+                       </div>
+                        <button id="dwnld-tec-btn" class="btn btn-lg btn-common centered-block">Descargar <i class="fa fa-download fa-lg"></i></button>
+                    </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

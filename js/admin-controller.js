@@ -62,6 +62,8 @@ $(document).ready(function(){
     });
     $("#val-rep").click( validateReport );
     
+    $("#dwnld-tec").click( showDTPanel );
+    $("#dwnld-tec-btn").click( getReportsEX );
     
 });
 function showUncheckedReports(){
@@ -942,4 +944,54 @@ function uploadMaterial(){
         contentType: false,
         processData: false
     });   
+}
+function showDTPanel(){
+    $(".mid-panel").slideUp();
+    $("#dwnld-tec-panel").slideDown();
+    $.post({
+        url : "php/getTecs.php",
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "-1")
+                swal("Error", data.error, "error");
+            else if( data.status == "-2")
+                swal("Error", "al leer  la información de la base de datos", "error");
+            else if( data.status == "-3")
+                swal("No hay técnicos registrados en el sistema", "", "warning");
+            else{
+                var select = $("#tecs");
+                for( var i = 0 ; i < data.tec.length ; i++ ){
+                    var option = $("<option></option>");
+                    option.val(data.tec[ i ].idt);
+                    option.text(data.tec[ i ].nom + " " + data.tec[ i ].ap);
+                    select.append( option );
+                }
+            }
+        }
+    });
+}
+function getReportsEX(){
+    var idt = $("#tecs").find(":selected").val();
+    var name = $("#tecs").find(":selected").text();
+    if( idt == "NONE")
+        swal("Por favor selecciona un técnico", "", "warning");
+    else{
+        $.post({
+            url : "php/getReportsEX.php",
+            data : { "idt" : idt , "name" : name },
+            success : function( response ){
+                console.log(response);
+                /*var data = null;
+                try{
+                    data = JSON.parse( response );
+                    if( data.status === "-1")
+                        swal("Error", data.error, "error");
+                    else if( data.status == "-2" )
+                        swal("No hay información para descargar", "", "warning");
+                }catch(e){
+                    window.open("http://localhost/niesystem/admin.html", "_blank");
+                }*/
+            }
+        });
+    }
 }
