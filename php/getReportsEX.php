@@ -50,6 +50,7 @@ try{
         //Save
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
         $objWriter->save("temp/".$filename);
+        echo "{\"status\":\"1\",\"url\":\"temp/".$filename."\"}";
     }else
         die("{\"status\":\"-2\"}");
 }catch(PDOException $ex){

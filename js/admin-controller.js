@@ -980,17 +980,13 @@ function getReportsEX(){
             url : "php/getReportsEX.php",
             data : { "idt" : idt , "name" : name },
             success : function( response ){
-                console.log(response);
-                /*var data = null;
-                try{
-                    data = JSON.parse( response );
-                    if( data.status === "-1")
-                        swal("Error", data.error, "error");
-                    else if( data.status == "-2" )
-                        swal("No hay información para descargar", "", "warning");
-                }catch(e){
-                    window.open("http://localhost/niesystem/admin.html", "_blank");
-                }*/
+                var data = JSON.parse( response );
+                if( data.status == "-1")
+                    swal("Error", data.error, "error");
+                else if( data.status == "-2" )
+                    swal("Error", "al leer la informacion de la base de datos", "error");
+                else if( data.status == "1")
+                    window.open( "php/" + data.url, "_blank");
             }
         });
     }

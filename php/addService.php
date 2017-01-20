@@ -60,9 +60,9 @@ try{
             
             $sql = "INSERT INTO servicios_cargo VALUES(:folio, :mod, :serie)";
             $stm = $pdo->prepare( $sql );
-            $stm->bindParam(":folio", $folio, PDO::PARAM_INT);
-            $stm->bindParam(":mod", $mod, PDO::PARAM_INT);
-            $stm->bindParam(":serie", $serie, PDO::PARAM_INT);
+            $stm->bindParam(":folio", $folio, PDO::PARAM_STR);
+            $stm->bindParam(":mod", $mod, PDO::PARAM_STR);
+            $stm->bindParam(":serie", $serie, PDO::PARAM_STR);
             if( $stm->execute() ){
                 echo "{";
                 echo "\"status\" : \"1\",";

@@ -108,7 +108,7 @@ function checkSvcExistence(){
                     swal({
                         title : "Advertencia",
                         type : "warning",
-                        text : "El folio que intentas agregar no existe en la base de datos"
+                        text : "El folio que intentas agregar no existe en la base de datos. Tal vez la base de datos aún no sea actualizada por el administrador"
                     },function(){
                         $("#loading-icon").slideUp("slow");
                         cleanFields();
