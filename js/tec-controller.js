@@ -1,5 +1,17 @@
 var num_svcs, num_svcs_c, num_svcs_ih;
 $(document).ready(function(){
+    
+    if( !isIE() ){
+        swal({
+            title : "Navegador no compatible",
+            text : "Para poder usar el sistema es necesario usar uno de los siguientes navegadores: <strong>Chrome, Firefox, Opera, Edge, Internet Explorer(versión 9 o superior)</strong>",
+            type : "error",
+            html : true
+        },function(){
+            location.href = "index.html";
+        });
+    }
+    
     $(".fecha").dateDropper();
     //Close session
     $("#close").click(function(){
@@ -48,7 +60,12 @@ $(document).ready(function(){
     $("#check-tarifas").click( openPopUpTarifas );
 
     $("#close-tarifas").click( closePopUpTarifas );
-
+    
+    $("#contact").click( openContact );
+    
+    $("#close-contact").click( closeContact );
+    
+    
     getRejectedServices();
 
 });
@@ -170,6 +187,7 @@ function checkSvcExistence(){
         });
         
     }
+    
 }
 
 function getInfoSvc( folio ){
@@ -230,7 +248,10 @@ function addService(){
                         text : "Servicio agregado correctamente",
                         type : "success"
                     }, function(){ cleanFields(); $("#add-svc").attr("disabled", "disabled"); $("#check-ok").slideUp("slow"); } );
-                }else{
+                }else if( data.status == "2"){
+                    
+                }
+                else{
                     swal({
                         title : "Error",
                         text : data.error,
@@ -1199,7 +1220,21 @@ function describeReport( idr ){
                     }
                     input_gar.attr( "disabled", "disabled" );
                     td_gar.append( input_gar );
-
+                    
+                    var div_obs = $("<div></div>");
+                    div_obs.attr("data-toggle", "tooltip");
+                    if( data.svcCargo[ i - 1 ].obs == "" ){
+                        div_obs.addClass("green-led");
+                        div_obs.attr("data-original-title", "OK");
+                    }
+                    else{
+                        div_obs.addClass("orange-led");
+                        div_obs.attr("data-original-title", data.svcCargo[ i - 1 ].obs);
+                    }
+                    div_obs.tooltip();
+                    var td_obs = $("<td></td>");
+                    td_obs.append( div_obs )
+                    
                     svc_tr.append( td_folio );
                     svc_tr.append( td_mod );
                     svc_tr.append( td_serie );
@@ -1210,6 +1245,7 @@ function describeReport( idr ){
                     svc_tr.append( td_partes );
                     svc_tr.append( td_cobro );
                     svc_tr.append( td_gar );
+                    svc_tr.append( td_obs );
 
                     table_c.append( svc_tr );
                 }
@@ -1366,7 +1402,22 @@ function describeReport( idr ){
                     }
                     input_gar.attr( "disabled", "disabled" );
                     td_gar.append( input_gar );
-
+                    
+                    
+                    var div_obs = $("<div></div>");
+                    div_obs.attr("data-toggle", "tooltip")
+                    if( data.svcIH[ i - 1 ].obs == "" ){
+                        div_obs.addClass("green-led");
+                        div_obs.attr("data-original-title", "OK");
+                    }
+                    else{
+                        div_obs.addClass("orange-led");
+                        div_obs.attr("data-original-title", data.svcIH[ i - 1 ].obs);
+                    }
+                    div_obs.tooltip();
+                    var td_obs = $("<td></td>");
+                    td_obs.append( div_obs )
+                    
                     svc_tr.append( td_folio );
                     svc_tr.append( td_mod );
                     svc_tr.append( td_serie );
@@ -1377,6 +1428,7 @@ function describeReport( idr ){
                     svc_tr.append( td_partes );
                     svc_tr.append( td_cobro );
                     svc_tr.append( td_gar );
+                    svc_tr.append( td_obs );
 
                     table_ih.append( svc_tr );
                 }
@@ -1404,7 +1456,6 @@ function describeReport( idr ){
         }
     });
 }
-
 function getRejectedServices(){
     var idt = ( JSON.parse( $.cookie("usuario") ) ).idt;
     var table = $("#rej-svc-table");
@@ -1458,4 +1509,19 @@ function getRejectedServices(){
             }
         }
     });
+}
+function closeContact(){
+    $("#popup-layer").fadeOut("slow");
+    $("#contact-block").fadeOut("slow");
+}
+function openContact(){
+    $("#popup-layer").fadeIn("slow");
+    $("#contact-block").fadeIn("slow");
+}
+function isIE(){
+    var user_agent = window.navigator.userAgent;
+    var version = Number( user_agent.indexOf("MSIE ") );
+    if( version > 0 && version < 9 ){
+        return false;
+    }else return true;
 }

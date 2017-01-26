@@ -1,13 +1,12 @@
 <?php
 include 'db-variables.php';
-$idt = $_POST["idt"];
-$name = $_POST["name"];
+$week = $_POST["week"];
 try{
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $usr_admin, $psw_admin);
     $pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, "SET NAMES utf8");
-    $sql = "SELECT s.folio, s.mano_obra, s.casetas, s.desplazamiento, s.partes_iva, s.cobro, s.observacion, s.garantia, r.semana FROM servicios_tecnico_trabajados s, reporte r WHERE r.idreporte=s.idreporte AND r.idtecnico=:idt";
+    $sql = "SELECT s.folio, s.mano_obra, r.idtecnico, s.casetas, s.desplazamiento, s.partes_iva, s.cobro, s.observacion, s.garantia, r.semana, p.nombre FROM servicios_tecnico_trabajados s, reporte r, persona p WHERE r.idreporte=s.idreporte AND r.semana=:week AND r.idtecnico=p.idtecnico";
     $stm = $pdo->prepare( $sql );
-    $stm->bindParam( ":idt", $idt, PDO::PARAM_INT );
+    $stm->bindParam( ":week", $week, PDO::PARAM_INT );
     if( $stm->execute() ){
         $rs = $stm->fetchAll(PDO::FETCH_ASSOC);
         date_default_timezone_set('America/Mexico_City');
@@ -15,7 +14,7 @@ try{
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getProperties()->setCreator("Gerardo Cabello@Niesystem")
             ->setTitle("Reporte")
-            ->setDescription("Reporte del tecnico ".$idt);
+            ->setDescription("Reporte de la semana ".$week);
         $title = "Reporte del técnico";
         $cols = array("Folio", "Mano de obra", "Semana", "Desplazamiento", "Casetas", "Partes con IVA", "Tecnico");
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A1:G1");
@@ -35,7 +34,7 @@ try{
                 ->setCellValue("D".$j, $rs[ $i ]["desplazamiento"])
                 ->setCellValue("E".$j, $rs[ $i ]["casetas"])
                 ->setCellValue("F".$j, $rs[ $i ]["partes_iva"])
-                ->setCellValue("G".$j, $name);
+                ->setCellValue("G".$j, $rs[ $i ]["nombre"]);
         }
         for( $i = 'A' ; $i <= 'G' ; $i++ ){
             $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension($i)->setAutoSize(TRUE);
@@ -44,7 +43,7 @@ try{
         $objPHPExcel->getActiveSheet()->setTitle("Reporte");
         $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet(0)->freezePaneByColumnAndRow(0,7);
-        $filename = "reporte_".$name."_".date("Y-m-d").".xlsx";
+        $filename = "reporte_semana_".$week."_".date("Y-m-d").".xlsx";
         //header("Content-Type: application/vnd.ms-excel");
         //header("Content-Disposition: attachment; filename=".$filename);
         //header("Cache-Control: max-age=1");

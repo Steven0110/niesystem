@@ -1,1 +1,8 @@
-//Para visualizar reportes dado un id de reporte
+//Regresar los servicios de un reporte dado a la seccion de creacion de reporte
+DELIMITER #
+CREATE PROCEDURE retReport(in idr bigint(20))
+BEGIN
+UPDATE servicios_tecnico_trabajados SET idreporte=NULL, status=1 WHERE idreporte=idr; 
+DELETE FROM reporte WHERE idreporte=idr;
+END #
+DELIMITER ;

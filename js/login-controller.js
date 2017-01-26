@@ -1,5 +1,14 @@
 $(document).ready(function(){
-
+    if( !isIE() ){
+        swal({
+            title : "Navegador no compatible",
+            text : "Para poder usar el sistema es necesario usar uno de los siguientes navegadores: <strong>Chrome, Firefox, Opera, Edge, Internet Explorer(versión 9 o superior)</strong>",
+            type : "error",
+            html : true
+        },function(){
+            location.href = "index.html";
+        });
+    }
     if($.cookie("usuario"))
         location.href = "tecnicos.html";
     $("#login-action").click(function(){
@@ -56,4 +65,12 @@ function validateFields(){
     }else{
         return true;
     }
+}
+
+function isIE(){
+    var user_agent = window.navigator.userAgent;
+    var version = Number( user_agent.indexOf("MSIE ") );
+    if( version > 0 && version < 9 ){
+        return false;
+    }else return true;
 }

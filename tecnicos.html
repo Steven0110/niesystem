@@ -34,24 +34,17 @@
     <link rel="stylesheet" href="css/my-dropper-style.css" />
     <link rel="shortcut icon" href="/favicon.ico?v=2" />
 
-
     <title>Tecnicos</title>
 </head>
 <body class="">
-
-
     <div class="fixed-button">
         <p id="close">Cerrar sesión</p>
     </div>
-
     <div class="nav-side-menu">
         <div class="brand" id="saludo"></div>
         <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
-
             <div class="menu-list">
-
                 <ul id="menu-content" class="menu-content collapse out">
-
                     <li  data-toggle="collapse" data-target="#options" class="collapsed active">
                       <a href="#"><i class="fa fa-folder fa-lg"></i> Reportes <span class="arrow"></span></a>
                     </li>
@@ -66,27 +59,25 @@
                       <i class="fa fa-flag fa-lg"></i> Ver tarifas
                       </a>
                     </li>
+                     <li id="contact">
+                      <a href="#">
+                      <i class="fa fa-envelope fa-lg"></i> Contacto
+                      </a>
+                    </li>
                 </ul>
          </div>
     </div>
-
-
     <div class="panel">
        <div class="row panel-title">
             PANEL DE TÉCNICO
         </div>
-
-
         <div class="mid-panel bg-samsung">
         </div>
-
         <!-- AGREGAR SERVICIOS -->
         <div class="mid-panel" hidden="hidden" id="gen-report-panel">
-
             <div class="row row-report">
                 <div class="centered-block title">Agregar servicios</div>
             </div>
-
             <div class="row row-report">
                 <div class="section-reg col-md-12">
                     <div class="centered-block">
@@ -163,13 +154,10 @@
                     </div>
                 </div>
             </div>
-
-                    <div class="centered-block button-quarter">
-                        <button class="btn btn-md btn-block btn-common" id="add-svc" disabled="disabled">Agregar servicio</button>
-                    </div>
-
+            <div class="centered-block button-quarter">
+                <button class="btn btn-md btn-block btn-common" id="add-svc" disabled="disabled">Agregar servicio</button>
+            </div>
         </div>
-
         <!-- Ver reportes -->
         <div class="mid-panel" hidden="hidden" id="view-reports-panel">
             <div class="row row-report">
@@ -225,7 +213,6 @@
                 </div>
                 <table id="report-table-c" class="centered-block">
                 </table>
-
                 <div class="row spaced">
                     <div class="col-md-2 data-block">
                         <div class="row centered-block">
@@ -262,7 +249,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row subsection-title centered-block">
                     <span>Servicios In Home (50%)</span>
                 </div>
@@ -312,17 +298,13 @@
                         </div>
                     </div>
                 </div>
-
                 <button class="btn-gen-report btn-common" id="generate-report">Generar reporte</button>
             </div>
         </div>
-
         <div class="mid-panel" hidden="hidden" id="last-reports-panel">
-
             <div class="row row-report">
                 <div class="centered-block title">Reportes anteriores</div>
             </div>
-
             <div class="row row-report">
                 <table id="prev-reports-table" class="centered-block"></table>
             </div>
@@ -339,7 +321,6 @@
                 </div>
                 <table id="desc-report-table-c" class="centered-block">
                 </table>
-
                 <div class="row spaced">
                     <div class="col-md-2 data-block">
                         <div class="row centered-block">
@@ -376,7 +357,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row subsection-title centered-block">
                     <span>Servicios In Home (50%)</span>
                 </div>
@@ -428,7 +408,6 @@
                 </div>
             </div>
         </div>
-
         <!-- MUESTRA SERVICIOS RECHAZADOS -->
         <div class="mid-panel" hidden="hidden" id="rej-services-panel">
             <div class="row row-report">
@@ -439,17 +418,19 @@
             </div>
         </div>
     </div>
-
-
-
-
-    <div id="tarifas-block" hidden="hidden">
-        <div id="close-tarifas"><img src="imgs/delete.png" class="table-icon" alt="Cerrar popup"></div>
+    <div id="tarifas-block" class="popup-md" hidden="hidden">
+        <div id="close-tarifas"><img src="imgs/delete.png" class="table-icon closer" alt="Cerrar popup"></div>
         <div class="row centered-block popup-panel">
            <span class="title centered-block">Tarifas</span>
            <table id="tarifas-table" class="centered-block"></table>
         </div>
-
+    </div>
+    <div id="contact-block" class="popup-sm" hidden="hidden">
+        <div id="close-contact"><img src="imgs/delete.png" class="table-icon closer" alt="Cerrar popup"></div>
+        <div class="row centered-block popup-panel">
+           <span class="title centered-block">Correo de contacto:</span>
+           <span class="title centered-block">cabello.acosta.gerardo@gmail.com</span>
+        </div>
     </div>
     <div class="layer" id="popup-layer" hidden="hidden"></div>
 </body>

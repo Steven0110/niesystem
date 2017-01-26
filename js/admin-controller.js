@@ -1,5 +1,17 @@
-
 $(document).ready(function(){
+    
+    //Detect if browser is IE 9+
+    if( !isIE() ){
+        swal({
+            title : "Navegador no compatible",
+            text : "Para poder usar el sistema es necesario usar uno de los siguientes navegadores: <strong>Chrome, Firefox, Opera, Edge, Internet Explorer(versión 9 o superior)</strong>",
+            type : "error",
+            html : true
+        },function(){
+            location.href = "index.html";
+        });
+    }
+    
     //Close session
     $("#close").click(function(){
         $.removeCookie("usuario");
@@ -47,6 +59,7 @@ $(document).ready(function(){
     //Upload files
     $("#upload-mat").click( uploadMaterial );
     $("#upload-gspn").click( uploadGSPN );
+    $("#upload-imp").click( uploadImp );
     //Validation for file update
     $('.file-input').change(function(){
         var file = this.files[0];
@@ -55,16 +68,30 @@ $(document).ready(function(){
             swal("Error. El archivo no es formato .xslx", "Si es .xsl favor de guardar el documento como documento .xlsx y volver a subirlo", "error");
             $("#upload-gspn").attr("disabled", "disabled");
             $("#upload-mat").attr("disabled", "disabled");
+            $("#upload-imp").attr("disabled", "disabled");
         }else{
             $("#upload-gspn").removeAttr("disabled");
             $("#upload-mat").removeAttr("disabled");
+            $("#upload-imp").removeAttr("disabled");
         }
     });
     $("#val-rep").click( validateReport );
     
     $("#dwnld-tec").click( showDTPanel );
     $("#dwnld-tec-btn").click( getReportsEX );
+    $("#dwnld-week-btn").click( getReportsWeekEX );
+    $("#dwnld-all").click( getReportsAllEX );
     
+    
+    $("#contact").click( openContact );
+    
+    $("#close-contact").click( closeContact );
+    
+    $("#dwnld-week").click( function(){
+        $(".mid-panel").slideUp("slow");
+        $("#generate-report-week-panel").slideDown("slow");
+        getWeeks();
+    });
 });
 function showUncheckedReports(){
     $.post({
@@ -796,52 +823,85 @@ function updateSvc( num ){
     var desp = $("#desp_td-" + num ).val();
     var partes = $("#partes_td-" + num).val();
     var cobro = $("#cobro_td-" + num).val();
-    console.log( folio + mo + cas + desp + partes + cobro );
-    $.post({
-        url : "php/updateSvc.php",
-        data : {
-            "folio" : folio,
-            "mo" : mo,
-            "cas" : cas,
-            "desp" : desp,
-            "partes" : partes,
-            "cobro" : cobro
-        },
-        success : function( response ){
-            var data = JSON.parse( response );
-            if( data.status == "-1" ){
-                swal("Error", data.error, "error");
-            }else if( data.status == "-2"){
-                swal("Error", "al actualizar el folio", "error");
-            }else{
-                swal("OK", "Servicio actualizado correctamente", "success");
-            }
+    
+    
+    swal({
+        title : "Motivo del cambio",
+        type : "input",
+        closeOnConfirm : false,
+        animation : "slide-from-top",
+        inputPlaceHolder : "Motivo"
+    }, function( val ){
+        if( val === false ) return false;
+        if( val === ""){
+            swal.showInputError("Favor de escribir un motivo");
+            return false;
         }
+        $.post({
+            url : "php/updateSvc.php",
+            data : {
+                "folio" : folio,
+                "mo" : mo,
+                "cas" : cas,
+                "desp" : desp,
+                "partes" : partes,
+                "cobro" : cobro,
+                "obs" : val
+            },
+            success : function( response ){
+                var data = JSON.parse( response );
+                if( data.status == "-1" ){
+                    swal("Error", data.error, "error");
+                }else if( data.status == "-2"){
+                    swal("Error", "al actualizar el folio", "error");
+                }else{
+                    swal("OK", "Servicio actualizado correctamente", "success");
+                }
+            }
+        });
     });
+        
 }
 function validateReport(){
     var folios = $("#desc-report-table-c .input[id^=\"folio_td-\"]");
     var partes = $("#desc-report-table-c .input[id^=\"partes_td-\"]");
+    var series = $("#desc-report-table-c .input[id^=\"serie_td-\"]");
+    var imps = $("#desc-report-table-c .input[id^=\"cobro_td-\"]");
+    
     var svc_adv = new Array();
     var svc_err = new Array();
+    var svc_imp = new Array();
+    var svc_imp_dif = new Array();
+    var svc_rng = new Array();
     $("#loading-icon-val").slideDown();
     for( var i = 0 ; i < folios.length ; i++ ){
         var valid = true;
         $.post({
             async : false, 
             data : { "folio" : $(folios[ i ]).val() },
-            url : "php/getPartes.php",
+            url : "php/getInfoCargo.php",
             success : function( response ){
                 var data = JSON.parse( response );
                 if( data.status == "-1")
                     swal("Error", data.error, "error");
                 else if( data.status == "-2")
                     swal("Error", "al leer la informacion de la base de datos", "error");
+                else if( data.status == "-4")
+                    swal("Error", "al comprobar si es reingreso", "error");
                 else if( data.status == "-3")
                     swal("Error", "No existe el folio " + $(folios[ i ]).val() + " en la base de datos", "error");
                 else if( data.status == "1" ){
+                    var imp = ( data.imp == "" ) ? -1 : Number( data.imp );
                     var iva = $(partes[ i ]).val();
+                    var imp_u = $(imps[ i ]).val();
                     var dif = Math.abs( iva - Number( data.partes) ).toFixed(2);
+                    if( imp == -1 )
+                        svc_imp.push({"folio" : $(folios[ i ]).val() });
+                    else{
+                        var dif_imp = Math.abs( imp - imp_u ).toFixed(2);
+                        if( Math.abs( imp - imp_u ) > 2 )
+                            svc_imp_dif.push({"folio" : $(folios[ i ]).val(), "imp_db" : imp, "imp" : imp_u, "dif" : dif_imp });
+                    }
                     if( dif < 50 & dif > 0 )
                         svc_adv.push({"folio" : $(folios[ i ]).val(), "partes_db" : data.partes, "partes" : iva, "dif" : dif });
                     else if( dif > 50 )
@@ -855,19 +915,31 @@ function validateReport(){
     else{
         var html_adv = "";
         var html_err = "";
+        var html_imp = "";
+        var html_imp_dif = "";
         if(svc_err.length == 0)
             var html_err = "<p>-- Ninguno --</p>";
         if( svc_adv.length == 0)
             var html_adv = "<p>-- Ninguna --</p>";
+        if( svc_imp.length == 0 )
+            var html_imp = "<p>-- Ninguno --</p>";
+        if( svc_imp_dif.length == 0 )
+            var html_imp_dif = "<p>-- Ninguno --</p>";
         //Errors
         for( var i = 0 ; i < svc_err.length ; i++ )
             html_err += ("<p><strong>Folio:</strong> " + svc_err[ i ].folio + ", <strong>partes (RP): </strong>$" + svc_err[ i ].partes + ",<strong> partes (BD):</strong> $" + svc_err[ i ].partes_db + ", <strong>diferencia: </strong>$" + svc_err[ i ].dif + "</p>");
         //Warnings
         for( var i = 0 ; i < svc_adv.length ; i++ )
             html_adv += ("<p><strong>Folio:</strong> " + svc_adv[ i ].folio + ", <strong>partes (RP):</strong> $" + svc_adv[ i ].partes + ", <strong>partes (BD):</strong> $" + svc_adv[ i ].partes_db + ", <strong>diferencia:</strong> $" + svc_adv[ i ].dif + "</p>");
+        //Differences on imports
+        for( var i = 0 ; i < svc_imp_dif.length ; i++ )
+            html_imp_dif += ("<p><strong>Folio:</strong> " + svc_imp_dif[ i ].folio + ", <strong>cobro (RP):</strong> $" + svc_imp_dif[ i ].imp + ", <strong>cobro (BD):</strong> $" + svc_imp_dif[ i ].imp_db + ", <strong>diferencia:</strong> $" + svc_imp_dif[ i ].dif + "</p>");
+        //Unexistent imports
+        for( var i = 0 ; i < svc_imp.length ; i++ )
+            html_imp += ("<p><strong>Folio:</strong> " + svc_imp[ i ].folio + "</p>");
         swal({
             title : "Se encontraron detalles en los siguientes servicios de cargo: ",
-            text : "<h4><strong>Advertencias (Partes dentro del rango permitido):</strong></h4>" + html_adv + "<h4><strong>Errores (Partes fuera del rango permitido):</strong></h4>" + html_err,
+            text : "<h4><strong>Advertencias (Partes dentro del rango permitido):</strong></h4>" + html_adv + "<h4><strong>Errores (Partes fuera del rango permitido):</strong></h4>" + html_err + "<h4><strong>Diferencias en cobros a cliente:</strong></h4>" + html_imp_dif + "<h4><strong>Informacion de cobro inexistente en base de datos:</strong></h4>" + html_imp,
             type : "warning",
             html : true
         });
@@ -945,6 +1017,41 @@ function uploadMaterial(){
         processData: false
     });   
 }
+function uploadImp(){
+    var file_data = $('#importe').prop('files')[0]; 
+    $("#loading-icon-imp").slideDown();
+    $("#upload-imp").hide();
+    var formData = new FormData();
+    formData.append( "file", file_data );
+    $.ajax({
+        url : "php/updateImp.php",  //Server script to process data
+        data: formData,
+        dataType : "text",
+        type: 'POST',
+        //Ajax events
+        success : function( response ){
+            $("#loading-icon-imp").slideUp();
+            $("#upload-imp").show();
+            var data = JSON.parse( response );
+            if( data.status == "-1" ){
+                swal("Error", "al crear la conexión con la base de datos", "error");
+            }else if( data.status == "-2"){
+                swal("Error", "al almacenar la informacion en la base de datos", "error");
+            }else if( data.status == "-3"){
+                swal("Error", "al subir el archivo al servidor", "error");
+            }else if( data.status == "-4"){
+                swal("Error", "al leer la hoja de cálculo", "error");
+            }else{
+                swal("OK", "Base de datos actualizada correctamente", "success");
+            }
+        },
+        // Form data
+        //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+    });   
+}
 function showDTPanel(){
     $(".mid-panel").slideUp();
     $("#dwnld-tec-panel").slideDown();
@@ -990,4 +1097,76 @@ function getReportsEX(){
             }
         });
     }
+}
+
+function closeContact(){
+    $("#popup-layer").fadeOut("slow");
+    $("#contact-block").fadeOut("slow");
+}
+function openContact(){
+    $("#popup-layer").fadeIn("slow");
+    $("#contact-block").fadeIn("slow");
+}
+function getWeeks(){
+    $.post({
+        url : "php/getWeeks.php",
+        success : function( response ){
+            var data  = JSON.parse( response );
+            if( data.status == "-1")
+                swal("Error", data.error, "error");
+            else if( data.status == "-2" )
+                swal("Error", "al conectar con la base de datos", "error");
+            else{
+                var select = $("#weeks");
+                for( var i = 0 ; i < data.week.length ; i++ ){
+                    var option = $("<option></option>");
+                    option.attr("value", data.week[ i ].no );
+                    option.text( data.week[ i ].no );
+                    select.append( option );
+                }
+            }
+                
+        }
+    });
+}
+function getReportsWeekEX(){
+    var week_no = $("#weeks").find(":selected").val();
+    if( week_no == "NONE")
+        swal("Por favor selecciona una semana", "", "warning");
+    else{
+        $.post({
+            url : "php/getReportsWeekEX.php",
+            data : { "week" : week_no },
+            success : function( response ){
+                var data = JSON.parse( response );
+                if( data.status == "-1")
+                    swal("Error", data.error, "error");
+                else if( data.status == "-2" )
+                    swal("Error", "al leer la informacion de la base de datos", "error");
+                else if( data.status == "1")
+                    window.open( "php/" + data.url, "_blank");
+            }
+        });
+    }   
+}
+function getReportsAllEX(){
+    $.post({
+        url : "php/getReportsAllEX.php",
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "-1")
+                swal("Error", data.error, "error");
+            else if( data.status == "-2" )
+                swal("Error", "al leer la informacion de la base de datos", "error");
+            else if( data.status == "1")
+                window.open( "php/" + data.url, "_blank");
+        }
+    });
+}
+function isIE(){
+    var user_agent = window.navigator.userAgent;
+    var version = Number( user_agent.indexOf("MSIE ") );
+    if( version > 0 && version < 9 ){
+        return false;
+    }else return true;
 }

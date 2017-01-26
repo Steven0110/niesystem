@@ -33,13 +33,10 @@
     <link rel="stylesheet" href="css/fonts.css" />
     <link rel="stylesheet" href="css/my-dropper-style.css" />
     <link rel="shortcut icon" href="/favicon.ico?v=2" />
-
-
+    
     <title>Administración</title>
 </head>
 <body class="">
-
-
     <div class="fixed-button">
         <p id="close">Cerrar sesión</p>
     </div>
@@ -47,11 +44,8 @@
     <div class="nav-side-menu">
         <div class="brand" id="saludo"></div>
         <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
-
             <div class="menu-list">
-
                 <ul id="menu-content" class="menu-content collapse out">
-
                     <li  data-toggle="collapse" data-target="#options" class="collapsed active">
                       <a href="#"><i class="fa fa-folder fa-lg"></i> Reportes <span class="arrow"></span></a>
                     </li>
@@ -79,21 +73,20 @@
                       <i class="fa fa-flag fa-lg"></i> Actualizar tarifas
                       </a>
                     </li>
+                     <li id="contact">
+                      <a href="#">
+                      <i class="fa fa-envelope fa-lg"></i> Contacto
+                      </a>
+                    </li>
                 </ul>
          </div>
     </div>
-
-
     <div class="panel">
        <div class="row panel-title">
             PANEL DE ADMINISTRADOR
         </div>
-
-
         <div class="mid-panel bg-samsung">
         </div>
-
-
         <div class="mid-panel" hidden="hidden" id="check-reports-panel">
             <div class="row row-report">
                 <div class="centered-block title">Revisar reportes pendientes</div>
@@ -134,6 +127,22 @@
                         <div class="row">
                             <div class="centered-block">
                                 <img src="imgs/loading.gif" class="loading-icon" alt="Cargando..." hidden="hidden" id="loading-icon-mat"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row row-report">
+                <div class="row subsection-title centered-block">
+                    <span>Importes</span>
+                </div>
+                <div class="row centered-block">
+                   <form enctype="multipart/form-data" id="form-imp">
+                        <input id="importe" type="file" class="file-input"/>
+                        <button id="upload-imp" class="btn btn-md btn-common centered-block">Subir <i class="fa fa-upload fa-lg"></i></button>
+                        <div class="row">
+                            <div class="centered-block">
+                                <img src="imgs/loading.gif" class="loading-icon" alt="Cargando..." hidden="hidden" id="loading-icon-imp"/>
                             </div>
                         </div>
                     </form>
@@ -249,7 +258,6 @@
             </div>
         </div>
 
-
         <div class="mid-panel" hidden="hidden" id="mng-usr-panel">
             <div class="row row-report">
                 <div class="centered-block title">Gestionar usuarios</div>
@@ -296,9 +304,6 @@
                 </div>
             </div>
         </div>
-
-       
-       
         <!-- GESTION DE TARIFAS -->
         <div class="mid-panel" hidden="hidden" id="tax-panel">
             <div class="row row-report">
@@ -345,9 +350,6 @@
                 </div>
             </div>
         </div>
-        
-        
-        
         <div class="mid-panel" hidden="hidden" id="dwnld-tec-panel">
             <div class="row row-report">
                 <div class="centered-block title">Descargar reporte por técnico</div>
@@ -365,6 +367,31 @@
                     </div>
             </div>
         </div>
+        <div class="mid-panel" hidden="hidden" id="generate-report-week-panel">
+            <div class="row row-report">
+                <div class="centered-block title">Descargar reportes por semana</div>
+            </div>
+            <div class="row row-report">
+                <div class="centered-block">
+                   <div class="row field">
+                        <select class="select" name="weeks" id="weeks">
+                            <option value="NONE" selected="selected" hidden="hidden">
+                                Selecciona una semana
+                            </option>
+                        </select>
+                   </div>
+                    <button id="dwnld-week-btn" class="btn btn-lg btn-common centered-block">Descargar <i class="fa fa-download fa-lg"></i></button>
+                </div>
+            </div>
+        </div>
     </div>
+    <div id="contact-block" class="popup-sm" hidden="hidden">
+        <div id="close-contact"><img src="imgs/delete.png" class="table-icon closer" alt="Cerrar popup"></div>
+        <div class="row centered-block popup-panel">
+           <span class="title centered-block">Correo de contacto:</span>
+           <span class="title centered-block">cabello.acosta.gerardo@gmail.com</span>
+        </div>
+    </div>
+    <div class="layer" id="popup-layer" hidden="hidden"></div>
 </body>
 </html>
