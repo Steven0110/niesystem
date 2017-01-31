@@ -865,14 +865,13 @@ function updateSvc( num ){
 function validateReport(){
     var folios = $("#desc-report-table-c .input[id^=\"folio_td-\"]");
     var partes = $("#desc-report-table-c .input[id^=\"partes_td-\"]");
-    var series = $("#desc-report-table-c .input[id^=\"serie_td-\"]");
     var imps = $("#desc-report-table-c .input[id^=\"cobro_td-\"]");
     
     var svc_adv = new Array();
     var svc_err = new Array();
     var svc_imp = new Array();
     var svc_imp_dif = new Array();
-    var svc_rng = new Array();
+    var svc_unx = new Array();
     $("#loading-icon-val").slideDown();
     for( var i = 0 ; i < folios.length ; i++ ){
         var valid = true;
@@ -886,10 +885,8 @@ function validateReport(){
                     swal("Error", data.error, "error");
                 else if( data.status == "-2")
                     swal("Error", "al leer la informacion de la base de datos", "error");
-                else if( data.status == "-4")
-                    swal("Error", "al comprobar si es reingreso", "error");
                 else if( data.status == "-3")
-                    swal("Error", "No existe el folio " + $(folios[ i ]).val() + " en la base de datos", "error");
+                    svc_unx.push({"folio" : $(folios[ i ]).val() });
                 else if( data.status == "1" ){
                     var imp = ( data.imp == "" ) ? -1 : Number( data.imp );
                     var iva = $(partes[ i ]).val();
@@ -910,13 +907,58 @@ function validateReport(){
             }
         });
     }
-    if( svc_err.length == 0 && svc_adv.length == 0 )
-        swal("OK", "Todos los servicios de cargo son correctos", "success");
+    if( (svc_err.length == 0 && svc_adv.length == 0) && svc_unx.length == 0 ){
+        swal({
+            title : "OK",
+            text : "Todos los servicios de cargo son correctos",
+            type : "success",
+            closeOnConfirm : false
+        },function(){
+            //Verifica si hay reingresos
+            var series_input_c = $("#desc-report-table-c .input[id^=\"serie_td-\"]");
+            var series_input_ih = $("#desc-report-table-ih .input[id^=\"serie_td-\"]");
+            var folios_c = $("#desc-report-table-c .input[id^=\"folio_td-\"]");
+            var folios_ih = $("#desc-report-table-ih .input[id^=\"folio_td-\"]");
+            var series = new Array();
+            var folios = new Array();
+            for( var i = 0 ; i < series_input_c.length ; i++ )
+                series.push({"serie" : $(series_input_c[ i ]).val() });
+            for( var i = 0 ; i < folios_c.length ; i++ )
+                folios.push({"folio" : $(folios_c[ i ]).val() });
+            for( var i = 0 ; i < series_input_ih.length ; i++ )
+                series.push({"serie" : $(series_input_ih[ i ]).val() });
+            for( var i = 0 ; i < folios_ih.length ; i++ )
+                folios.push({"folio" : $(folios_ih[ i ]).val() });
+            $.post({
+                url : "php/checkRng.php",
+                data : { "series" : series, "folios" : folios },
+                success : function( response ){
+                    var data = JSON.parse( response );
+                    if( data.status == "-1" )
+                        swal("Error", data.error, "error");
+                    else if( data.status == "-2")
+                        swal("Error", "al leer informacion de la base de datos", "error");
+                    else if( data.status == "2"){
+                        html_rng = "";
+                        for( var i = 0 ; i < data.rng.length ; i++ )
+                            html_rng += ("<p><strong>Folio: </strong>" + data.rng[ i ] + "</p>");
+                        swal({
+                        title : "Reingresos encontrados",
+                        text : html_rng,
+                        type : "warning",
+                        html : true
+                        });
+                    }
+                }
+            });
+        });
+    }
     else{
         var html_adv = "";
         var html_err = "";
         var html_imp = "";
         var html_imp_dif = "";
+        var html_unx = "";
         if(svc_err.length == 0)
             var html_err = "<p>-- Ninguno --</p>";
         if( svc_adv.length == 0)
@@ -925,6 +967,8 @@ function validateReport(){
             var html_imp = "<p>-- Ninguno --</p>";
         if( svc_imp_dif.length == 0 )
             var html_imp_dif = "<p>-- Ninguno --</p>";
+        if( svc_unx.length == 0 )
+            var html_unx = "<p>-- Ninguno --</p>";
         //Errors
         for( var i = 0 ; i < svc_err.length ; i++ )
             html_err += ("<p><strong>Folio:</strong> " + svc_err[ i ].folio + ", <strong>partes (RP): </strong>$" + svc_err[ i ].partes + ",<strong> partes (BD):</strong> $" + svc_err[ i ].partes_db + ", <strong>diferencia: </strong>$" + svc_err[ i ].dif + "</p>");
@@ -937,11 +981,52 @@ function validateReport(){
         //Unexistent imports
         for( var i = 0 ; i < svc_imp.length ; i++ )
             html_imp += ("<p><strong>Folio:</strong> " + svc_imp[ i ].folio + "</p>");
+        //Unexistent services
+        for( var i = 0 ; i < svc_unx.length ; i++ )
+            html_unx += ("<p><strong>Folio:</strong> " + svc_unx[ i ].folio + "</p>");
         swal({
             title : "Se encontraron detalles en los siguientes servicios de cargo: ",
-            text : "<h4><strong>Advertencias (Partes dentro del rango permitido):</strong></h4>" + html_adv + "<h4><strong>Errores (Partes fuera del rango permitido):</strong></h4>" + html_err + "<h4><strong>Diferencias en cobros a cliente:</strong></h4>" + html_imp_dif + "<h4><strong>Informacion de cobro inexistente en base de datos:</strong></h4>" + html_imp,
+            text : "<h4><strong>Advertencias (Partes dentro del rango permitido):</strong></h4>" + html_adv + "<h4><strong>Errores (Partes fuera del rango permitido):</strong></h4>" + html_err + "<h4><strong>Diferencias en cobros a cliente:</strong></h4>" + html_imp_dif + "<h4><strong>Folio existente pero sin informacion de cobro:</strong></h4>" + html_imp + "<h4><strong>Sin informacion en la base de datos:</strong></h4>" + html_unx,
             type : "warning",
             html : true
+        },function(){
+            //Verifica si hay reingresos
+            var series_input_c = $("#desc-report-table-c .input[id^=\"serie_td-\"]");
+            var series_input_ih = $("#desc-report-table-ih .input[id^=\"serie_td-\"]");
+            var folios_c = $("#desc-report-table-c .input[id^=\"folio_td-\"]");
+            var folios_ih = $("#desc-report-table-ih .input[id^=\"folio_td-\"]");
+            var series = new Array();
+            var folios = new Array();
+            for( var i = 0 ; i < series_input_c.length ; i++ )
+                series.push({"serie" : $(series_input_c[ i ]).val() });
+            for( var i = 0 ; i < folios_c.length ; i++ )
+                folios.push({"folio" : $(folios_c[ i ]).val() });
+            for( var i = 0 ; i < series_input_ih.length ; i++ )
+                series.push({"serie" : $(series_input_ih[ i ]).val() });
+            for( var i = 0 ; i < folios_ih.length ; i++ )
+                folios.push({"folio" : $(folios_ih[ i ]).val() });
+            $.post({
+                url : "php/checkRng.php",
+                data : { "series" : series, "folios" : folios },
+                success : function( response ){
+                    var data = JSON.parse( response );
+                    if( data.status == "-1" )
+                        swal("Error", data.error, "error");
+                    else if( data.status == "-2")
+                        swal("Error", "al leer informacion de la base de datos", "error");
+                    else if( data.status == "2"){
+                        html_rng = "";
+                        for( var i = 0 ; i < data.rng.length ; i++ )
+                            html_rng += ("<p><strong>Folio: </strong>" + data.rng[ i ] + "</p>");
+                        swal({
+                        title : "Reingresos encontrados",
+                        text : html_rng,
+                        type : "warning",
+                        html : true
+                        });
+                    }
+                }
+            });
         });
     }
     $("#loading-icon-val").slideUp();

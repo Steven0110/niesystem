@@ -72,7 +72,7 @@ $(document).ready(function(){
 
 
 function checkSvcExistence(){
-    //Detecta si el folio es de samsung o de cargo
+    //Detecta si el folio es de samsung o de cargo. TRATAMIENTO DE CADENA PARA EL FOLIO
     var folio = $("#folio").val();
     var isSamsung = true;
     if( folio.length == 10 ){
@@ -143,53 +143,87 @@ function checkSvcExistence(){
         });
     }else{
         //Para los servicios de cargo
-        $("#loading-icon").slideDown("slow");
-        $("#check-ok").slideUp("fast");
-        $.post({
-            data : { "folio" : folio, "type" : 1 },
-            url : "php/checkSvcExistence.php",
-            success : function( response ){
-                var data = JSON.parse( response );
-                if( data.status == "1" ){
-                    if( data.cantidad == "0" ){
-                        //OK
-                        cleanFields_2();
-                        $("#check-cargo").attr("checked", "checked");
-                        $("#loading-icon").slideUp("slow", function(){
-                            $("#check-ok").slideDown("slow", function(){
-                                $("#add-svc").removeAttr("disabled");
-                                $("#mod").removeAttr("disabled");
-                                $("#serie").removeAttr("disabled");
-                                
-                            });
-                        });
-                    }else{
-                        //Ya hay un folio registrado
-                        swal({
-                            title : "Advertencia",
-                            type : "warning",
-                            text : "El folio ya ha sido registrado"
-                        },function(){
-                            $("#loading-icon").slideUp("slow");
-                            $("#add-svc").attr("disabled", "disabled");
-                            cleanFields();
-                        });
-                    }
-                }else{
-                    //Error desconocido
-                    swal({
-                        title : "Error",
-                        text : data.error,
-                        type : "error"
-                    }, function(){ cleanFields(); $("#add-svc").attr("disabled", "disabled"); } );
-                }
-            }
-        });
-        
+        //
+        //TRATAMIENTO DE CADENAS
+        if( !validarFolioCargo( folio ) ){
+            swal({
+                title : "Cuidado",
+                text : "Parece ser que el folio de cargo que intentas agregar es incorrecto. Revisalo antes de agregar el reporte, de ser erróneo no se te pagará el servicio",
+                type : "warning",
+                showCancelButton : true,
+                confirmButtonColor : "#DD6B55",
+                confirmButtonText : "El folio es correcto",
+                cancelButtonText : "Revisar",
+                closeOnConfirm : true
+            }, function(){
+                finSvcCargo( folio );
+            });
+        }else finSvcCargo( folio );
     }
     
 }
+function validarFolioCargo( folio ){
+    if( folio.includes("-") ){
+        var aux = folio.split("-");
+        var no = aux[ 0 ];
+        var y = aux[ 1 ];
+        if( no.length != 3 )
+            return false;
+        if( y.length <= 2 && y.length >= 4 )
+            return false;
+        if( !isUpperCase( y ) )
+            return false;
+        return true;
+    }
+    else return false;
+}
+function isUpperCase( str ){
+    return str === str.toUpperCase();
+}
+function finSvcCargo( folio ){
+    $("#loading-icon").slideDown("slow");
+    $("#check-ok").slideUp("fast");
+    $.post({
+        data : { "folio" : folio, "type" : 1 },
+        url : "php/checkSvcExistence.php",
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "1" ){
+                if( data.cantidad == "0" ){
+                    //OK
+                    cleanFields_2();
+                    $("#check-cargo").attr("checked", "checked");
+                    $("#loading-icon").slideUp("slow", function(){
+                        $("#check-ok").slideDown("slow", function(){
+                            $("#add-svc").removeAttr("disabled");
+                            $("#mod").removeAttr("disabled");
+                            $("#serie").removeAttr("disabled");
 
+                        });
+                    });
+                }else{
+                    //Ya hay un folio registrado
+                    swal({
+                        title : "Advertencia",
+                        type : "warning",
+                        text : "El folio ya ha sido registrado"
+                    },function(){
+                        $("#loading-icon").slideUp("slow");
+                        $("#add-svc").attr("disabled", "disabled");
+                        cleanFields();
+                    });
+                }
+            }else{
+                //Error desconocido
+                swal({
+                    title : "Error",
+                    text : data.error,
+                    type : "error"
+                }, function(){ cleanFields(); $("#add-svc").attr("disabled", "disabled"); } );
+            }
+        }
+    });
+}
 function getInfoSvc( folio ){
     $.post({
         data : { "folio" : folio },
@@ -748,18 +782,12 @@ function validarServicio( num ){
     var gar = ( $("#gar_td-" + num ).prop("checked") == true ) ? 1 : 0;
     if( gar == 0 ){
         var total_tecnico = sem + mo + cas + desp + partes;
-        if( total_tecnico < cobro ){
+        if( total_tecnico > cobro ){
             swal({
                 type : "error",
                 title : "Error en el cobro del servicio " + folio,
-                text : "La suma total es menor a lo que se le cobró al cliente "
-            });
-            return false;
-        }else if( total_tecnico > cobro ){
-            swal({
-                type : "error",
-                title : "Error en el cobro del servicio " + folio,
-                text : "La suma total es mayor a lo que se le cobró al cliente "
+                text : "La suma total es mayor a lo que se le cobró al cliente",
+                closeOnConfirm : false
             });
             return false;
         }else return true;
@@ -772,13 +800,6 @@ function validarServicio( num ){
                     type : "error",
                     title : "Error en el cobro del servicio " + folio,
                     text : "La mano de obra es mayor a la que deberia ser ($" + total_mo + ")"
-                });
-                return false;
-            }else if( mo < total_mo ){
-                swal({
-                    type : "error",
-                    title : "Error en el cobro del servicio " + folio,
-                    text : "La mano de obra es menor a la que deberia ser ($" + total_mo + ")"
                 });
                 return false;
             }else return true;
@@ -897,6 +918,12 @@ function setDesp(){
             desp_ih.val(25);
         }
     }else{
+        swal({
+            title : "Cuidado con la mano de obra",
+            text : "Recuerda respetar los precios definidos para los productos. Los puedes consultar en la sección de Tarifas",
+            type : "warning",
+            closeOnConfirm : false
+        });
         var desp_c = $("#report-table-c .input[id^=\"desp_td-\"]");
         for( var i = 0 ; i < desp_c.length ; i++ ){
             desp_c.val(0);

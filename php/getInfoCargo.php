@@ -12,18 +12,10 @@ try{
             echo "{\"status\":\"-3\"}";
         else{
             $rs = $stm->fetchAll(PDO::FETCH_ASSOC);
-            $sql_rng = "SELECT * FROM (SELECT Nro_de_Serie FROM registro_gspn UNION ALL SELECT serie FROM servicios_cargo) AS u where u.Nro_de_Serie=:serie";
-            $stm = $pdo->prepare( $sql_rng );
-            if( $stm->execute() ){
-                if( $stm->rowCount() == 0)
-                    echo "{\"status\":\"1\",\"partes\":\"".$rs[ 0 ]["partes_iva"]."\",\"imp\":\"".$rs[ 0 ]["importe"]."\"}";
-                else
-                    echo "{\"status\":\"1\",\"partes\":\"".$rs[ 0 ]["partes_iva"]."\",\"imp\":\"".$rs[ 0 ]["importe"]."\",\"rng\":\"1\"}";
-                
-            }else{
-                die( "{\"status\":\"-4\"}");
-            }
-            
+            if( is_null($rs[ 0 ]["partes_iva"]) )
+                echo "{\"status\":\"1\",\"partes\":\""."0"."\",\"imp\":\"".$rs[ 0 ]["importe"]."\"}";
+            else
+                echo "{\"status\":\"1\",\"partes\":\"".$rs[ 0 ]["partes_iva"]."\",\"imp\":\"".$rs[ 0 ]["importe"]."\"}";
         }
     }else{
         echo "{\"status\":\"-2\"}";

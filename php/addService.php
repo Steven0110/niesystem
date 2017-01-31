@@ -71,7 +71,7 @@ try{
             }else{
                 echo "{";
                 echo "\"status\" : \"-1\",";
-                echo "\"error\" : \"$sql\"";
+                echo "\"error\" : \"".$sql."\"";
                 echo "}";
             }
         }else{
