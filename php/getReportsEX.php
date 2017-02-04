@@ -5,7 +5,7 @@ $name = $_POST["name"];
 try{
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $usr_admin, $psw_admin);
     $pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, "SET NAMES utf8");
-    $sql = "SELECT s.folio, s.mano_obra, s.casetas, s.desplazamiento, s.partes_iva, s.cobro, s.observacion, s.garantia, r.semana FROM servicios_tecnico_trabajados s, reporte r WHERE r.idreporte=s.idreporte AND r.idtecnico=:idt";
+    $sql = "SELECT s.folio, s.mano_obra, s.casetas, s.desplazamiento, s.partes_iva, s.cobro, s.observacion, s.garantia, r.semana FROM servicios_tecnico_trabajados s, reporte r WHERE r.idreporte=s.idreporte AND r.idtecnico=:idt ORDER BY 10, 11, 1";
     $stm = $pdo->prepare( $sql );
     $stm->bindParam( ":idt", $idt, PDO::PARAM_INT );
     if( $stm->execute() ){

@@ -88,7 +88,7 @@ function checkSvcExistence(){
         //Revisa que el folio no haya sido cobrado
         $("#loading-icon").slideDown("slow");
         $("#check-ok").slideUp("fast");
-
+        $("#check-gar").attr("checked", "checked");
         $.post({
             url : "php/checkSvcExistence.php",
             // 0 Samsung, 1 Cargo
@@ -143,7 +143,7 @@ function checkSvcExistence(){
         });
     }else{
         //Para los servicios de cargo
-        //
+        $("#check-gar").removeAttr("checked");
         //TRATAMIENTO DE CADENAS
         if( !validarFolioCargo( folio ) ){
             swal({

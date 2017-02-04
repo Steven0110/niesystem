@@ -856,11 +856,11 @@ function updateSvc( num ){
                     swal("Error", "al actualizar el folio", "error");
                 }else{
                     swal("OK", "Servicio actualizado correctamente", "success");
+                    calcularTotales();
                 }
             }
         });
     });
-        
 }
 function validateReport(){
     var folios = $("#desc-report-table-c .input[id^=\"folio_td-\"]");
@@ -1093,6 +1093,24 @@ function uploadMaterial(){
                 swal("Error", "al leer la hoja de cálculo", "error");
             }else{
                 swal("OK", "Base de datos actualizada correctamente", "success");
+                swal({
+                    "title" : "OK",
+                    "text" : "Base de datos actualizada correctamente",
+                    "type" : "success",
+                    closeOnConfirm : false
+                });
+                if( data.obj.length > 0 ){
+                    var html = "<p>";
+                    for( var i = 0 ; i < data.obj.length ; i++ )
+                        html += (data.obj[ i ].folio + "#" + data.obj[ i ].parte + "     <strong>;</strong>     ");
+                    html += "</p>";
+                    swal({
+                        "title" : "Informacion duplicada(FOLIO#PARTE): ",
+                        "text" : html,
+                        "type" : "warning",
+                        "html" : true
+                    });
+                }
             }     
         },
         // Form data
