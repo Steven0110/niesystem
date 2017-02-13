@@ -92,6 +92,7 @@ $(document).ready(function(){
         $("#generate-report-week-panel").slideDown("slow");
         getWeeks();
     });
+    $("#send-msg-btn").click( sendMsg );
 });
 function showUncheckedReports(){
     $.post({
@@ -856,7 +857,7 @@ function updateSvc( num ){
                     swal("Error", "al actualizar el folio", "error");
                 }else{
                     swal("OK", "Servicio actualizado correctamente", "success");
-                    calcularTotales();
+                    calculateTotals();
                 }
             }
         });
@@ -1273,3 +1274,64 @@ function isIE(){
         return false;
     }else return true;
 }
+
+function calculateTotals(){
+    var mo_c = $("#desc-report-table-c .input[id^=\"mo_td-\"]");
+    var mo_ih = $("#desc-report-table-ih .input[id^=\"mo_td-\"]");
+    var cas_c = $("#desc-report-table-c .input[id^=\"cas_td-\"]");
+    var cas_ih = $("#desc-report-table-ih .input[id^=\"cas_td-\"]");
+    var desp_c = $("#desc-report-table-c .input[id^=\"desp_td-\"]");
+    var desp_ih = $("#desc-report-table-ih .input[id^=\"desp_td-\"]");
+    
+    var total_mo_c = 0, total_cas_c = 0, total_desp_c = 0;
+    var total_mo_ih = 0, total_cas_ih = 0, total_desp_ih = 0;
+    for( var i = 0 ; i < mo_c.length ; i++ ){
+        total_mo_c += Number($(mo_c[ i ]).val());
+        total_cas_c += Number($(cas_c[ i ]).val());
+        total_desp_c += Number($(desp_c[ i ]).val());
+    }
+    for( var i = 0 ; i < mo_ih.length ; i++ ){
+        total_mo_ih += Number($(mo_ih[ i ]).val());
+        total_cas_ih += Number($(cas_ih[ i ]).val());
+        total_desp_ih += Number($(desp_ih[ i ]).val());
+    }
+    $("#desc-total-mo-c").text("$" + total_mo_c);
+    $("#desc-total-mo-ih").text("$" + total_mo_ih);
+    $("#desc-total-cas-c").text("$" + total_cas_c);
+    $("#desc-total-cas-ih").text("$" + total_cas_ih);
+    $("#desc-total-desp-c").text("$" + total_desp_c);
+    $("#desc-total-desp-ih").text("$" + total_desp_ih);
+    
+    //IVAs...
+    $("#desc-total-sub-c").text("$" + (total_mo_c * 0.3914).toFixed(2) );
+    $("#desc-total-sub-ih").text("$" + (total_mo_ih * 0.5).toFixed(2) );
+    $("#desc-total-iva-c").text("$" + (total_mo_c * 0.3914 * 0.16).toFixed(2) );
+    $("#desc-total-iva-ih").text("$" + (total_mo_ih * 0.5 * 0.16).toFixed(2) );
+    $("#desc-total-labor-c").text("$" + ( (total_mo_c * 0.3914 * 0.16) + (total_mo_c * 0.3914) ).toFixed(2) );
+    $("#desc-total-labor-ih").text("$" + ( (total_mo_ih * 0.5 * 0.16) + (total_mo_ih * 0.5) ).toFixed(2) );
+}
+function sendMsg(){
+    var idt = JSON.parse( $.cookie("usuario") ).idt;
+    var msg = $("#problem").val();
+    $.post({
+        "url" : "php/sendMsg.php",
+        "data" : { "idt" : idt, "msg" : msg },
+        "success" : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "-1" )
+                swal("Error", data.error, "error");
+            else if( data.status == "-2" )
+                swal("Error", "al guardar la informacion en la base de datos", "error");
+            else{
+                swal({
+                    title : "OK",
+                    text : "Mensaje enviado correctamente",
+                    type : "success"
+                },function(){
+                    location.href = "admin.html";
+                });
+            }
+        }
+    });
+}
+//172652610

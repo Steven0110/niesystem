@@ -64,6 +64,7 @@ $(document).ready(function(){
     $("#contact").click( openContact );
     
     $("#close-contact").click( closeContact );
+    $("#send-msg-btn").click( sendMsg );
     
     
     getRejectedServices();
@@ -1552,3 +1553,29 @@ function isIE(){
         return false;
     }else return true;
 }
+
+function sendMsg(){
+    var idt = JSON.parse( $.cookie("usuario") ).idt;
+    var msg = $("#problem").val();
+    $.post({
+        "url" : "php/sendMsg.php",
+        "data" : { "idt" : idt, "msg" : msg },
+        "success" : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "-1" )
+                swal("Error", data.error, "error");
+            else if( data.status == "-2" )
+                swal("Error", "al guardar la informacion en la base de datos", "error");
+            else{
+                swal({
+                    title : "OK",
+                    text : "Mensaje enviado correctamente",
+                    type : "success"
+                },function(){
+                    location.href = "tecnicos.html";
+                });
+            }
+        }
+    });
+}
+//172652610

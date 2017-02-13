@@ -388,8 +388,11 @@
     <div id="contact-block" class="popup-sm" hidden="hidden">
         <div id="close-contact"><img src="imgs/delete.png" class="table-icon closer" alt="Cerrar popup"></div>
         <div class="row centered-block popup-panel">
-           <span class="title centered-block">Correo de contacto:</span>
-           <span class="title centered-block">cabello.acosta.gerardo@gmail.com</span>
+           <span class="description centered-block">Describe el problema con todos los detalles (folio, no. de reporte o técnico con el que surgio el problema, qué fue lo que hizo con exactitud, archivo que usó para actualizar la base de datos, etc.)</span>
+           <div class="centered-block">
+               <textarea name="problem" id="problem" cols="80" rows="5"></textarea>
+               <button id="send-msg-btn" class="btn btn-lg btn-common centered-block">Enviar <i class="fa fa-upload fa-lg"></i></button>
+           </div>
         </div>
     </div>
     <div class="layer" id="popup-layer" hidden="hidden"></div>
