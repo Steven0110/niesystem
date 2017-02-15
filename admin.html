@@ -52,6 +52,7 @@
                     <ul class="sub-menu collapse" id="options">
                         <li id="check-reports"><a href="#">Revisar reportes</a></li>
                         <li id="feed-db"><a href="#">Alimentar base de datos</a></li>
+                        <li id="conf-parts"><a href="#">Confirmar partes</a></li>
                     </ul>
                      <li data-toggle="collapse" data-target="#reports" class="collapsed active">
                       <a href="#">
@@ -163,96 +164,43 @@
             </div>
             <div class="row row-report">
                 <div class="row subsection-title centered-block">
-                    <span>Servicios de cargo (39.14%)</span>
+                    <span>Servicios de cargo</span>
                 </div>
                 <table id="desc-report-table-c" class="centered-block">
                 </table>
-
-                <div class="row spaced">
-                    <div class="col-md-2 data-block">
-                        <div class="row centered-block">
-                            <p class="block-title-reg">Total M.O:</p>
-                            <p class="data" id="desc-total-mo-c"></p>
-                        </div>
-                    </div>
-                    <div class="col-md-2 data-block">
-                        <div class="row centered-block">
-                            <p class="block-title-reg">Total casetas:</p>
-                            <p class="data" id="desc-total-cas-c"></p>
-                        </div>
-                    </div>
-                    <div class="col-md-2 data-block">
-                        <div class="row centered-block">
-                            <p class="block-title-reg">Total desplazamiento:</p>
-                            <p class="data" id="desc-total-desp-c"></p>
-                        </div>
-                    </div>
-                    <div class="col-md-2 data-block">
-                        <div class="row centered-block">
-                            <p class="block-title-reg">Subtotal:</p>
-                            <p class="data" id="desc-total-sub-c"></p>
-                        </div>
-                        <div class="row centered-block">
-                            <p class="block-title-reg">IVA (16%):</p>
-                            <p class="data" id="desc-total-iva-c"></p>
-                        </div>
-                    </div>
-                    <div class="col-md-2 data-block all-bordered">
-                        <div class="row centered-block">
-                            <p class="block-title-reg">Total labor:</p>
-                            <p class="data" id="desc-total-labor-c"></p>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="row subsection-title centered-block">
-                    <span>Servicios In Home (50%)</span>
+                    <span>Servicios In Home</span>
                 </div>
                 <table id="desc-report-table-ih" class="centered-block">
                 </table>
                 <div class="row spaced">
-                    <div class="col-md-2 data-block">
-                        <div class="row centered-block">
-                            <p class="block-title-reg">Total M.O:</p>
-                            <p class="data" id="desc-total-mo-ih"></p>
-                        </div>
-                    </div>
-                    <div class="col-md-2 data-block">
-                        <div class="row centered-block">
-                            <p class="block-title-reg">Total casetas:</p>
-                            <p class="data" id="desc-total-cas-ih"></p>
-                        </div>
-                    </div>
-                    <div class="col-md-2 data-block">
-                        <div class="row centered-block">
-                            <p class="block-title-reg">Total desplazamiento:</p>
-                            <p class="data" id="desc-total-desp-ih"></p>
-                        </div>
-                    </div>
-                    <div class="col-md-2 data-block">
-                        <div class="row centered-block">
-                            <p class="block-title-reg">Subtotal:</p>
-                            <p class="data" id="desc-total-sub-ih"></p>
-                        </div>
-                        <div class="row centered-block">
-                            <p class="block-title-reg">IVA (16%):</p>
-                            <p class="data" id="desc-total-iva-ih"></p>
-                        </div>
-                    </div>
-                    <div class="col-md-2 data-block all-bordered">
-                        <div class="row centered-block">
-                            <p class="block-title-reg">Total labor:</p>
-                            <p class="data" id="desc-total-labor-ih"></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row spaced">
-                    <div class="col-md-3 col-md-offset-8 data-block all-bordered">
-                        <div class="row centered-block">
-                            <p class="block-title-reg">COBRO TOTAL POR REPORTE:</p>
-                            <p class="data" id="desc-total-rep"></p>
-                        </div>
-                    </div>
+                   <table class="centered-block chart">
+                       <thead>
+                           <th>Mano de obra</th>
+                           <th>Casetas</th>
+                           <th>Desplazamiento</th>
+                           <th>Subtotal</th>
+                           <th>IVA</th>
+                           <th>Total labor</th>
+                       </thead>
+                       <tr id="c-row" class="green-row">
+                           <td rowspan="2" id="total-mo" class="share"></td>
+                           <td rowspan="2" id="total-cas" class="share"></td>
+                           <td rowspan="2" id="total-desp" class="share"></td>
+                           <td id="sub-ih"></td>
+                           <td id="iva-ih"></td>
+                           <td id="labor-ih"></td>
+                       </tr>
+                       <tr id="ih-row" class="yellow-row">
+                           <td id="sub-c"></td>
+                           <td id="iva-c"></td>
+                           <td id="labor-c"></td>
+                       </tr>
+                   </table>
+                   <div class="centered-block blackened">
+                       <div class="row"><div class="green-dot"></div> In Home (50%)</div>
+                       <div class="row"><div class="yellow-dot"></div> Taller (39.14%)</div>
+                   </div>
                 </div>
                 <button class="btn-gen-report btn-common" id="confirm-report">Confirmar reporte</button>
             </div>
@@ -381,6 +329,20 @@
                         </select>
                    </div>
                     <button id="dwnld-week-btn" class="btn btn-lg btn-common centered-block">Descargar <i class="fa fa-download fa-lg"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="mid-panel" hidden="hidden" id="confirm-part-panel">
+            <div class="row row-report">
+                <div class="centered-block title">Confirmar una parte</div>
+            </div>
+            <div class="row row-report">
+                <div class="centered-block">
+                   <div class="row field">
+                       <input type="text" id="part-no" placeholder="Numero de parte"/>
+                       <input type="text" id="folio-part" placeholder="Folio"/>
+                   </div>
+                    <button id="confirm-parts-btn" class="btn btn-lg btn-common centered-block">Confirmar <i class="fa fa-check-circle fa-lg"></i></button>
                 </div>
             </div>
         </div>

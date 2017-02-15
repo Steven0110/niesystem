@@ -811,43 +811,85 @@ function validarServicio( num ){
 function calcularTotales(){
     var total_mo_c = 0, total_desp_c = 0, total_cas_c = 0, total_labor_c = 0;
     var total_mo_ih = 0, total_desp_ih = 0, total_cas_ih = 0, total_labor_ih = 0;
-    //Calculo para cargo
+    
+    var total_mo = 0, total_cas = 0, total_desp = 0;
+    
+    //Calculo para cargo 
     var mo_cargo = $("#report-table-c .input[id^=\"mo_td-\"]");
     var desp_cargo = $("#report-table-c .input[id^=\"desp_td-\"]");
     var cas_cargo = $("#report-table-c .input[id^=\"cas_td-\"]");
-    for( var i = 0 ; i < mo_cargo.length ; i++ ){
-        //var index = getIndex( $(mo_cargo[ i ]).attr("id") );
-        total_mo_c += Number( $(mo_cargo[ i ]).val() );
-        total_cas_c += Number( $(cas_cargo[ i ]).val() );
-        total_desp_c += Number( $(desp_cargo[ i ]).val() );
-    }
-    total_labor_c = ((total_mo_c * 0.3914) + (total_mo_c * 0.3914 * 0.16)).toFixed(2);
-    $("#total-mo-c").text("$" + total_mo_c );
-    $("#total-cas-c").text("$" + total_cas_c );
-    $("#total-desp-c").text("$" + total_desp_c );
-    $("#total-sub-c").text( "$" + (total_mo_c * 0.3914).toFixed(2) );
-    $("#total-iva-c").text( "$" + (total_mo_c * 0.3914 * 0.16).toFixed(2) );
-    $("#total-labor-c").text("$" + total_labor_c );
-
-    //Calculo para in home
+    
+    //Calculo para in home AKA Gar
     var mo_ih = $("#report-table-ih .input[id^=\"mo_td-\"]");
     var desp_ih = $("#report-table-ih .input[id^=\"desp_td-\"]");
     var cas_ih = $("#report-table-ih .input[id^=\"cas_td-\"]");
-
-    for( var i = 0 ; i < mo_ih.length ; i++ ){
-        total_mo_ih += Number( $(mo_ih[ i ]).val() );
-        total_cas_ih += Number( $(cas_ih[ i ]).val() );
-        total_desp_ih += Number( $(desp_ih[ i ]).val() );
+    for( var i = 0 ; i < mo_cargo.length ; i++ ){
+        //var index = getIndex( $(mo_cargo[ i ]).attr("id") );
+        total_mo += Number( $(mo_cargo[ i ]).val() );
+        total_cas += Number( $(cas_cargo[ i ]).val() );
+        total_desp += Number( $(desp_cargo[ i ]).val() );
     }
-    total_labor_ih = ((total_mo_ih * 0.5) + (total_mo_ih * 0.5 * 0.16)).toFixed(2);
-    $("#total-mo-ih").text("$" + total_mo_ih );
-    $("#total-cas-ih").text("$" + total_cas_ih );
-    $("#total-desp-ih").text("$" + total_desp_ih );
-    $("#total-sub-ih").text( "$" + (total_mo_ih * 0.5).toFixed(2));
-    $("#total-iva-ih").text( "$" + (total_mo_ih * 0.5 * 0.16).toFixed(2) );
-    $("#total-labor-ih").text("$" + total_labor_ih );
-    var total_reporte = Number(total_labor_c )+ Number(total_labor_ih);
-    $("#total-rep").text( "$" + total_reporte.toFixed(2) );
+    for( var i = 0 ; i < mo_ih.length ; i++ ){
+        total_mo += Number( $(mo_ih[ i ]).val() );
+        total_cas += Number( $(cas_ih[ i ]).val() );
+        total_desp += Number( $(desp_ih[ i ]).val() );
+    }
+    
+    total_labor_c = ((total_mo * 0.3914) + (total_mo * 0.3914 * 0.16)).toFixed(2);
+    $("#total-mo").text("$ " + total_mo );
+    $("#total-cas").text("$ " + total_cas );
+    $("#total-desp").text("$ " + total_desp );
+    $("#sub-c").text( "$ " + (total_mo * 0.3914).toFixed(2) );
+    $("#iva-c").text( "$ " + (total_mo * 0.3914 * 0.16).toFixed(2) );
+    $("#labor-c").text("$ " + total_labor_c );
+
+
+    total_labor_ih = ((total_mo * 0.5) + (total_mo * 0.5 * 0.16)).toFixed(2);
+    $("#sub-ih").text( "$ " + (total_mo * 0.5).toFixed(2));
+    $("#iva-ih").text( "$ " + (total_mo * 0.5 * 0.16).toFixed(2) );
+    $("#labor-ih").text("$ " + total_labor_ih );
+}
+
+function calculateTotalsDR(){
+    var total_mo_c = 0, total_desp_c = 0, total_cas_c = 0, total_labor_c = 0;
+    var total_mo_ih = 0, total_desp_ih = 0, total_cas_ih = 0, total_labor_ih = 0;
+    
+    var total_mo = 0, total_cas = 0, total_desp = 0;
+    
+    //Calculo para cargo 
+    var mo_cargo = $("#desc-report-table-c .input[id^=\"mo_td-\"]");
+    var desp_cargo = $("#desc-report-table-c .input[id^=\"desp_td-\"]");
+    var cas_cargo = $("#desc-report-table-c .input[id^=\"cas_td-\"]");
+    
+    //Calculo para in home AKA Gar
+    var mo_ih = $("#desc-report-table-ih .input[id^=\"mo_td-\"]");
+    var desp_ih = $("#desc-report-table-ih .input[id^=\"desp_td-\"]");
+    var cas_ih = $("#desc-report-table-ih .input[id^=\"cas_td-\"]");
+    for( var i = 0 ; i < mo_cargo.length ; i++ ){
+        //var index = getIndex( $(mo_cargo[ i ]).attr("id") );
+        total_mo += Number( $(mo_cargo[ i ]).val() );
+        total_cas += Number( $(cas_cargo[ i ]).val() );
+        total_desp += Number( $(desp_cargo[ i ]).val() );
+    }
+    for( var i = 0 ; i < mo_ih.length ; i++ ){
+        total_mo += Number( $(mo_ih[ i ]).val() );
+        total_cas += Number( $(cas_ih[ i ]).val() );
+        total_desp += Number( $(desp_ih[ i ]).val() );
+    }
+    
+    total_labor_c = ((total_mo * 0.3914) + (total_mo * 0.3914 * 0.16)).toFixed(2);
+    $("#desc-total-mo").text("$ " + total_mo );
+    $("#desc-total-cas").text("$ " + total_cas );
+    $("#desc-total-desp").text("$ " + total_desp );
+    $("#desc-sub-c").text( "$ " + (total_mo * 0.3914).toFixed(2) );
+    $("#desc-iva-c").text( "$ " + (total_mo * 0.3914 * 0.16).toFixed(2) );
+    $("#desc-labor-c").text("$ " + total_labor_c );
+
+
+    total_labor_ih = ((total_mo * 0.5) + (total_mo * 0.5 * 0.16)).toFixed(2);
+    $("#desc-sub-ih").text( "$ " + (total_mo * 0.5).toFixed(2));
+    $("#desc-iva-ih").text( "$ " + (total_mo * 0.5 * 0.16).toFixed(2) );
+    $("#desc-labor-ih").text("$ " + total_labor_ih );
 }
 
 function addReport( idr, fecha, semana, idt, tipo ){
@@ -921,7 +963,7 @@ function setDesp(){
     }else{
         swal({
             title : "Cuidado con la mano de obra",
-            text : "Recuerda respetar los precios definidos para los productos. Los puedes consultar en la sección de Tarifas",
+            text : "Recuerda respetar la mano de obra definida para los productos, de lo contrario se te pueden retener los servicios. Los puedes consultar en la sección de Tarifas",
             type : "warning",
             closeOnConfirm : false
         });
@@ -1469,6 +1511,7 @@ function describeReport( idr ){
                 $("#desc-total-labor-ih").text( "$" + total_labor_ih );
                 var total_rep = Number( total_labor_ih ) + Number( total_labor_c );
                 $("#desc-total-rep").text("$" + total_rep );
+                calculateTotalsDR();
             }else if( data.status == "-2"){
                 swal({
                     title : "Error desconocido",

@@ -6,7 +6,6 @@ if ( 0 < $_FILES['file']['error'] ) {
 }
 else{
     $pdo = null;
-    $dupl = array();
     try{
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $usr_admin, $psw_admin);
         $pdo->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, "SET NAMES utf8");
@@ -41,28 +40,17 @@ else{
         $stm->bindParam(":parte", $parte_folio, PDO::PARAM_STR);
         $stm->bindParam(":costo", $costo, PDO::PARAM_STR);
         if( $stm->execute() ){
-            $sql = "INSERT IGNORE INTO material_cargo(folio, partes_iva) VALUES(:folio, :partes)";
+            $sql = "INSERT INTO material_cargo(folio, partes_iva) VALUES(:folio, :partes) ON DUPLICATE KEY UPDATE partes_iva=:partes2";
             $stm = $pdo->prepare( $sql );
             $stm->bindParam(":folio", $folio, PDO::PARAM_STR);
-            $stm->bindParam(":partes", $partes, PDO::PARAM_INT);
+            $stm->bindParam(":partes", $partes, PDO::PARAM_STR);
+            $stm->bindParam(":partes2", $partes, PDO::PARAM_STR);
             //Error al insertar (-2)
             if( !$stm->execute() ){
                 die("{\"status\":\"-2\"}");
             }    
-        }else{
-            $err = $stm->errorInfo();
-            if( $err[ 1 ] == 1062 ){
-                $dupl_aux = new stdClass();
-                $dupl_aux->folio = $folio;
-                $dupl_aux->parte = $parte_folio;
-                array_push($dupl, $dupl_aux);
-            }
         }
     }
-    $status = "1";
-    $response = new stdClass();
-    $response->status = $status;
-    $response->obj = $dupl;
-    echo json_encode( $response );
+    die("{\"status\":\"1\"}");
 }
 ?>

@@ -93,6 +93,11 @@ $(document).ready(function(){
         getWeeks();
     });
     $("#send-msg-btn").click( sendMsg );
+    $("#conf-parts").click( function(){
+        $(".mid-panel").slideUp("slow");
+        $("#confirm-part-panel").slideDown("slow");
+    });
+    $("#confirm-parts-btn").click( confirmPart );
 });
 function showUncheckedReports(){
     $.post({
@@ -526,6 +531,7 @@ function checkReport( idr, idt ){
                 $("#desc-total-sub-ih").text( "$" + (total_mo_ih * 0.5).toFixed(2) );
                 $("#desc-total-iva-ih").text( "$" + (total_mo_ih * 0.5 * 0.16).toFixed(2));
                 $("#desc-total-labor-ih").text( "$" + total_labor_ih );
+                calculateTotals();
                 var total_rep = Number( total_labor_ih ) + Number( total_labor_c );
                 $("#desc-total-rep").text("$" + total_rep );
             }else if( data.status == "-2"){
@@ -1033,6 +1039,7 @@ function validateReport(){
     $("#loading-icon-val").slideUp();
 }
 function uploadGSPN(){
+    event.preventDefault();
     var file_data = $('#gspn-reg').prop('files')[0]; 
     $("#loading-icon-gspn").slideDown();
     $("#upload-gspn").hide();
@@ -1069,6 +1076,7 @@ function uploadGSPN(){
     });
 }
 function uploadMaterial(){
+    event.preventDefault();
     var file_data = $('#material').prop('files')[0]; 
     $("#loading-icon-mat").slideDown();
     $("#upload-mat").hide();
@@ -1093,26 +1101,8 @@ function uploadMaterial(){
             }else if( data.status == "-4"){
                 swal("Error", "al leer la hoja de cálculo", "error");
             }else{
-                swal("OK", "Base de datos actualizada correctamente", "success");
-                swal({
-                    "title" : "OK",
-                    "text" : "Base de datos actualizada correctamente",
-                    "type" : "success",
-                    closeOnConfirm : false
-                });
-                if( data.obj.length > 0 ){
-                    var html = "<p>";
-                    for( var i = 0 ; i < data.obj.length ; i++ )
-                        html += (data.obj[ i ].folio + "#" + data.obj[ i ].parte + "     <strong>;</strong>     ");
-                    html += "</p>";
-                    swal({
-                        "title" : "Informacion duplicada(FOLIO#PARTE): ",
-                        "text" : html,
-                        "type" : "warning",
-                        "html" : true
-                    });
-                }
-            }     
+                swal("OK", "Base de datos actualizada correctamente", "success")
+            }
         },
         // Form data
         //Options to tell jQuery not to process data or worry about content-type.
@@ -1122,6 +1112,7 @@ function uploadMaterial(){
     });   
 }
 function uploadImp(){
+    event.preventDefault();
     var file_data = $('#importe').prop('files')[0]; 
     $("#loading-icon-imp").slideDown();
     $("#upload-imp").hide();
@@ -1276,39 +1267,45 @@ function isIE(){
 }
 
 function calculateTotals(){
-    var mo_c = $("#desc-report-table-c .input[id^=\"mo_td-\"]");
-    var mo_ih = $("#desc-report-table-ih .input[id^=\"mo_td-\"]");
-    var cas_c = $("#desc-report-table-c .input[id^=\"cas_td-\"]");
-    var cas_ih = $("#desc-report-table-ih .input[id^=\"cas_td-\"]");
-    var desp_c = $("#desc-report-table-c .input[id^=\"desp_td-\"]");
-    var desp_ih = $("#desc-report-table-ih .input[id^=\"desp_td-\"]");
+    var total_mo_c = 0, total_desp_c = 0, total_cas_c = 0, total_labor_c = 0;
+    var total_mo_ih = 0, total_desp_ih = 0, total_cas_ih = 0, total_labor_ih = 0;
     
-    var total_mo_c = 0, total_cas_c = 0, total_desp_c = 0;
-    var total_mo_ih = 0, total_cas_ih = 0, total_desp_ih = 0;
-    for( var i = 0 ; i < mo_c.length ; i++ ){
-        total_mo_c += Number($(mo_c[ i ]).val());
-        total_cas_c += Number($(cas_c[ i ]).val());
-        total_desp_c += Number($(desp_c[ i ]).val());
+    var total_mo = 0, total_cas = 0, total_desp = 0;
+    
+    //Calculo para cargo 
+    var mo_cargo = $("#desc-report-table-c .input[id^=\"mo_td-\"]");
+    var desp_cargo = $("#desc-report-table-c .input[id^=\"desp_td-\"]");
+    var cas_cargo = $("#desc-report-table-c .input[id^=\"cas_td-\"]");
+    
+    //Calculo para in home AKA Gar
+    var mo_ih = $("#desc-report-table-ih .input[id^=\"mo_td-\"]");
+    var desp_ih = $("#desc-report-table-ih .input[id^=\"desp_td-\"]");
+    var cas_ih = $("#desc-report-table-ih .input[id^=\"cas_td-\"]");
+    for( var i = 0 ; i < mo_cargo.length ; i++ ){
+        //var index = getIndex( $(mo_cargo[ i ]).attr("id") );
+        total_mo += Number( $(mo_cargo[ i ]).val() );
+        total_cas += Number( $(cas_cargo[ i ]).val() );
+        total_desp += Number( $(desp_cargo[ i ]).val() );
     }
     for( var i = 0 ; i < mo_ih.length ; i++ ){
-        total_mo_ih += Number($(mo_ih[ i ]).val());
-        total_cas_ih += Number($(cas_ih[ i ]).val());
-        total_desp_ih += Number($(desp_ih[ i ]).val());
+        total_mo += Number( $(mo_ih[ i ]).val() );
+        total_cas += Number( $(cas_ih[ i ]).val() );
+        total_desp += Number( $(desp_ih[ i ]).val() );
     }
-    $("#desc-total-mo-c").text("$" + total_mo_c);
-    $("#desc-total-mo-ih").text("$" + total_mo_ih);
-    $("#desc-total-cas-c").text("$" + total_cas_c);
-    $("#desc-total-cas-ih").text("$" + total_cas_ih);
-    $("#desc-total-desp-c").text("$" + total_desp_c);
-    $("#desc-total-desp-ih").text("$" + total_desp_ih);
     
-    //IVAs...
-    $("#desc-total-sub-c").text("$" + (total_mo_c * 0.3914).toFixed(2) );
-    $("#desc-total-sub-ih").text("$" + (total_mo_ih * 0.5).toFixed(2) );
-    $("#desc-total-iva-c").text("$" + (total_mo_c * 0.3914 * 0.16).toFixed(2) );
-    $("#desc-total-iva-ih").text("$" + (total_mo_ih * 0.5 * 0.16).toFixed(2) );
-    $("#desc-total-labor-c").text("$" + ( (total_mo_c * 0.3914 * 0.16) + (total_mo_c * 0.3914) ).toFixed(2) );
-    $("#desc-total-labor-ih").text("$" + ( (total_mo_ih * 0.5 * 0.16) + (total_mo_ih * 0.5) ).toFixed(2) );
+    total_labor_c = ((total_mo * 0.3914) + (total_mo * 0.3914 * 0.16)).toFixed(2);
+    $("#total-mo").text("$ " + total_mo );
+    $("#total-cas").text("$ " + total_cas );
+    $("#total-desp").text("$ " + total_desp );
+    $("#sub-c").text( "$ " + (total_mo * 0.3914).toFixed(2) );
+    $("#iva-c").text( "$ " + (total_mo * 0.3914 * 0.16).toFixed(2) );
+    $("#labor-c").text("$ " + total_labor_c );
+
+
+    total_labor_ih = ((total_mo * 0.5) + (total_mo * 0.5 * 0.16)).toFixed(2);
+    $("#sub-ih").text( "$ " + (total_mo * 0.5).toFixed(2));
+    $("#iva-ih").text( "$ " + (total_mo * 0.5 * 0.16).toFixed(2) );
+    $("#labor-ih").text("$ " + total_labor_ih );
 }
 function sendMsg(){
     var idt = JSON.parse( $.cookie("usuario") ).idt;
@@ -1334,4 +1331,32 @@ function sendMsg(){
         }
     });
 }
-//172652610
+function confirmPart(){
+    var parte = $("#part-no").val();
+    var folio = $("#folio-part").val();
+    if( parte == "" || folio == "")
+        swal("Advertencia", "Por favor, no dejes ningún campo vacío", "warning");
+    else{
+        $.post({
+            url : "php/confirmPart.php",
+            data : {
+                "folio" : folio,
+                "parte" : parte
+            },
+            success : function( response ){
+                var data = JSON.parse( response );
+                if( data.status == "-1" )
+                    swal("Error", data.error, "error");
+                else if( data.status == "-2")
+                    swal("Error", "al acceder a la base de datos", "error");
+                else if( data.status == "-3")
+                    swal("Error", "La parte que deseas confirmar no existe para ese folio. Por favor revisa los datos ingresados", "error");
+                else if( data.status == "-4")
+                    swal("Error", "al leer informacion sobre material de cargo", "error");
+                else if( data.status == "1")
+                    swal("OK", "Parte confirmada correctamente", "success");
+            }
+        });
+    }
+}
+// 17 26 52 61 0

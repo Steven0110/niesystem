@@ -191,6 +191,12 @@ select{
 th{
     background-color: #2F5C91;
 }
+.chart thead th{
+    background-color: #990C0F;
+}
+.chart{
+    
+}
 td, th{
     border: 1px solid black;
     padding: 3px;
@@ -199,6 +205,42 @@ td, th{
 
 td{
     background-color: #3F6DA5;
+}
+.chart .green-row td{
+    background-color: rgb(20,150,50);
+}
+.chart .yellow-row td{
+    background-color: rgb(120,150,20);
+}
+.share{
+    background-color: rgb(20, 50, 150) !important;
+}
+.chart td{
+    font-size: 20px;
+    padding: 10px;
+}
+.yellow-dot{
+    display: inline-block;
+    border-radius: 50%;
+    width : 15px;
+    height : 15px;
+    background-color: rgb(120,150,20);
+}
+.green-dot{
+    display: inline-block;
+    border-radius: 50%;
+    width : 15px;
+    height : 15px;
+    background-color: rgb(20,150,50);
+}
+.blackened{
+    background-color: #2F5C91;
+    overflow: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 10px;
 }
 input{
     background-color: black;
