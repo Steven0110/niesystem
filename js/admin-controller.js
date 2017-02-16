@@ -87,6 +87,10 @@ $(document).ready(function(){
     
     $("#close-contact").click( closeContact );
     
+    $("#check-tarifas").click( openPopUpTarifas );
+
+    $("#close-tarifas").click( closePopUpTarifas );
+    
     $("#dwnld-week").click( function(){
         $(".mid-panel").slideUp("slow");
         $("#generate-report-week-panel").slideDown("slow");
@@ -1358,5 +1362,52 @@ function confirmPart(){
             }
         });
     }
+}
+
+function closePopUpTarifas(){
+    $("#popup-layer").fadeOut("slow");
+    $("#tarifas-block").fadeOut("slow");
+}
+function openPopUpTarifas(){
+    $("#popup-layer").fadeIn("slow");
+    $("#tarifas-block").fadeIn("slow");
+    showTarifas();
+}
+
+function showTarifas(){
+    var table = $("#tarifas-table-2");
+    table.empty();
+    $.post({
+        url : "php/getTarifas.php",
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "1" ){
+                var row_header = $("<tr></tr>");
+                var header = $("<th>Descripción</th><th>Mano de obra</th><th>Costo revisión</th><th>Categoría</th>");
+                row_header.append( header );
+                table.append( row_header );
+                for( var i = 0 ; i < data.item.length ; i++ ){
+                    var tr = $("<tr></tr>");
+
+                    var td_desc = $("<td>" + data.item[ i ].desc +  "</td>");
+                    var td_mo = $("<td>" + data.item[ i ].mo +  "</td>");
+                    var td_rev = $("<td>" + data.item[ i ].rev +  "</td>");
+                    var td_cat = $("<td>" + data.item[ i ].cat +  "</td>");
+
+                    tr.append( td_desc );
+                    tr.append( td_mo );
+                    tr.append( td_rev );
+                    tr.append( td_cat );
+                    table.append( tr );
+                }
+            }else{
+                swal({
+                    title : "Error",
+                    text : data.error,
+                    type : "error"
+                });
+            }
+        }
+    });
 }
 // 17 26 52 61 0

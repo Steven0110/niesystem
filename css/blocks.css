@@ -435,6 +435,16 @@ progress{
         background-color: #4977AF;
     }
 }
-
-
-
+.sweet-alert{
+    box-sizing: border-box;
+    max-height: 100% !important;
+    overflow-y: auto;
+    padding: 0 17px 17px !important;
+    margin-top: 10%;
+}
+.sweet-alert:before{
+    content:"";
+    display: block;
+    height: 17px;
+    width: 0;
+}
