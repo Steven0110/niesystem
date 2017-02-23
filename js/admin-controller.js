@@ -1176,27 +1176,6 @@ function showDTPanel(){
         }
     });
 }
-function getReportsEX(){
-    var idt = $("#tecs").find(":selected").val();
-    var name = $("#tecs").find(":selected").text();
-    if( idt == "NONE")
-        swal("Por favor selecciona un técnico", "", "warning");
-    else{
-        $.post({
-            url : "php/getReportsEX.php",
-            data : { "idt" : idt , "name" : name },
-            success : function( response ){
-                var data = JSON.parse( response );
-                if( data.status == "-1")
-                    swal("Error", data.error, "error");
-                else if( data.status == "-2" )
-                    swal("Error", "al leer la informacion de la base de datos", "error");
-                else if( data.status == "1")
-                    window.open( "php/" + data.url, "_blank");
-            }
-        });
-    }
-}
 
 function closeContact(){
     $("#popup-layer").fadeOut("slow");
@@ -1228,6 +1207,28 @@ function getWeeks(){
         }
     });
 }
+
+function getReportsEX(){
+    var idt = $("#tecs").find(":selected").val();
+    var name = $("#tecs").find(":selected").text();
+    if( idt == "NONE")
+        swal("Por favor selecciona un técnico", "", "warning");
+    else{
+        $.post({
+            url : "php/getReportsEX.php",
+            data : { "idt" : idt , "name" : name },
+            success : function( response ){
+                var data = JSON.parse( response );
+                if( data.status == "-1")
+                    swal("Error", data.error, "error");
+                else if( data.status == "-2" )
+                    swal("Error", "al leer la informacion de la base de datos", "error");
+                else if( data.status == "1")
+                    window.open( "php/" + data.url, "_blank");
+            }
+        });
+    }
+}
 function getReportsWeekEX(){
     var week_no = $("#weeks").find(":selected").val();
     if( week_no == "NONE")
@@ -1238,7 +1239,7 @@ function getReportsWeekEX(){
             data : { "week" : week_no },
             success : function( response ){
                 var data = JSON.parse( response );
-                if( data.status == "-1")
+                if( data.status == "-1      ")
                     swal("Error", data.error, "error");
                 else if( data.status == "-2" )
                     swal("Error", "al leer la informacion de la base de datos", "error");

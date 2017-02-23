@@ -14,8 +14,8 @@ try{
             ->setTitle("Reporte")
             ->setDescription("Reporte global");
         $title = "Reporte global";
-        $cols = array("Folio", "Mano de obra", "Semana", "Desplazamiento", "Casetas", "Partes con IVA", "Tecnico");
-        $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A1:G1");
+        $cols = array("Folio", "Mano de obra", "Semana", "Desplazamiento", "Casetas", "Partes con IVA", "Tecnico", "Mano de obra TLP");
+        $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A1:H1");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue("A1", $title)
             ->setCellValue("A2", $cols[ 0 ])
             ->setCellValue("B2", $cols[ 1 ])
@@ -23,16 +23,23 @@ try{
             ->setCellValue("D2", $cols[ 3 ])
             ->setCellValue("E2", $cols[ 4 ])
             ->setCellValue("F2", $cols[ 5 ])
-            ->setCellValue("G2", $cols[ 6 ]);
+            ->setCellValue("G2", $cols[ 6 ])
+            ->setCellValue("H2", $cols[ 7 ]);
         for( $i = 0 ; $i < $stm->rowCount() ; $i++ ){
             $j = $i + 3;
+            //$aux_str = '=VLOOKUP(A'.$j.',\'file://EQUIPOS REPARADOS POR TECNICOS TLP.xlsx\'#$\'REPORTE ACUMUL\''.'.$a$'.strtoupper("a").':'.'$A$'.'1048576'.',2,0)';
+            //$aux_str = '=VLOOKUP(A'.$j.',\'file://EQUIPOS REPARADOS POR TECNICOS TLP.xlsx\'#$\'REPORTE ACUMUL\'.A1:A1048576)';
+            $aux_str = '=VLOOKUP(A'.$j.',\'[EQUIPOS REPARADOS POR TECNICOS TLP.xlsx]REPORTE ACUMUL\'!$A$1:$B$1048576, 2, 0)';
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue("A".$j, $rs[ $i ]["folio"])
                 ->setCellValue("B".$j, $rs[ $i ]["mano_obra"])
                 ->setCellValue("C".$j, $rs[ $i ]["semana"])
                 ->setCellValue("D".$j, $rs[ $i ]["desplazamiento"])
                 ->setCellValue("E".$j, $rs[ $i ]["casetas"])
                 ->setCellValue("F".$j, $rs[ $i ]["partes_iva"])
-                ->setCellValue("G".$j, $rs[ $i ]["nombre"]);
+                ->setCellValue("G".$j, $rs[ $i ]["nombre"])
+                ->setCellValue("H".$j, $aux_str);
+    //=VLOOKUP(A7,'file:///home/steven/Desktop/GERARDO PRUEBAS/PRUEBA_FINAL/EQUIPOS REPARADOS POR TECNICOS TLP.xlsx'#$'REPORTE ACUMUL'.$A$1:$B$1048576,2,0)
+    //=VLOOKUP(A7,'file:///home/steven/Desktop/GERARDO PRUEBAS/PRUEBA_FINAL/EQUIPOS REPARADOS POR TECNICOS TLP.xlsx'#$'REPORTE ACUMUL'.$A$1:$A$1048576, 2, 0)
         }
         for( $i = 'A' ; $i <= 'G' ; $i++ ){
             $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension($i)->setAutoSize(TRUE);
@@ -47,6 +54,7 @@ try{
         //header("Cache-Control: max-age=1");
         //Save
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+        $objWriter->setPreCalculateFormulas(FALSE);
         $objWriter->save("temp/".$filename);
         echo "{\"status\":\"1\",\"url\":\"temp/".$filename."\"}";
     }else
