@@ -29,7 +29,12 @@ try{
             $j = $i + 3;
             //$aux_str = '=VLOOKUP(A'.$j.',\'file://EQUIPOS REPARADOS POR TECNICOS TLP.xlsx\'#$\'REPORTE ACUMUL\''.'.$a$'.strtoupper("a").':'.'$A$'.'1048576'.',2,0)';
             //$aux_str = '=VLOOKUP(A'.$j.',\'file://EQUIPOS REPARADOS POR TECNICOS TLP.xlsx\'#$\'REPORTE ACUMUL\'.A1:A1048576)';
+            //$aux_str = '=VLOOKUP(A'.$j.',\'[EQUIPOS REPARADOS POR TECNICOS TLP.xlsx]REPORTE ACUMUL\'!$A$1:$B$1048576, 2, 0)';
+            //URL ABSOLUTA DE LA PC DE SANTANA
+            /*$aux_str = '=VLOOKUP(A'.$j.',\'C:\Users\dasac\Mis Archivos\DOCUMENTACION Y ORGANIZAC DE  NIESA\CONTABILIDAD TLP Y COY\EQUIPOS REP SEM POR TECNICOS\[EQUIPOS REPARADOS POR TECNICOS TLP.xlsx]REPORTE ACUMUL\'!$A$1:$B$1048576, 2, 0)';*/
+            //URL RELATIVA DE LA PC DE PRUEBAS DE LA RED DE NIESA
             $aux_str = '=VLOOKUP(A'.$j.',\'[EQUIPOS REPARADOS POR TECNICOS TLP.xlsx]REPORTE ACUMUL\'!$A$1:$B$1048576, 2, 0)';
+            
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue("A".$j, $rs[ $i ]["folio"])
                 ->setCellValue("B".$j, $rs[ $i ]["mano_obra"])
                 ->setCellValue("C".$j, $rs[ $i ]["semana"])

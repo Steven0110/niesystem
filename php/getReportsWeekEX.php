@@ -16,7 +16,7 @@ try{
             ->setTitle("Reporte")
             ->setDescription("Reporte de la semana ".$week);
         $title = "Reporte del técnico";
-        $cols = array("Folio", "Mano de obra", "Semana", "Desplazamiento", "Casetas", "Partes con IVA", "Tecnico");
+        $cols = array("Folio", "Mano de obra", "Semana", "Desplazamiento", "Casetas", "Partes con IVA", "Tecnico", "Mano de obra TLP");
         $objPHPExcel->setActiveSheetIndex(0)->mergeCells("A1:G1");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue("A1", $title)
             ->setCellValue("A2", $cols[ 0 ])
@@ -25,16 +25,25 @@ try{
             ->setCellValue("D2", $cols[ 3 ])
             ->setCellValue("E2", $cols[ 4 ])
             ->setCellValue("F2", $cols[ 5 ])
-            ->setCellValue("G2", $cols[ 6 ]);
+            ->setCellValue("G2", $cols[ 6 ])
+            ->setCellValue("H2", $cols[ 7 ]);
         for( $i = 0 ; $i < $stm->rowCount() ; $i++ ){
             $j = $i + 3;
+            
+            
+            //URL ABSOLUTA DE LA PC DE SANTANA
+            /*$aux_str = '=VLOOKUP(A'.$j.',\'C:\Users\dasac\Mis Archivos\DOCUMENTACION Y ORGANIZAC DE  NIESA\CONTABILIDAD TLP Y COY\EQUIPOS REP SEM POR TECNICOS\[EQUIPOS REPARADOS POR TECNICOS TLP.xlsx]REPORTE ACUMUL\'!$A$1:$B$1048576, 2, 0)';
+            //URL RELATIVA DE LA PC DE PRUEBAS DE LA RED DE NIESA*/
+            $aux_str = '=VLOOKUP(A'.$j.',\'[EQUIPOS REPARADOS POR TECNICOS TLP.xlsx]REPORTE ACUMUL\'!$A$1:$B$1048576, 2, 0)';
+            
             $objPHPExcel->setActiveSheetIndex(0)->setCellValue("A".$j, $rs[ $i ]["folio"])
                 ->setCellValue("B".$j, $rs[ $i ]["mano_obra"])
                 ->setCellValue("C".$j, $rs[ $i ]["semana"])
                 ->setCellValue("D".$j, $rs[ $i ]["desplazamiento"])
                 ->setCellValue("E".$j, $rs[ $i ]["casetas"])
                 ->setCellValue("F".$j, $rs[ $i ]["partes_iva"])
-                ->setCellValue("G".$j, $rs[ $i ]["nombre"]);
+                ->setCellValue("G".$j, $rs[ $i ]["nombre"])
+                ->setCellValue("H".$j, $aux_str);
         }
         for( $i = 'A' ; $i <= 'G' ; $i++ ){
             $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension($i)->setAutoSize(TRUE);
