@@ -102,6 +102,8 @@ $(document).ready(function(){
         $("#confirm-part-panel").slideDown("slow");
     });
     $("#confirm-parts-btn").click( confirmPart );
+    $("#add-folio").click( addFolio );
+    $("#add-gar").click( addGarantia );
 });
 function showUncheckedReports(){
     $.post({
@@ -866,7 +868,9 @@ function updateSvc( num ){
                 }else if( data.status == "-2"){
                     swal("Error", "al actualizar el folio", "error");
                 }else{
-                    swal("OK", "Servicio actualizado correctamente", "success");
+                    swal("OK", "Servicio actualizado correctamente. Mano de obra modificada", "success");
+                    //Update MO
+                    $("#mo_td-" + num).val( data.new_mo );
                     calculateTotals();
                 }
             }
@@ -1411,4 +1415,310 @@ function showTarifas(){
         }
     });
 }
+function addFolio(){
+    var idr = $("#no-reporte").text();
+    console.log("      idr:" + idr);
+    var folio, modelo, serie, mo, tipo, cas, desp, partes, cobro;
+    swal({
+        title : "Folio para el reporte " + idr,
+        type : "input",
+        closeOnConfirm : false,
+        animation : "slide-from-top",
+        inputPlaceHolder : "Folio"
+    }, function( val ){
+        if( val === false ) return false;
+        if( val === ""){
+            swal.showInputError("Favor de escribir un folio");
+            return false;
+        }else{
+            //Check if exists, if not, continues
+            folio = val;
+            $.post({
+                url : "php/checkGralSvc.php",
+                data : {
+                    "folio" : folio
+                },
+                success : function( response ){
+                    var data = JSON.parse( response );
+                    if( data.status == "1" ){
+                        swal({
+                            title : "Modelo: ",
+                            type : "input",
+                            closeOnConfirm : false,
+                            animation : "slide-from-top",
+                            inputPlaceHolder : "Modelo"
+                        }, function( val_2 ){
+                            modelo = val_2;
+                            swal({
+                            title : "Serie: ",
+                            type : "input",
+                            closeOnConfirm : false,
+                            animation : "slide-from-top",
+                            inputPlaceHolder : "Serie"
+                            }, function( val_3 ){
+                                serie = val_3;
+                                swal({
+                                title : "Mano de obra: ",
+                                type : "input",
+                                closeOnConfirm : false,
+                                animation : "slide-from-top",
+                                inputPlaceHolder : "Mano de obra"
+                                }, function( val_4 ){
+                                    if( val_4 === ""){
+                                        swal.showInputError("Favor de escribir un número");
+                                        return false;
+                                    }else{
+                                        mo = val_4;
+                                        swal({
+                                        title : "Cargo(1)/Garantía(0)",
+                                        type : "input",
+                                        closeOnConfirm : false,
+                                        animation : "slide-from-top",
+                                        inputPlaceHolder : "Escriba 0 o 1, sea el caso"
+                                        }, function( val_5 ){
+                                            if( val_5 === ""){
+                                                swal.showInputError("Favor de escribir un número");
+                                                return false;
+                                            }else{
+                                                tipo = val_5;
+                                                swal({
+                                                title : "Casetas",
+                                                type : "input",
+                                                closeOnConfirm : false,
+                                                animation : "slide-from-top",
+                                                inputPlaceHolder : "Casetas"
+                                                }, function( val_6 ){
+                                                    if( val_6 === ""){
+                                                        swal.showInputError("Favor de escribir un número");
+                                                        return false;
+                                                    }else{
+                                                        cas = val_6;
+                                                        swal({
+                                                        title : "Desplazamiento",
+                                                        type : "input",
+                                                        closeOnConfirm : false,
+                                                        animation : "slide-from-top",
+                                                        inputPlaceHolder : "Desplazamiento"
+                                                        }, function( val_7 ){
+                                                            if( val_7 === ""){
+                                                                swal.showInputError("Favor de escribir un número");
+                                                                return false;
+                                                            }else{
+                                                                desp = val_7;
+                                                                swal({
+                                                                title : "Partes",
+                                                                type : "input",
+                                                                closeOnConfirm : false,
+                                                                animation : "slide-from-top",
+                                                                inputPlaceHolder : "Partes"
+                                                                }, function( val_8 ){
+                                                                    if( val_8 === ""){  swal.showInputError("Favor de escribir un número");
+                                                                        return false;
+                                                                    }else{
+                                                                        partes = val_8;
+                                                                        swal({
+                                                                        title : "Cobro",
+                                                                        type : "input",
+                                                                        closeOnConfirm : true,
+                                                                        animation : "slide-from-top",
+                                                                        inputPlaceHolder : "Cobro a cliente"
+                                                                        }, function( val_9 ){
+                                                                            if( val_9 === ""){  swal.showInputError("Favor de escribir un número");
+                                                                                return false;
+                                                                            }else{
+                                                                                cobro = val_9;
+                                                                                addSvc(idr, folio, modelo, serie, mo, 1, cas, desp, partes, cobro);
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            });
+                        });
+                    }else if(data.status == "-1" ){
+                        swal("Error", data.error, "error");
+                    }else if(data.status == "-2" ){
+                        swal("Error", "al acceder a la base de datos", "error");
+                    }else if(data.status == "-3" ){
+                        swal("Ese folio ya fue registrado", "", "error");
+                    }
+                }
+            });
+        }
+    });
+}
 // 17 26 52 61 0
+function addSvc(idr, folio, modelo, serie, mo, tipo, cas, desp, partes, cobro){
+    $.post({
+        url  : "php/addSvcReport.php",
+        data : {
+            "idr" : idr,
+            "folio" : folio,
+            "mod" : modelo,
+            "serie" : serie,
+            "mo" : mo,
+            "tipo" : tipo,
+            "cas" : cas,
+            "desp" : desp,
+            "partes" : partes,
+            "cobro" : cobro
+        },
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "1"){
+                swal("OK", "Servicio agregado correctamente", "success");
+                checkReport( idr, data.idt );
+            }else if( data.status == "-1"){
+                swal("Error", data.error, "error");
+            }else if( data.status == "-2"){
+                swal("Error", "al acceder a la base de datos", "error");
+            }else if( data.status == "-1"){
+                swal("Error", data.error, "error");
+            }
+        }
+    });
+}
+function addGarantia(){
+    var idr = $("#no-reporte").text();
+    var folio, modelo, serie, mo, tipo, cas, desp, partes, cobro;
+    swal({
+        title : "Folio para el reporte " + idr,
+        type : "input",
+        closeOnConfirm : false,
+        animation : "slide-from-top",
+        inputPlaceHolder : "Folio"
+    }, function( val ){
+        //Check if exists
+        if( val === false ) return false;
+        if( val === ""){
+            swal.showInputError("Favor de escribir un folio");
+            return false;
+        }else{
+            folio = val;
+            $.post({
+                url : "php/checkSvcExistence.php",
+                data : {
+                    "folio" : val,
+                    "type" : 0
+                },
+                success : function( response ){
+                    var data = JSON.parse( response );
+                    if( data.status == "1"){
+                        swal({
+                        title : "Mano de obra: ",
+                        type : "input",
+                        closeOnConfirm : false,
+                        animation : "slide-from-top",
+                        inputPlaceHolder : "Mano de obra"
+                        }, function( val_4 ){
+                            if( val_4 === ""){
+                                swal.showInputError("Favor de escribir un número");
+                                return false;
+                            }else{
+                                mo = val_4;
+                                swal({
+                                title : "Casetas",
+                                type : "input",
+                                closeOnConfirm : false,
+                                animation : "slide-from-top",
+                                inputPlaceHolder : "Casetas"
+                                }, function( val_6 ){
+                                    if( val_6 === ""){
+                                        swal.showInputError("Favor de escribir un número");
+                                        return false;
+                                    }else{
+                                        cas = val_6;
+                                        swal({
+                                        title : "Desplazamiento",
+                                        type : "input",
+                                        closeOnConfirm : false,
+                                        animation : "slide-from-top",
+                                        inputPlaceHolder : "Desplazamiento"
+                                        }, function( val_7 ){
+                                            if( val_7 === ""){
+                                                swal.showInputError("Favor de escribir un número");
+                                                return false;
+                                            }else{
+                                                desp = val_7;
+                                                swal({
+                                                title : "Partes",
+                                                type : "input",
+                                                closeOnConfirm : false,
+                                                animation : "slide-from-top",
+                                                inputPlaceHolder : "Partes"
+                                                }, function( val_8 ){
+                                                    if( val_8 === ""){  swal.showInputError("Favor de escribir un número");
+                                                        return false;
+                                                    }else{
+                                                        partes = val_8;
+                                                        swal({
+                                                        title : "Cobro",
+                                                        type : "input",
+                                                        closeOnConfirm : true,
+                                                        animation : "slide-from-top",
+                                                        inputPlaceHolder : "Cobro a cliente"
+                                                        }, function( val_9 ){
+                                                            if( val_9 === ""){  swal.showInputError("Favor de escribir un número");
+                                                                return false;
+                                                            }else{
+                                                                cobro = val_9;
+                                                                addSvcGar(idr, folio, modelo, serie, mo, 0, cas, desp, partes, cobro);
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                        
+                    }else if( data.status == "-1"){
+                        swal("Error", data.error, "error");
+                    }else if( data.status == "0"){
+                        swal("Error", "No existe el folio " + val + " en la base de datos del GSPN", "error");
+                    }
+                }
+            });
+        }
+    });
+}
+
+function addSvcGar(idr, folio, modelo, serie, mo, tipo, cas, desp, partes, cobro){
+    $.post({
+        url  : "php/addSvcGarReport.php",
+        data : {
+            "idr" : idr,
+            "folio" : folio,
+            "mod" : modelo,
+            "serie" : serie,
+            "mo" : mo,
+            "tipo" : tipo,
+            "cas" : cas,
+            "desp" : desp,
+            "partes" : partes,
+            "cobro" : cobro
+        },
+        success : function( response ){
+            var data = JSON.parse( response );
+            if( data.status == "1"){
+                swal("OK", "Servicio agregado correctamente", "success");
+                checkReport( idr, data.idt );
+            }else if( data.status == "-1"){
+                swal("Error", data.error, "error");
+            }else if( data.status == "-2"){
+                swal("Error", "al acceder a la base de datos", "error");
+            }else if( data.status == "-1"){
+                swal("Error", data.error, "error");
+            }
+        }
+    });
+}

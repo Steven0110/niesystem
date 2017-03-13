@@ -9,8 +9,6 @@ $(document).ready(function(){
             location.href = "index.html";
         });
     }
-    if($.cookie("usuario"))
-        location.href = "tecnicos.html";
     $("#login-action").click(function(){
         if( validateFields() == true ){
             var rfc = $("#rfc").val();
