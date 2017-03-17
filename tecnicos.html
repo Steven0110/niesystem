@@ -51,6 +51,7 @@
                     <ul class="sub-menu collapse" id="options">
                         <li id="gen-report"><a href="#">Agregar servicios</a></li>
                         <li id="show-reports"><a href="#">Crear reporte</a></li>
+                        <li id="upload-report"><a href="#">Subir reporte</a></li>
                         <li id="checked-reports" class="view-checked-reports"><a href="#">Reportes anteriores</a></li>
                         <li id="rejected-services"><a href="#">Servicios rechazados (<span id="no-rechazados">0</span>)</a></li>
                     </ul>
@@ -314,6 +315,38 @@
             </div>
             <div class="row row-report">
                 <table id="rej-svc-table" class="centered-block"></table>
+            </div>
+        </div>
+        <div class="mid-panel" hidden="hidden" id="upload-report-panel">
+            <div class="row row-report">
+                <div class="centered-block title">Subir reporte (hoja de cálculo)</div>
+            </div>
+            <div class="row row-report">
+                <div class="centered-block">
+                    <div class="row field">
+                        <div class="row subsection-title centered-block">
+                            <span>Selecciona un tipo de reporte</span>
+                        </div>
+                        <select class="select centered-block" name="r_type" id="r_type">
+                            <option value="NONE" selected="selected" hidden="hidden">
+                                Tipo
+                            </option>
+                            <option value="2">Electrónica CI</option>
+                            <option value="5">Electrónica IH</option>
+                            <option value="2">Linea Blanca</option>
+                        </select>
+                    </div>
+                    
+                   <form enctype="multipart/form-data" id="form-imp">
+                        <input id="r_file" type="file" class="file-input" placeholder="Selecciona un archivo XLSX"/>
+                        <button id="upload-rep-btn" class="btn btn-lg btn-common centered-block">Subir <i class="fa fa-upload fa-lg"></i></button>
+                        <div class="row">
+                            <div class="centered-block">
+                                <img src="imgs/loading.gif" class="loading-icon" alt="Cargando..." hidden="hidden" id="loading-icon-rep"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

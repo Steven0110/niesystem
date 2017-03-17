@@ -45,7 +45,7 @@ $(document).ready(function(){
         $("#mng-usr-panel").slideDown("slow");
     });
     $("#tax").click(function(){
-        //Ver gestion de usuarios
+        //Ver gestion de tarifas
         $(".mid-panel").slideUp("slow");
         $("#tax-panel").slideDown("slow");
         showTaxes();

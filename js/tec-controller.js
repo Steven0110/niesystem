@@ -45,6 +45,11 @@ $(document).ready(function(){
         $(".mid-panel").slideUp("slow");
         $("#rej-services-panel").slideDown("slow");
     });
+    
+    $("#upload-report").click(function(){
+        $(".mid-panel").slideUp("slow");
+        $("#upload-report-panel").slideDown("slow");
+    });
 
     var salute = "Bienvenido " + JSON.parse( $.cookie("usuario")).name;
     $("#saludo").text( salute );
@@ -65,6 +70,9 @@ $(document).ready(function(){
     
     $("#close-contact").click( closeContact );
     $("#send-msg-btn").click( sendMsg );
+    
+    
+    $("#upload-rep-btn").click( uploadReport );
     
     
     getRejectedServices();
@@ -1620,5 +1628,48 @@ function sendMsg(){
             }
         }
     });
+}
+
+function uploadReport(){
+    event.preventDefault();
+    var file_data = $('#r_file').prop('files')[0];
+    var idt = ( JSON.parse( $.cookie("usuario") ) ).idt;
+    var tipo = $('#r_type').find(":selected").val();
+    $("#loading-icon-rep").slideDown();
+    $("#upload-rep-btn").hide();
+    var formData = new FormData();
+    formData.append( "file", file_data );
+    var url_sheet = "php/uploadReport.php?val=" + tipo + "&idt=" + idt;
+    $.post({
+        url : url_sheet,  //Server script to process data
+        data: formData,
+        dataType : "text",
+        //type: 'POST',
+        //Ajax events
+        success : function( response ){
+            $("#loading-icon-rep").slideUp();
+            $("#upload-rep-btn").show();
+            var data = JSON.parse( response );
+            if( data.status == "-1" ){
+                swal("Error al conectar con la BD: ", data.error, "error");
+            }else if( data.status == "-2"){
+                swal("Error", "al almacenar la informacion en la base de datos", "error");
+            }else if( data.status == "-3"){
+                swal("Error", "al subir el archivo al servidor", "error");
+            }else if( data.status == "-4"){
+                swal("Error", "al leer la hoja de cálculo", "error");
+            }else if( data.status == "-5"){
+                swal("Error", "al insertar los datos en la base de datos", "error");
+            }else if(data.status == "1" ){
+                //Recibe informacion sobre todos los folios con sus errores.
+                swal("OK", "Base de datos actualizada correctamente", "success")
+            }
+        },
+        // Form data
+        //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+    });  
 }
 //172652610
