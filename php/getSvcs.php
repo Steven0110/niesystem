@@ -33,7 +33,7 @@ try{
             $response .= "},";
         }
         $response = trim( $response, "," );
-        //COntinuamos creando los de IN HOME
+        //COntinuamos creando los de Garantía
         $sql = "SELECT s.folio, s.mano_obra, s.casetas, s.desplazamiento, s.partes_iva, s.cobro, s.observacion, r.Modelo, r.Nro_de_Serie, r.Valor_de_la_Mano_de_Obra, s.garantia FROM servicios_tecnico_trabajados s, registro_gspn r WHERE s.idTecnico=:idt AND s.tipo=0 AND r.Reclamacion_del_ASC=s.folio AND (s.status <> 20 AND s.status <> 10 ) ORDER BY garantia DESC";
         $stm = $pdo->prepare( $sql );
         $stm->bindParam( ":idt", $idt, PDO::PARAM_INT );

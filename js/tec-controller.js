@@ -834,11 +834,13 @@ function calcularTotales(){
     for( var i = 0 ; i < mo_cargo.length ; i++ ){
         //var index = getIndex( $(mo_cargo[ i ]).attr("id") );
         total_mo += Number( $(mo_cargo[ i ]).val() );
+        //console.log( mo_cargo[ i ] );
         total_cas += Number( $(cas_cargo[ i ]).val() );
         total_desp += Number( $(desp_cargo[ i ]).val() );
     }
     for( var i = 0 ; i < mo_ih.length ; i++ ){
         total_mo += Number( $(mo_ih[ i ]).val() );
+        //console.log( mo_cargo[ i ] );
         total_cas += Number( $(cas_ih[ i ]).val() );
         total_desp += Number( $(desp_ih[ i ]).val() );
     }
@@ -968,6 +970,7 @@ function setDesp(){
         for( var i = 0 ; i < desp_ih.length ; i++ ){
             desp_ih.val(25);
         }
+        setMO();
     }else{
         swal({
             title : "Cuidado con la mano de obra",
@@ -983,8 +986,9 @@ function setDesp(){
         for( var i = 0 ; i < desp_ih.length ; i++ ){
             desp_ih.val(100);
         }
+        
     }
-    setMO();
+    
     calcularTotales();
 }
 function setMO(){
@@ -1662,7 +1666,28 @@ function uploadReport(){
                 swal("Error", "al insertar los datos en la base de datos", "error");
             }else if(data.status == "1" ){
                 //Recibe informacion sobre todos los folios con sus errores.
-                swal("OK", "Base de datos actualizada correctamente", "success")
+                var html_rg = "<h4>Folios ya registrados previamente:</h4>";
+                var html_nx = "<h4>Garantías que no existen en GSPN:</h4>";
+                var html_ok = "<h4>Folios registrados correctamente:</h4>";
+                for( var i = 0 ; i < data.svcNx.length ; i++ )
+                    html_nx += ("<string>" + data.svcNx[ i ] + ", </string>");
+                for( var i = 0 ; i < data.svcRg.length ; i++ )
+                    html_rg += ("<string>" + data.svcRg[ i ] + ", </string>");
+                for( var i = 0 ; i < data.svcOk.length ; i++ )
+                    html_ok += ("<string>" + data.svcOk[ i ] + ", </string>");
+                if( data.svcOk.length == 0 )
+                    html_ok += "<string>-- Ninguno --</string>";
+                if( data.svcNx.length == 0 )
+                    html_nx += "<string>-- Ninguno --</string>";
+                if( data.svcRg.length == 0 )
+                    html_rg += "<string>-- Ninguno --</string>";
+                var html = html_rg + html_nx + html_ok;
+                swal({
+                    title : "Reporte subido",
+                    text : html,
+                    type : "success",
+                    html : true
+                });
             }
         },
         // Form data

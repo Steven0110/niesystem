@@ -7,7 +7,9 @@ function esCargo( $cad ){
 function fixVal( $cad ){
     if( $cad == "")
         return "0.0";
-    else 
+    else if( strpos( $cad, ".") !== false )
+        return $cad;
+    else
         return $cad.".0";
 }
 
@@ -62,7 +64,7 @@ else{
         $mod = $sheet->getCell("I".$row)->getValue();
         $serie = $sheet->getCell("J".$row)->getValue();
         $cobro = fixVal( $sheet->getCell("M".$row)->getValue() );
-        
+        //Garantias:
         if( !esCargo( $folio ) ){
             //Check if exists
             $sql = "SELECT Modelo FROM registro_gspn WHERE Reclamacion_del_ASC=:folio";
@@ -79,7 +81,7 @@ else{
                         if( $stm->rowCount() == 0 ){
                             //Inserts
                             array_push($svc_ok, $folio);
-                            $sql = "INSERT INTO servicios_tecnico_trabajados VALUES(:folio, :idTecnico, 1, :mo, :cas, :desp, :iva, :cobro, NULL, NULL, 1, 0)";
+                            $sql = "INSERT INTO servicios_tecnico_trabajados VALUES(:folio, :idTecnico, 1, :mo, :cas, :desp, :iva, :cobro, NULL, NULL, 0, 1)";
                             $stm = $pdo->prepare( $sql );
                             $stm->bindParam(":folio", $folio, PDO::PARAM_STR);
                             $stm->bindParam(":idTecnico", $idt, PDO::PARAM_STR);
@@ -89,6 +91,7 @@ else{
                             $stm->bindParam(":iva", $partes, PDO::PARAM_STR);
                             $stm->bindParam(":cobro", $cobro, PDO::PARAM_STR);
                             if( !$stm->execute() )
+                                //print_r($stm->errorInfo());
                                 die("{\"status\":\"-5\"}");
                         }
                         else
@@ -123,6 +126,7 @@ else{
                         $stm->bindParam(":mod", $mod, PDO::PARAM_STR);
                         $stm->bindParam(":serie", $serie, PDO::PARAM_STR);
                         if( !$stm->execute() )
+                               // print_r($stm->errorInfo());
                             die("{\"status\":\"-5\"}");
                     }
                     else
